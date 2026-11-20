@@ -3,6 +3,7 @@ import Logo from './Logo.astro';
 import Icon from './Icon.astro';
 import { GRUPOS, temasDoGrupo, type Grupo } from '../data/temas';
 import { SITE, DATASET } from '../data/site';
+import { b } from '../utils/url';
 const grupos = Object.keys(GRUPOS) as Grupo[];
 ---
 <footer class="footer" id="rodape">
@@ -13,13 +14,13 @@ const grupos = Object.keys(GRUPOS) as Grupo[];
       <div class="fsocial"><a href={SITE.substack} target="_blank" rel="noopener" title="Substack" aria-label="DefendaMe no Substack"><Icon name="substack" size={15} /><span>Substack</span></a></div>
     </div>
     {grupos.map((g) => (
-      <div class="fcol"><div class="fcol-h">{GRUPOS[g]}</div>{temasDoGrupo(g).map((t) => <a href={`/${t.slug}/`}>{t.nome}</a>)}</div>
+      <div class="fcol"><div class="fcol-h">{GRUPOS[g]}</div>{temasDoGrupo(g).map((t) => <a href={b(`${t.slug}/`)}>{t.nome}</a>)}</div>
     ))}
     <div class="fcol"><div class="fcol-h">Institucional</div>
-      <a href="/quem-somos/">Quem somos</a><a href="/autor/andre-l-silva/">André L. Silva</a><a href="/artigos/">Todos os artigos</a><a href="/#verificar" data-open-case>Verificar meu caso</a>
-      <a href="/privacidade/">Política de privacidade</a><a href="/cookies/">Política de cookies</a>
+      <a href={b('quem-somos/')}>Quem somos</a><a href={b('autor/andre-l-silva/')}>André L. Silva</a><a href={b('artigos/')}>Todos os artigos</a><a href={b('#verificar')} data-open-case>Verificar meu caso</a>
+      <a href={b('privacidade/')}>Política de privacidade</a><a href={b('cookies/')}>Política de cookies</a>
       <button type="button" class="flink" data-cookie-prefs>Preferências de cookies</button>
     </div>
   </div>
-  <div class="fbottom"><span>© {new Date().getFullYear()} DefendaMe · defendame.online</span><span><a href="/privacidade/">Privacidade</a> · <a href="/cookies/">Cookies</a> · Dados: TJSP · {DATASET.recorte}</span></div>
+  <div class="fbottom"><span>© {new Date().getFullYear()} DefendaMe · defendame.online</span><span><a href={b('privacidade/')}>Privacidade</a> · <a href={b('cookies/')}>Cookies</a> · Dados: TJSP · {DATASET.recorte}</span></div>
 </footer>

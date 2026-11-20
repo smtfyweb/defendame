@@ -3,20 +3,21 @@ import Logo from './Logo.astro';
 import Icon from './Icon.astro';
 import { GRUPOS, temasDoGrupo, type Grupo } from '../data/temas';
 import { DATASET } from '../data/site';
+import { b } from '../utils/url';
 const grupos = Object.keys(GRUPOS) as Grupo[];
 const links = [
-  { href: '/', label: 'Início' },
-  { href: '/artigos/', label: 'Artigos' },
-  { href: '/#jurimetria', label: 'Jurimetria' },
-  { href: '/#como-funciona', label: 'Como funciona' },
-  { href: '/quem-somos/', label: 'Sobre' },
+  { href: b(), label: 'Início' },
+  { href: b('artigos/'), label: 'Artigos' },
+  { href: b('#jurimetria'), label: 'Jurimetria' },
+  { href: b('#como-funciona'), label: 'Como funciona' },
+  { href: b('quem-somos/'), label: 'Sobre' },
 ];
 ---
 <nav class="nav-wrap">
   <div class="nav">
     <Logo />
     <ul class="nav-links">
-      <li><a href="/">Início</a></li>
+      <li><a href={b()}>Início</a></li>
       <li class="has-mega" id="megaWrap">
         <button class="mega-btn" id="megaBtn" aria-expanded="false" aria-controls="mega">Temas <Icon name="chevron-down" size={14} stroke={2.2} class="chev" /></button>
         <div class="mega" id="mega" role="menu">
@@ -24,11 +25,11 @@ const links = [
             <div class="mega-col">
               <div class="mega-h">{GRUPOS[g]}</div>
               {temasDoGrupo(g).map((t) => (
-                <a href={`/${t.slug}/`} class="mega-a"><span class="mega-ic"><Icon name={t.icone} size={18} /></span>{t.nome}</a>
+                <a href={b(`${t.slug}/`)} class="mega-a"><span class="mega-ic"><Icon name={t.icone} size={18} /></span>{t.nome}</a>
               ))}
             </div>
           ))}
-          <div class="mega-foot"><span>14 temas · {DATASET.totalFmt} decisões do TJSP analisadas</span><a href="/#temas">Ver todos os temas →</a></div>
+          <div class="mega-foot"><span>14 temas · {DATASET.totalFmt} decisões do TJSP analisadas</span><a href={b('#temas')}>Ver todos os temas →</a></div>
         </div>
       </li>
       {links.slice(1).map((l) => <li><a href={l.href}>{l.label}</a></li>)}
@@ -37,7 +38,7 @@ const links = [
       <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema claro/escuro" title="Alternar tema">
         <Icon name="sun" size={18} stroke={2} class="ic-sun" /><Icon name="moon" size={18} stroke={2} class="ic-moon" />
       </button>
-      <a href="/#verificar" class="btn btn-primary" data-open-case>Verificar meu caso</a>
+      <a href={b('#verificar')} class="btn btn-primary" data-open-case>Verificar meu caso</a>
       <button class="burger" id="burger" aria-label="Abrir menu"><Icon name="menu" size={20} stroke={2} /></button>
     </div>
   </div>
@@ -48,14 +49,14 @@ const links = [
   <div class="drawer-panel">
     <div class="drawer-top"><Logo /><button class="drawer-x" data-close aria-label="Fechar">×</button></div>
     <div class="dr-main">
-      <a href="/" data-close>Início</a><a href="/#temas" data-close>Todos os temas</a>
+      <a href={b()} data-close>Início</a><a href={b('#temas')} data-close>Todos os temas</a>
       {links.slice(1).map((l) => <a href={l.href} data-close>{l.label}</a>)}
     </div>
     {grupos.map((g) => (<>
       <div class="dr-h">{GRUPOS[g]}</div>
-      {temasDoGrupo(g).map((t) => <a href={`/${t.slug}/`} class="dr-a">{t.nome}</a>)}
+      {temasDoGrupo(g).map((t) => <a href={b(`${t.slug}/`)} class="dr-a">{t.nome}</a>)}
     </>))}
-    <a href="/#verificar" class="btn btn-primary" data-open-case>Verificar meu caso</a>
+    <a href={b('#verificar')} class="btn btn-primary" data-open-case>Verificar meu caso</a>
   </div>
 </div>
 
