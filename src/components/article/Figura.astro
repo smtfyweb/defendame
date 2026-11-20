@@ -1,0 +1,9 @@
+---
+/** Moldura de figura numerada com legenda. Envolva gráficos, fluxos e grades. */
+interface Props { numero: number; legenda: string; titulo?: string }
+const { numero, legenda, titulo } = Astro.props;
+---
+<figure class="article-figure fig-std">
+  <slot />
+  <figcaption><strong>Figura {numero}{titulo ? `: ${titulo}.` : ':'}</strong> <Fragment set:html={legenda} /></figcaption>
+</figure>

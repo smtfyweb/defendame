@@ -1,0 +1,133 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import AdSlot from '../components/article/AdSlot.astro';
+import { TEMAS, GRUPOS, fmt, temaPorSlug, type Grupo } from '../data/temas';
+import { SITE, DATASET } from '../data/site';
+
+const artigos = (await getCollection('artigos', ({ data }) => import.meta.env.DEV || !data.rascunho)).sort((a, b) => +b.data.publicado - +a.data.publicado);
+const destaque = artigos.find((a) => a.data.destaque) ?? artigos[0];
+const dT = destaque && temaPorSlug(destaque.data.tema)!;
+const comArtigo = new Set(artigos.map((a) => a.data.tema));
+const outrosArtigos = artigos.filter((a) => a !== destaque).slice(0, 3);
+const proximos = TEMAS.filter((t) => !comArtigo.has(t.slug)).sort((a, b) => b.decisoes - a.decisoes).slice(0, Math.max(0, 3 - outrosArtigos.length));
+const grupos = Object.keys(GRUPOS) as Grupo[];
+const max = Math.max(...TEMAS.map((t) => t.decisoes));
+const chips = ['Golpe do Pix', 'Nome negativado', 'Voo cancelado', 'Conta de luz', 'Plano de saúde', 'Compra não entregue'];
+const data = (d: Date) => d.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+const etapas = [
+  { n: 1, ic: 'chat', t: 'Conte seu caso', d: 'Pelo formulário Verificar meu caso, você descreve o que aconteceu e informa os dados principais da demanda.', tag: 'Sem compromisso', lead: true },
+  { n: 2, ic: 'search-plus', t: 'Análise inicial', d: 'Avaliamos o relato à luz de decisões reais do TJSP: viabilidade, provas necessárias e o caminho adequado (JEC, Procon ou consumidor.gov.br).', tag: 'Sem compromisso', lead: true },
+  { n: 3, ic: 'folder', t: 'Estudo do caso', d: 'Análise aprofundada dos documentos, das provas e da jurisprudência da sua comarca para definir a estratégia.', tag: 'Com contrato' },
+  { n: 4, ic: 'doc', t: 'Petição inicial', d: 'Redação da petição com fundamentação no CDC, nas súmulas aplicáveis e em precedentes do TJSP.', tag: 'Com contrato' },
+  { n: 5, ic: 'stamp', t: 'Protocolo', d: 'Distribuição da ação no Juizado Especial Cível competente e acompanhamento das intimações.', tag: 'Com contrato' },
+  { n: 6, ic: 'gavel', t: 'Audiência e acompanhamento', d: 'Preparação e presença na audiência de conciliação e acompanhamento do processo até a sentença e o cumprimento.', tag: 'Com contrato' },
+];
+const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SITE.name, url: SITE.url, inLanguage: 'pt-BR', description: SITE.description }];
+---
+<BaseLayout title={`${SITE.name} — ${SITE.tagline}`} description={SITE.description} jsonLd={jsonLd}>
+<section class="hero">
+  <div class="hero-inner">
+    <a href="#jurimetria" class="hero-pill"><span class="hero-pill-badge">Jurimetria TJSP</span><span class="hero-pill-text">{DATASET.totalFmt} decisões analisadas <Icon name="chevron-right" size={14} stroke={2.4} /></span></a>
+    <h1>Seus direitos no Juizado Especial Cível, <em>explicados com dados</em></h1>
+    <p class="hero-lead">Artigos e guias sobre as 14 demandas mais comuns do JEC, construídos a partir de decisões reais do TJSP.</p>
+    <form class="search" id="searchForm" role="search">
+      <Icon name="search" size={20} stroke={2} />
+      <input id="q" type="search" placeholder="Qual foi o problema? Ex.: voo cancelado, nome no Serasa…" autocomplete="off" aria-label="Buscar tema" />
+      <button class="btn btn-primary" type="submit">Buscar</button>
+    </form>
+    <div class="chips">{chips.map((c) => <button class="chip" type="button" data-q={c}>{c}</button>)}</div>
+  </div>
+</section>
+
+<div class="stats-wrap"><div class="stats-panel"><div class="stats">
+  <div class="stat-card"><div class="stat-eyebrow">Extraídas do TJSP · {DATASET.recorte}</div><div class="stat-num">{DATASET.totalFmt}</div><div class="stat-label">Decisões analisadas</div></div>
+  <div class="stat-card"><div class="stat-eyebrow">Organizadas por fato gerador</div><div class="stat-num">14</div><div class="stat-label">Temas do JEC</div></div>
+  <div class="stat-card"><div class="stat-eyebrow">Guias e análises jurimétricas</div><div class="stat-num">{artigos.length}</div><div class="stat-label">{artigos.length === 1 ? 'Artigo publicado' : 'Artigos publicados'}</div></div>
+</div></div></div>
+
+<section class="temas" id="temas"><div class="section-inner">
+  <div class="section-head"><div class="section-eyebrow">14 temas do JEC</div><h2 class="section-title">Qual foi o seu problema?</h2><p class="section-sub">Escolha o tema para ler os artigos, entender seus direitos e ver como o TJSP tem decidido.</p></div>
+  <div class="tabs" id="tabs"><button class="tab on" data-f="all">Todos</button>{grupos.map((g) => <button class="tab" data-f={g}>{GRUPOS[g]}</button>)}</div>
+  <div class="tgrid" id="tgrid">{grupos.flatMap((g) => TEMAS.filter((t) => t.grupo === g)).map((t) => (
+    <a class="tcard" id={`tema-${t.slug}`} href={`/${t.slug}/`} data-g={t.grupo} data-k={`${t.nome.toLowerCase()} ${t.palavras}`}>
+      <div class="tcard-top"><span class="tcard-ic"><Icon name={t.icone} /></span><span class="tcard-g">{GRUPOS[t.grupo]}</span></div>
+      <h3 class="tcard-t">{t.nome}</h3><p class="tcard-d">{t.linha}</p>
+      <div class="tcard-f"><span>{fmt(t.decisoes)} decisões analisadas</span><span class="tcard-go">Ler artigos <Icon name="arrow-right" size={14} stroke={2.2} /></span></div>
+    </a>))}
+  </div>
+  <p class="empty" id="empty">Nenhum tema encontrado. Tente outras palavras ou <a href="#temas" id="clearQ" style="color:var(--teal)">veja todos os temas</a>.</p>
+</div></section>
+
+<div style="padding:0 16px"><AdSlot variant="wide" /></div>
+
+{destaque && (
+<section class="section" id="artigos" style="padding-top:72px"><div class="section-inner">
+  <div class="section-head"><div class="section-eyebrow">Artigos</div><h2 class="section-title">Em destaque</h2></div>
+  <div class="feat-grid">
+    <a class="feat" href={`/${dT!.slug}/${destaque.data.slug}/`}>
+      <div class="feat-vis">
+        <div class="fv-main"><div class="fv-n">{destaque.data.kpis.find((k) => k.destaque)?.valor ?? destaque.data.kpis[0]?.valor}</div><div class="fv-l">{destaque.data.kpis.find((k) => k.destaque)?.rotulo ?? destaque.data.kpis[0]?.rotulo}</div></div>
+      </div>
+      <div class="feat-body"><span class="feat-tag">{dT!.nome}</span><h3 class="feat-t">{destaque.data.titulo}</h3><div class="feat-meta">{destaque.data.formato === 'guia' ? 'Guia · Redação DefendaMe' : 'Análise · por André L. Silva'} · {data(destaque.data.publicado)} · {destaque.data.leitura} min de leitura</div></div>
+    </a>
+    <div class="slots">
+      <div class="slots-h">{outrosArtigos.length ? 'Mais artigos' : 'Próximos temas em produção'}</div>
+      {outrosArtigos.map((a) => { const t = temaPorSlug(a.data.tema)!; return (
+        <a class="nx" href={`/${t.slug}/${a.data.slug}/`}><span class="tcard-ic"><Icon name={t.icone} /></span><span class="nx-b"><span class="nx-t">{a.data.titulo}</span><span class="nx-m"><span class={`post-fmt fmt-${a.data.formato}`}>{a.data.formato === 'guia' ? 'Guia' : 'Análise'}</span>{t.nome} · {a.data.leitura} min</span></span><span class="nx-go"><Icon name="arrow-right" size={16} stroke={2.2} /></span></a>); })}
+      {proximos.map((t) => (
+        <a class="nx" href={`/${t.slug}/`}><span class="tcard-ic"><Icon name={t.icone} /></span><span class="nx-b"><span class="nx-t">{t.nome}</span><span class="nx-m">{fmt(t.decisoes)} decisões analisadas · artigo em breve</span></span><span class="nx-go"><Icon name="arrow-right" size={16} stroke={2.2} /></span></a>))}
+      <a class="nx-all" href="/artigos/">Ver todos os artigos <Icon name="arrow-right" size={16} stroke={2.2} /></a>
+    </div>
+  </div>
+</div></section>)}
+
+<section class="section" id="jurimetria" style="background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="section-inner juri">
+    <div>
+      <div class="section-head"><div class="section-eyebrow">Jurimetria</div><h2 class="section-title">Onde estão as demandas do JEC</h2><p class="section-sub">Volume de decisões do TJSP mapeadas em cada tema. Clique para abrir o tema.</p></div>
+      <div class="juri-kpis"><div class="kpi"><b>{DATASET.totalFmt}</b><span>decisões na base</span></div><div class="kpi"><b>{DATASET.recorte}</b><span>amostra TJSP</span></div></div>
+    </div>
+    <div>
+      <ol class="bars">{[...TEMAS].sort((a, b) => b.decisoes - a.decisoes).map((t) => (
+        <li class="bar"><a href={`/${t.slug}/`} class="bar-l">{t.nome}</a><div class="bar-t"><div class="bar-f" style={`width:${((t.decisoes / max) * 100).toFixed(1)}%`}></div></div><span class="bar-n">{fmt(t.decisoes)}</span></li>))}
+      </ol>
+      <p class="bars-note">Fonte: {DATASET.fonte}.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="como-funciona" style="background:var(--surface)"><div class="section-inner">
+  <div class="section-head"><div class="section-eyebrow">Como funciona</div><h2 class="section-title">Do seu relato à sentença, em 6 etapas</h2><p class="section-sub">O conteúdo do portal é aberto a todos. Se você decidir buscar seus direitos, acompanhamos o caso do início ao fim no Juizado Especial Cível.</p></div>
+  <div class="ph-lead-row">{etapas.filter((e) => e.lead).map((e) => (
+    <div class="ph ph-lead"><div class="ph-top"><span class="ph-ic"><Icon name={e.ic} /></span><span class="ph-tag">{e.tag}</span></div><div class="ph-n">Etapa {e.n}</div><h3 class="ph-t">{e.t}</h3><p class="ph-d">{e.d}</p></div>))}</div>
+  <div class="ph-div"><span><Icon name="lock" size={15} /> A partir daqui, com contrato de prestação de serviços advocatícios</span></div>
+  <div class="ph-row">{etapas.filter((e) => !e.lead).map((e) => (
+    <div class="ph"><div class="ph-top"><span class="ph-ic"><Icon name={e.ic} /></span><span class="ph-tag">{e.tag}</span></div><div class="ph-n">Etapa {e.n}</div><h3 class="ph-t">{e.t}</h3><p class="ph-d">{e.d}</p></div>))}</div>
+  <div class="ph-bar"><span class="ph-bar-ic"><Icon name="chart" size={18} /></span><p><b>Jurimetria em cada etapa:</b> a estratégia do seu caso é orientada por {DATASET.totalFmt} decisões do TJSP analisadas. As condições de contratação são apresentadas individualmente, após a análise inicial.</p></div>
+</div></section>
+
+<section class="cta-band"><div class="cta-box">
+  <h2>Não encontrou o seu caso?</h2><p>Conte o que aconteceu e receba uma orientação inicial sobre o caminho no JEC.</p>
+  <div class="hero-ctas" style="margin:0"><a href="#temas" class="btn btn-outline">Ver todos os temas</a><a href="#verificar" class="btn btn-primary" data-open-case>Verificar meu caso</a></div>
+</div></section>
+</BaseLayout>
+
+<script>
+  const cards = [...document.querySelectorAll<HTMLElement>('.tcard')], tabs = [...document.querySelectorAll<HTMLElement>('.tab')];
+  const q = document.getElementById('q') as HTMLInputElement, empty = document.getElementById('empty')!;
+  let group = 'all';
+  const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  function apply() {
+    const terms = norm(q.value).split(/\s+/).filter((w) => w.length > 2); let shown = 0;
+    cards.forEach((c) => { const k = norm(c.dataset.k || ''); const ok = (group === 'all' || c.dataset.g === group) && (!terms.length || terms.some((w) => k.includes(w))); c.hidden = !ok; if (ok) shown++; });
+    empty.style.display = shown ? 'none' : 'block';
+  }
+  const toTemas = () => document.getElementById('temas')!.scrollIntoView({ behavior: 'smooth' });
+  tabs.forEach((t) => t.addEventListener('click', () => { tabs.forEach((x) => x.classList.remove('on')); t.classList.add('on'); group = t.dataset.f!; apply(); }));
+  q.addEventListener('input', apply);
+  document.getElementById('searchForm')!.addEventListener('submit', (e) => { e.preventDefault(); apply(); toTemas(); });
+  document.querySelectorAll<HTMLElement>('.chip').forEach((c) => c.addEventListener('click', () => { q.value = c.dataset.q!; apply(); toTemas(); }));
+  document.getElementById('clearQ')!.addEventListener('click', () => { q.value = ''; group = 'all'; tabs.forEach((x) => x.classList.toggle('on', x.dataset.f === 'all')); apply(); });
+</script>

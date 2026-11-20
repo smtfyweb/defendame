@@ -1,0 +1,7 @@
+---
+/** Chamada "Verificar meu caso" no meio do texto. Use 2–3 por artigo, com frases diferentes. */
+import Icon from '../Icon.astro';
+interface Props { titulo?: string; texto?: string; tema?: string }
+const { titulo = 'Passou por algo parecido?', texto = 'Conte o que aconteceu e veja como o JEC tem decidido casos semelhantes.', tema } = Astro.props;
+---
+<aside class="cta-in"><div><b>{titulo}</b><span>{texto}</span></div><a class="btn btn-primary" href="/#verificar" data-open-case data-cat={tema}>Verificar meu caso <Icon name="arrow-right" size={16} stroke={2.2} /></a></aside>

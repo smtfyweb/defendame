@@ -1,0 +1,83 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { GRUPOS, temasDoGrupo, type Grupo } from '../data/temas';
+import { DATASET } from '../data/site';
+const grupos = Object.keys(GRUPOS) as Grupo[];
+const links = [
+  { href: '/', label: 'Início' },
+  { href: '/artigos/', label: 'Artigos' },
+  { href: '/#jurimetria', label: 'Jurimetria' },
+  { href: '/#como-funciona', label: 'Como funciona' },
+  { href: '/quem-somos/', label: 'Sobre' },
+];
+---
+<nav class="nav-wrap">
+  <div class="nav">
+    <Logo />
+    <ul class="nav-links">
+      <li><a href="/">Início</a></li>
+      <li class="has-mega" id="megaWrap">
+        <button class="mega-btn" id="megaBtn" aria-expanded="false" aria-controls="mega">Temas <Icon name="chevron-down" size={14} stroke={2.2} class="chev" /></button>
+        <div class="mega" id="mega" role="menu">
+          {grupos.map((g) => (
+            <div class="mega-col">
+              <div class="mega-h">{GRUPOS[g]}</div>
+              {temasDoGrupo(g).map((t) => (
+                <a href={`/${t.slug}/`} class="mega-a"><span class="mega-ic"><Icon name={t.icone} size={18} /></span>{t.nome}</a>
+              ))}
+            </div>
+          ))}
+          <div class="mega-foot"><span>14 temas · {DATASET.totalFmt} decisões do TJSP analisadas</span><a href="/#temas">Ver todos os temas →</a></div>
+        </div>
+      </li>
+      {links.slice(1).map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+    </ul>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema claro/escuro" title="Alternar tema">
+        <Icon name="sun" size={18} stroke={2} class="ic-sun" /><Icon name="moon" size={18} stroke={2} class="ic-moon" />
+      </button>
+      <a href="/#verificar" class="btn btn-primary" data-open-case>Verificar meu caso</a>
+      <button class="burger" id="burger" aria-label="Abrir menu"><Icon name="menu" size={20} stroke={2} /></button>
+    </div>
+  </div>
+</nav>
+
+<div class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer-bg" data-close></div>
+  <div class="drawer-panel">
+    <div class="drawer-top"><Logo /><button class="drawer-x" data-close aria-label="Fechar">×</button></div>
+    <div class="dr-main">
+      <a href="/" data-close>Início</a><a href="/#temas" data-close>Todos os temas</a>
+      {links.slice(1).map((l) => <a href={l.href} data-close>{l.label}</a>)}
+    </div>
+    {grupos.map((g) => (<>
+      <div class="dr-h">{GRUPOS[g]}</div>
+      {temasDoGrupo(g).map((t) => <a href={`/${t.slug}/`} class="dr-a">{t.nome}</a>)}
+    </>))}
+    <a href="/#verificar" class="btn btn-primary" data-open-case>Verificar meu caso</a>
+  </div>
+</div>
+
+<script>
+  const root = document.documentElement;
+  document.getElementById('themeToggle')?.addEventListener('click', () => {
+    const n = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', n);
+    try { localStorage.setItem('dm-theme', n); } catch {}
+  });
+  const mw = document.getElementById('megaWrap')!, mb = document.getElementById('megaBtn')!;
+  let tmr: number | undefined;
+  const hover = () => matchMedia('(hover:hover)').matches;
+  const setMega = (o: boolean) => { mw.classList.toggle('open', o); mb.setAttribute('aria-expanded', String(o)); };
+  mb.addEventListener('click', (e) => { e.stopPropagation(); if (hover()) { setMega(true); return; } setMega(!mw.classList.contains('open')); });
+  mw.addEventListener('mouseenter', () => { clearTimeout(tmr); if (hover()) setMega(true); });
+  mw.addEventListener('mouseleave', () => { tmr = window.setTimeout(() => setMega(false), 160); });
+  document.addEventListener('click', (e) => { if (!mw.contains(e.target as Node)) setMega(false); });
+  mw.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMega(false)));
+  const dr = document.getElementById('drawer')!;
+  const closeDr = () => { dr.classList.remove('open'); dr.setAttribute('aria-hidden', 'true'); };
+  document.getElementById('burger')?.addEventListener('click', () => { dr.classList.add('open'); dr.setAttribute('aria-hidden', 'false'); });
+  dr.querySelectorAll('[data-close], .dr-a, [data-open-case]').forEach((el) => el.addEventListener('click', closeDr));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { setMega(false); closeDr(); } });
+</script>

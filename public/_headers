@@ -1,0 +1,6 @@
+# Cloudflare Pages / Netlify: cache longo para arquivos com hash
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin

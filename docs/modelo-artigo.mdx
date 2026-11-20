@@ -1,0 +1,105 @@
+---
+# ─── COPIE ESTE ARQUIVO PARA src/content/artigos/<tema>-<assunto>.mdx ───
+titulo: "Título do artigo (H1) — claro, com a palavra-chave principal no início"
+seoTitle: "Título para o Google (até ~60 caracteres) — opcional"
+descricao: "Meta description: 140–160 caracteres, com a palavra-chave e o benefício para o leitor."
+linhaFina: "Subtítulo de 2–3 linhas que resume a tese. Aceita **negrito**."
+vinheta: "Jurimetria · Nome do tema"
+formato: analise                # analise = 1ª pessoa, "Por André L. Silva" | guia = Redação + revisão técnica
+tema: golpe-pix                 # um dos 14 slugs de src/data/temas.ts
+slug: assunto-curto             # URL final: /<tema>/<slug>/
+publicado: 2026-12-01
+leitura: 10                     # minutos
+destaque: false                 # true = vira o destaque da home
+rascunho: true                  # true = não é publicado no site
+tags: ["tag 1", "tag 2"]
+palavrasChave: ["palavra-chave principal", "variação 1", "variação 2"]
+kpis:                           # 3 números no topo (o mais importante com destaque: true)
+  - { valor: "19.558", rotulo: "Decisões analisadas TJSP" }
+  - { valor: "000", rotulo: "Sentenças do tema" }
+  - { valor: "00,0%", rotulo: "Procedência na comarca", destaque: true }
+kpiNota: "Dados extraídos diretamente do TJSP · amostra das RAJs 1 e 4."
+dadosComarca:                   # cartão lateral (opcional)
+  titulo: "Dados · JEC Barueri"
+  subtitulo: "Nome do tema"
+  linhas:
+    - { rotulo: "Sentenças", valor: "00" }
+    - { rotulo: "Procedência", valor: "00,0%", tom: bom }
+    - { rotulo: "Prescrição", valor: "5 anos", tom: alerta }
+relacionados: ["negativacao-indevida", "consignado-rmc"]   # "Demandas correlatas"
+faq:                            # vira o acordeão + dados estruturados FAQPage
+  - pergunta: "Pergunta frequente 1?"
+    resposta: "Resposta objetiva, citando a norma (ex.: Art. 14 do CDC)."
+fontes:
+  - { nome: "Súmula 479 do STJ", descricao: "Responsabilidade objetiva das instituições financeiras.", url: "https://www.stj.jus.br" }
+---
+
+## 1. O caso concreto (abra com uma história)
+
+Parágrafo de abertura em 1ª pessoa ("Entre as decisões que separei na base…"). Use **negrito** só para termos-chave.
+
+<CasoReal titulo="Título curto do caso" origem="JEC de Barueri · nome do tema" nome="Seu João">
+
+Fatos do caso, extraídos de decisão pública da base e anonimizados (nome fictício, detalhes alterados).
+
+Desfecho descrito de forma qualitativa: "a sentença reconheceu… e determinou…". Sem valor de condenação.
+
+</CasoReal>
+
+<Figura numero={1} legenda="Explique o que a figura mostra em uma frase.">
+  <StepFlow etapas={[
+    { icone: 'phone', titulo: 'Etapa 1', texto: 'Descrição curta.' },
+    { icone: 'alert', titulo: 'Etapa 2', texto: 'Descrição curta.' },
+    { icone: 'swap', titulo: 'Etapa 3', texto: 'Descrição curta.' },
+    { icone: 'exit', titulo: 'Etapa 4', texto: 'Descrição curta.' },
+  ]} />
+</Figura>
+
+<Cta titulo="Passou por algo parecido?" texto="Conte o que aconteceu e veja como o JEC tem decidido casos semelhantes." tema="golpe-pix" />
+
+## 2. A tese (em 1ª pessoa)
+
+Argumento do autor em 1ª pessoa, com a norma e a súmula que sustentam a tese.
+
+<Quote rotulo="Ponto-chave">
+Uma frase curta do próprio texto que resume a tese.
+</Quote>
+
+Doutrina: cite autor e obra. Edição e página só se conferidas no exemplar.
+
+## 3. O que dizem os dados
+
+<DataTable colunas={['Recorte', 'Decisões', 'Procedência', 'Dano moral médio']} linhas={[
+  { celulas: ['Média estadual', '657', '41,7%', 'R$ 3.722'] },
+  { celulas: ['JEC Barueri (comarca-foco)', '47', '46,8%', 'R$ 5.058'], destaque: true },
+]} />
+
+<Figura numero={2} legenda="Taxa de procedência por recorte.">
+  <BarChart titulo="Taxa de procedência" subtitulo="Tema · TJSP" nota="Fonte: dados extraídos diretamente do TJSP · amostra das RAJs 1 e 4." barras={[
+    { rotulo: 'Média estadual', sub: '657 sentenças', valor: 41.7, tom: 'base' },
+    { rotulo: 'JEC Barueri', sub: '47 sentenças', valor: 46.8, tom: 'destaque' },
+  ]} />
+</Figura>
+
+<Callout titulo="Ressalva metodológica e conformidade OAB (Provimento nº 205/2021)">
+Os percentuais refletem tendências de decisões já proferidas e não garantem resultado em casos individuais.
+</Callout>
+
+<AdSlot />
+
+## 4. O que fazer (passo a passo)
+
+<ProofGrid itens={[
+  { titulo: 'Documento 1', texto: 'Para que serve.' },
+  { titulo: 'Documento 2', texto: 'Para que serve.' },
+]} />
+
+<Cta titulo="Já reuniu os documentos?" texto="Envie o relato do seu caso para uma análise inicial." tema="golpe-pix" />
+
+## 5. Conclusão
+
+<Parecer titulo="Conclusão do autor">
+
+"Conclusão do especialista em 1–2 parágrafos."
+
+</Parecer>

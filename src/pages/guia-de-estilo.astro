@@ -1,0 +1,313 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import Logo from '../components/Logo.astro';
+import { Quote, CasoReal, Cta, AdSlot, Figura, StepFlow, BarChart, DataTable, EvidenceGrid, ProofGrid, Callout, Parecer, Sumula, LeiaTambem } from '../components/article/index';
+
+const cores = [
+  ['--bg', 'Fundo da página', '#f6fbfa', '#0b1719'], ['--bg-hero', 'Fundo do topo', '#eaf6f4', '#0d1f22'], ['--surface', 'Cartões e menu', '#ffffff', '#11252a'],
+  ['--muted-bg', 'Painéis e trilhos', '#ecefef', '#15292d'], ['--teal', 'Destaque · botões · dado principal', '#12857e', '#2bb3a8'], ['--teal-h', 'Hover do botão', '#0f736d', '#38c4b8'],
+  ['--teal-logo', 'Barras secundárias', '#3fa79e', '#5ccfc4'], ['--teal-pale', 'Fundo de chip e ícone', '#e6f4f2', '#0f2f30'], ['--line-teal', 'Bordas teal, barra base', '#cfe7e3', '#1f4542'],
+  ['--navy', 'Títulos e texto forte', '#1d2939', '#e6eef0'], ['--fg-mid', 'Texto corrido', '#3b475a', '#b7c5ca'], ['--fg-muted', 'Legendas e metadados', '#667085', '#8a9ba1'],
+  ['--fg-light', 'Eixos e notas', '#98a2b3', '#5f7176'], ['--border', 'Bordas e divisórias', '#e3e8ec', '#1f373c'],
+];
+const apoio = [['Âmbar', '#d97706', 'Alertas e ressalvas'], ['Vermelho', '#d64545', 'Erros de formulário'], ['Substack', '#ff6719', 'Hover do ícone Substack'], ['Logo', '#12857e', 'Caixas do logotipo (fixo)']];
+const tipos = [
+  ['H1 de artigo', 'clamp(32px, 4.6vw, 52px) · 400 · -0.04em', 'font-size:44px;font-weight:400;letter-spacing:-.04em;line-height:1.08', 'Golpe do Pix e falsa central'],
+  ['H2 de artigo', 'clamp(26px, 3vw, 32px) · 400 · -0.035em', 'font-size:30px;font-weight:400;letter-spacing:-.035em;line-height:1.15', 'Radiografia da jurimetria'],
+  ['Título de cartão', '16.5–18.5px · 600 · -0.015em', 'font-size:18px;font-weight:600;letter-spacing:-.015em', 'Negativação indevida'],
+  ['Texto do artigo', '18px · 400 · altura 1.78', 'font-size:18px;line-height:1.78;color:var(--fg-mid)', 'O consumidor lesado conta com a inversão do ônus da prova.'],
+  ['Interface', '14–15px · 500', 'font-size:15px;font-weight:500', 'Verificar meu caso'],
+  ['Chapéu', '12–13px · 600 · MAIÚSCULAS · +0.07em', 'font-size:13px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--teal)', 'Reportagem investigativa'],
+  ['Número (KPI)', '26–52px · 400 · -0.04em · tabular', 'font-size:44px;font-weight:400;letter-spacing:-.04em;font-variant-numeric:tabular-nums', '19.558'],
+];
+const icones = {
+  Temas: ['pix', 'user-x', 'receipt', 'card', 'trending-down', 'file-x', 'zap', 'phone', 'heart-pulse', 'plane', 'luggage', 'cart', 'car', 'hourglass', 'help'],
+  Interface: ['search', 'search-plus', 'chevron-down', 'chevron-right', 'arrow-right', 'arrow-left', 'menu', 'x', 'plus', 'sun', 'moon', 'send', 'check', 'pencil', 'link', 'list'],
+  Conteúdo: ['lock', 'clock', 'alert', 'swap', 'exit', 'gavel', 'user', 'bank', 'doc', 'chat', 'folder', 'stamp', 'chart', 'shield', 'layers', 'monitor'],
+  Marcas: ['whatsapp', 'x-brand', 'facebook', 'linkedin', 'substack', 'volume'],
+};
+const nav = [['principios', 'Princípios'], ['marca', 'Marca'], ['cores', 'Cores'], ['tipografia', 'Tipografia'], ['espaco', 'Espaço e forma'], ['icones', 'Ícones'], ['interface', 'Interface'], ['artigo', 'Componentes de artigo'], ['graficos', 'Técnica dos gráficos'], ['formatos', 'Formatos e autoria'], ['estrutura', 'Estrutura do artigo'], ['seo', 'SEO e silo'], ['voz', 'Voz e OAB'], ['outro-chat', 'Usar em outro chat']];
+const code = (s: string) => s.trim();
+---
+<BaseLayout title="Guia de estilo — DefendaMe" description="Padrão visual, editorial e técnico do DefendaMe." noindex>
+<main class="sg">
+  <header class="sg-cover">
+    <Logo />
+    <h1>Guia de Estilo</h1>
+    <p>Identidade visual, componentes e padrão editorial do DefendaMe. Versão 1.0 · novembro de 2026.</p>
+    <div class="sg-cover-meta"><span>DM Sans</span><span>Teal #12857e</span><span>Astro + MDX</span><span>Provimento 205/2021</span></div>
+  </header>
+  <div class="sg-wrap">
+    <nav class="sg-nav" aria-label="Seções do guia"><ol>{nav.map(([a, t], i) => <li><a href={`#${a}`}><span>{String(i + 1).padStart(2, '0')}</span>{t}</a></li>)}</ol>
+      <a class="sg-dl" href="https://github.com/" onclick="return false" title="Arquivo no repositório">docs/GUIA-DE-ESTILO.md</a></nav>
+    <div class="sg-body">
+
+<section id="principios"><span class="sg-n">01</span><h2>Princípios</h2>
+  <div class="sg-grid3">
+    <div class="sg-card"><b>Clean e sóbrio</b><p>Muito respiro, poucos elementos por tela. Referência: template DataNova.</p></div>
+    <div class="sg-card"><b>Uma cor de destaque</b><p>Teal é a única cor de marca. Âmbar só para alertas.</p></div>
+    <div class="sg-card"><b>Dado antes de opinião</b><p>Todo artigo abre com números e mostra a fonte de cada um.</p></div>
+    <div class="sg-card"><b>Ética da OAB</b><p>Informativo, sem promessa de resultado, sem preço e sem "grátis".</p></div>
+    <div class="sg-card"><b>Escuro por padrão</b><p>Abre no tema escuro; tudo precisa funcionar também no claro.</p></div>
+    <div class="sg-card"><b>Nada de imagem em gráfico</b><p>Gráficos e diagramas em HTML/CSS/SVG com os tokens de cor.</p></div>
+  </div>
+</section>
+
+<section id="marca"><span class="sg-n">02</span><h2>Marca</h2>
+  <p>Caixa teal com o <b>D</b> e uma seta de devolução na base da haste, "efenda" em texto e caixa teal com "<b>Me</b>". As letras são contornos reais da DM Sans 600; as duas caixas têm a mesma altura e ficam na linha de base do texto.</p>
+  <div class="sg-grid2">
+    <div class="sg-logo sg-light" data-theme="light"><Logo /></div>
+    <div class="sg-logo sg-dark"><Logo /></div>
+  </div>
+  <div class="sg-row"><img src="/favicon.svg" width="56" height="56" alt="Ícone" /><p class="sg-small">Ícone (favicon e avatar): só a caixa do D. Não usar escudo, balança, azul-marinho, laranja nem slogan junto do logo.</p></div>
+</section>
+
+<section id="cores"><span class="sg-n">03</span><h2>Cores</h2>
+  <p>Toda cor vem de uma variável CSS. Nunca use cor fixa em componente.</p>
+  <div class="sg-swatches">{cores.map(([t, uso, cl, es]) => (
+    <div class="sg-sw"><div class="sg-sw-c"><span style={`background:${cl}`}></span><span style={`background:${es}`}></span></div><code>{t}</code><small>{uso}</small><small class="sg-hex">{cl} · {es}</small></div>))}
+  </div>
+  <p class="sg-small">Cada amostra: metade esquerda = tema claro, metade direita = tema escuro.</p>
+  <div class="sg-grid4">{apoio.map(([n, h, u]) => <div class="sg-sw"><div class="sg-sw-c"><span style={`background:${h}`}></span></div><code>{n} {h}</code><small>{u}</small></div>)}</div>
+</section>
+
+<section id="tipografia"><span class="sg-n">04</span><h2>Tipografia</h2>
+  <p>Fonte única: <b>DM Sans</b> (variável, hospedada no site). Títulos leves (400) com letras apertadas; ênfase em 600.</p>
+  <div class="sg-type">{tipos.map(([n, spec, st, ex]) => <div class="sg-type-r"><div><b>{n}</b><small>{spec}</small></div><div style={st}>{ex}</div></div>)}</div>
+</section>
+
+<section id="espaco"><span class="sg-n">05</span><h2>Espaço e forma</h2>
+  <div class="sg-grid3">
+    <div class="sg-card"><div class="sg-radius" style="border-radius:6px"></div><b>6px · botões</b><p><code>--r-btn</code></p></div>
+    <div class="sg-card"><div class="sg-radius" style="border-radius:10px"></div><b>10px · campos e caixas</b><p><code>--r</code></p></div>
+    <div class="sg-card"><div class="sg-radius" style="border-radius:16px"></div><b>16px · cartões</b><p><code>--r-lg</code></p></div>
+  </div>
+  <ul class="sg-list"><li>Largura máxima 1170px · coluna de leitura 752px · barra lateral 300px · margem no celular 16px.</li><li>96px entre seções da home · 52–56px antes de cada H2 · 30–36px em volta de citações, figuras e chamadas.</li><li>Sombras: só <code>--shadow</code> (cartões) e <code>--shadow-lg</code> (hover e modais).</li></ul>
+</section>
+
+<section id="icones"><span class="sg-n">06</span><h2>Ícones</h2>
+  <p>Estilo Lucide: traço 1.9–2px, pontas arredondadas, grade 24×24. Marcas são preenchidas. Uso: <code>&lt;Icon name="plane" size=&#123;22&#125; /&gt;</code></p>
+  {Object.entries(icones).map(([g, ns]) => (<>
+    <h3 class="sg-h3">{g}</h3>
+    <div class="sg-icons">{ns.map((n) => <div class="sg-ic"><span class="med-icon"><Icon name={n} stroke={2} /></span><code>{n}</code></div>)}</div>
+  </>))}
+</section>
+
+<section id="interface"><span class="sg-n">07</span><h2>Componentes de interface</h2>
+  <h3 class="sg-h3">Botões e selos</h3>
+  <div class="sg-demo sg-row"><a class="btn btn-primary">Verificar meu caso</a><a class="btn btn-outline">Ver as 5 provas</a><span class="section-eyebrow" style="margin:0">Guia prático</span><span class="feat-tag" style="margin:0">Fraude bancária e golpe do Pix</span></div>
+  <pre><code>{code(`<a class="btn btn-primary" href="/#verificar" data-open-case>Verificar meu caso</a>
+<a class="btn btn-outline" href="#">Ver as 5 provas</a>
+<span class="section-eyebrow">Guia prático</span>`)}</code></pre>
+  <h3 class="sg-h3">Cartão de tema</h3>
+  <div class="sg-demo" style="max-width:340px"><a class="tcard" href="/golpe-pix/"><div class="tcard-top"><span class="tcard-ic"><Icon name="pix" /></span><span class="tcard-g">Bancos e crédito</span></div><h3 class="tcard-t">Fraude bancária e golpe do Pix</h3><p class="tcard-d">Falsa central, invasão de conta, contas "laranja"</p><div class="tcard-f"><span>657 decisões analisadas</span><span class="tcard-go">Ler artigos <Icon name="arrow-right" size={14} stroke={2.2} /></span></div></a></div>
+  <h3 class="sg-h3">Formulário "Verificar meu caso"</h3>
+  <p>Modal em 3 etapas. Abre com qualquer elemento que tenha <code>data-open-case</code>; com <code>data-cat="golpe-pix"</code> já entra na etapa 2 com o tema escolhido. As perguntas de cada demanda ficam em <code>src/data/caseForms.ts</code>.</p>
+  <div class="sg-demo sg-row"><button class="btn btn-primary" data-open-case data-cat="transporte-aereo">Abrir o formulário (Voo)</button></div>
+</section>
+
+<section id="artigo"><span class="sg-n">08</span><h2>Componentes de artigo</h2>
+  <p>Usados dentro do <code>.mdx</code> sem importar nada. Abaixo, cada um funcionando e o código para usá-lo.</p>
+
+  <h3 class="sg-h3">Quote — fala do especialista</h3>
+  <div class="sg-demo post-body"><Quote>"A alegação de 'culpa exclusiva da vítima' tornou-se um carimbo burocrático. O CDC Art. 14 é claro: a responsabilidade do fornecedor é objetiva. Não se discute má-fé — discute-se o defeito na segurança do serviço. Quando o texto é longo, ele fica recolhido em cerca de seis linhas, com o botão para ler a análise completa, sem perder nada do conteúdo para o Google. O sistema bancário lucra com a digitalização e responde pela segurança do canal."</Quote></div>
+  <pre><code>{code(`<Quote>
+"Texto da fala. A primeira frase é destacada automaticamente."
+</Quote>`)}</code></pre>
+
+  <h3 class="sg-h3">Cta — chamada no meio do texto</h3>
+  <div class="sg-demo"><Cta titulo="Passou por algo parecido?" texto="Conte o que aconteceu e veja como o JEC tem decidido casos semelhantes." tema="golpe-pix" /></div>
+  <pre><code>{code(`<Cta titulo="Passou por algo parecido?" texto="Conte o que aconteceu…" tema="golpe-pix" />`)}</code></pre>
+
+  <h3 class="sg-h3">StepFlow — fluxo e linha do tempo</h3>
+  <div class="sg-demo"><Figura numero={2} legenda="Prazos do Mecanismo Especial de Devolução (MED)."><StepFlow etapas={[
+    { icone: 'clock', valor: '24', unidade: 'h', titulo: 'Janela de ouro', texto: 'Comunique o banco imediatamente.' },
+    { icone: 'lock', valor: '72', unidade: 'h', titulo: 'Bloqueio cautelar', texto: 'Saldo congelado no banco recebedor.' },
+    { icone: 'doc', valor: '80', unidade: 'd', titulo: 'Prazo final', texto: 'Devolução via MED ou ação no JEC.' }]} /></Figura></div>
+  <pre><code>{code(`<Figura numero={2} legenda="Prazos do MED.">
+  <StepFlow etapas={[
+    { icone: 'clock', valor: '24', unidade: 'h', titulo: 'Janela de ouro', texto: '…' },
+    { icone: 'lock',  valor: '72', unidade: 'h', titulo: 'Bloqueio cautelar', texto: '…' },
+  ]} />
+</Figura>`)}</code></pre>
+
+  <h3 class="sg-h3">BarChart — gráfico de barras</h3>
+  <div class="sg-demo"><BarChart titulo="Taxa de procedência" subtitulo="Fraude bancária / Pix · TJSP" nota="Fonte: dados extraídos diretamente do TJSP · amostra das RAJs 1 e 4." barras={[
+    { rotulo: 'TJSP Fraude', sub: '657 sentenças', valor: 41.7, tom: 'base' }, { rotulo: 'JEC Osasco', sub: '271 sentenças', valor: 42.3 }, { rotulo: 'JEC Barueri', sub: '47 sentenças', valor: 46.8, tom: 'destaque' }]} /></div>
+  <pre><code>{code(`<BarChart titulo="Taxa de procedência" subtitulo="Fraude bancária / Pix · TJSP" nota="Fonte: …" barras={[
+  { rotulo: 'TJSP Fraude', sub: '657 sentenças', valor: 41.7, tom: 'base' },     // referência
+  { rotulo: 'JEC Osasco',  sub: '271 sentenças', valor: 42.3 },                   // comparativo
+  { rotulo: 'JEC Barueri', sub: '47 sentenças',  valor: 46.8, tom: 'destaque' },  // dado principal (1 por gráfico)
+]} />`)}</code></pre>
+
+  <h3 class="sg-h3">DataTable — tabela jurimétrica</h3>
+  <div class="sg-demo"><DataTable colunas={['Recorte', 'Decisões', 'Procedência', 'Dano moral médio']} linhas={[{ celulas: ['Média estadual', '657', '41,7%', 'R$ 3.722'] }, { celulas: ['JEC Barueri', '47', '46,8%', 'R$ 5.058'], destaque: true }]} /></div>
+  <pre><code>{code(`<DataTable colunas={['Recorte', 'Decisões', 'Procedência', 'Dano moral médio']} linhas={[
+  { celulas: ['Média estadual', '657', '41,7%', 'R$ 3.722'] },
+  { celulas: ['JEC Barueri', '47', '46,8%', 'R$ 5.058'], destaque: true },
+]} />`)}</code></pre>
+
+  <h3 class="sg-h3">EvidenceGrid — comparativo em duas colunas</h3>
+  <div class="sg-demo"><EvidenceGrid rodape="Art. 6º, VIII, do CDC: o ônus da prova pode ser invertido." colunas={[
+    { titulo: 'O consumidor prova', icone: 'user', tom: 'positivo', itens: [{ titulo: 'Comunicação imediata', texto: 'B.O. e protocolos.' }, { titulo: 'Comprovantes', texto: 'Pix com identificador E2E.' }] },
+    { titulo: 'Só o banco detém', icone: 'bank', tom: 'neutro', itens: [{ titulo: 'Registros de acesso', texto: 'Logs, IP e dispositivo.' }, { titulo: 'Rastreabilidade', texto: 'Trilha da conta recebedora.' }] }]} /></div>
+
+  <h3 class="sg-h3">ProofGrid — cartões numerados</h3>
+  <div class="sg-demo"><ProofGrid itens={[{ titulo: 'B.O. detalhado', texto: 'Registro imediato.' }, { titulo: 'Protocolos do SAC', texto: 'Pedido de MED.' }, { titulo: 'Comprovantes E2E', texto: 'Chave e banco.' }]} /></div>
+
+  <h3 class="sg-h3">Quote rotulo — olho nas Análises</h3>
+  <div class="sg-demo post-body"><Quote rotulo="Ponto-chave">A pergunta que decide esses processos não é "quem digitou a senha", e sim "o sistema do banco deveria ter estranhado aquela transferência".</Quote></div>
+  <pre><code>{code(`<Quote rotulo="Ponto-chave">Frase curta do próprio texto.</Quote>`)}</code></pre>
+  <h3 class="sg-h3">CasoReal — caso da base, anonimizado</h3>
+  <div class="sg-demo post-body"><CasoReal titulo="O aposentado que tentou cancelar uma compra" origem="JEC de Barueri · fraude via Pix" nome="Seu João"><p>Fatos do caso extraídos de decisão pública, com nome fictício e detalhes alterados. Desfecho descrito de forma qualitativa, sem valor de condenação.</p></CasoReal></div>
+  <pre><code>{code(`<CasoReal titulo="…" origem="JEC de Barueri · tema" nome="Seu João">
+
+Fatos do caso (decisão pública, anonimizada).
+
+</CasoReal>`)}</code></pre>
+  <h3 class="sg-h3">Callout · Sumula · Parecer</h3>
+  <div class="sg-demo post-body">
+    <Callout titulo="Ressalva metodológica e conformidade OAB">Os percentuais refletem tendências de decisões já proferidas e não garantem resultado em casos individuais.</Callout>
+    <Sumula rotulo="Súmula 479 · STJ" fonte="Superior Tribunal de Justiça">"As instituições bancárias respondem objetivamente pelos danos causados por fraudes ou delitos praticados por terceiros…"</Sumula>
+    <Parecer><p>"A via judicial no Juizado Especial Cível não deve ser encarada como uma aposta, mas como um mecanismo técnico de restabelecimento do equilíbrio contratual."</p></Parecer>
+  </div>
+
+  <h3 class="sg-h3">LeiaTambem · AdSlot</h3>
+  <div class="sg-demo post-body"><LeiaTambem temas={['negativacao-indevida', 'consignado-rmc']} /><AdSlot /></div>
+</section>
+
+<section id="graficos"><span class="sg-n">09</span><h2>Técnica dos gráficos e elementos gráficos</h2>
+  <div class="sg-rule"><Icon name="chart" stroke={2} /><p><b>Regra de ouro:</b> nenhum gráfico é imagem. Tudo é HTML + CSS + SVG inline com os tokens de cor. Funciona nos dois temas, fica nítido em qualquer tela e o texto é lido pelo Google e por leitores de tela.</p></div>
+  <div class="sg-grid2">
+    <div class="sg-card"><b>Barras verticais</b><p>SVG com viewBox ≥ 500 × 185–200, largura 100%. 3 linhas de grade (<code>--border</code>), eixo 10px <code>--fg-light</code>. Barras de 64px, raio 4px. Papéis: base = <code>--line-teal</code>; comparativo = <code>--teal-logo</code> 55%; destaque = <code>--teal</code> (só uma).</p></div>
+    <div class="sg-card"><b>Barras horizontais</b><p>Lista com rótulo 13.5px, trilho 8px <code>--muted-bg</code>, preenchimento <code>--teal</code> proporcional ao maior valor e número à direita (600, tabular).</p></div>
+    <div class="sg-card"><b>Fluxos e prazos</b><p>Cartões em grid com setas <code>arrow-right</code>; ícone em quadrado 46px <code>--teal-pale</code>; número grande opcional com unidade em teal. No celular, empilham e a seta gira 90°.</p></div>
+    <div class="sg-card"><b>Cartões e tabelas</b><p>Superfície + borda <code>--border</code> + raio 16px. Destaque sempre teal (borda, fundo <code>--teal-pale</code> ou número). Tabelas rolam na horizontal no celular.</p></div>
+  </div>
+  <ol class="sg-list"><li>Use só tokens de cor e teste nos dois temas.</li><li>Texto mínimo de 10px no SVG e 12.5px fora dele.</li><li>Prefira HTML/CSS (grid/flex) quando não for gráfico de dados.</li><li>Uma informação de destaque por elemento, sempre em teal.</li><li>Envolva em <code>&lt;Figura&gt;</code> e numere na ordem em que aparece.</li></ol>
+</section>
+
+<section id="formatos"><span class="sg-n">10</span><h2>Formatos editoriais e autoria</h2>
+  <p>O DefendaMe é o veículo e o laboratório de dados; André L. Silva é a voz e a autoridade. Cada artigo declara <code>formato: analise</code> ou <code>formato: guia</code> no frontmatter.</p>
+  <div class="sg-grid2">
+    <div class="sg-card"><b><span class="post-fmt fmt-analise">Análise</span></b><p>"Por André L. Silva", em 1ª pessoa. Interpreta os dados da base. Olhos com <code>Quote rotulo</code>, caso em <code>CasoReal</code>, conclusão em <code>Parecer</code>. JSON-LD OpinionNewsArticle com autor Person. 1.800–3.500 palavras.</p></div>
+    <div class="sg-card"><b><span class="post-fmt fmt-guia">Guia</span></b><p>"Redação DefendaMe · Revisão técnica: André L. Silva". Passo a passo em ordem cronológica, fala com o leitor. 1 <code>Quote</code> do revisor e checklist final. JSON-LD Article com autor Organization e reviewedBy. 900–1.600 palavras.</p></div>
+  </div>
+  <p>Cada tema deve ter o par Análise + Guia, com link cruzado. A página <a href="/autor/andre-l-silva/">/autor/andre-l-silva/</a> lista os dois automaticamente.</p>
+</section>
+
+<section id="estrutura"><span class="sg-n">11</span><h2>Estrutura padrão de um artigo</h2>
+  <ol class="sg-steps">
+    <li><b>Cabeçalho</b> (automático): chapéu, H1 com a palavra-chave no início, linha fina, autor/data, barra de ações.</li>
+    <li><b>KPIs</b>: 3 números (o principal em destaque) + nota de fonte.</li>
+    <li><b>Índice</b> (automático, a partir dos H2).</li>
+    <li><b>1. O caso</b>: <code>CasoReal</code> da base + Figura 1 + CTA 1.</li>
+    <li><b>2. A tese</b>: argumento em 1ª pessoa, 1 olho (<code>Quote rotulo</code>), doutrina por autor e obra.</li>
+    <li><b>3. Os dados</b>: tabela + gráfico + ressalva (<code>Callout</code>) + CTA 2 + anúncio.</li>
+    <li><b>4. A norma/procedimento</b>: prazos em <code>StepFlow</code>, súmulas em <code>Sumula</code>.</li>
+    <li><b>5. O que fazer</b>: checklist / <code>ProofGrid</code> + CTA 3.</li>
+    <li><b>6. Conclusão</b>: <code>Parecer</code>.</li>
+    <li><b>Rodapé</b> (automático): FAQ, tags, CTA final, fontes, nota editorial, demandas correlatas.</li>
+  </ol>
+  <div class="sg-grid4">
+    <div class="sg-kpi"><b>1.800–3.500</b><span>palavras</span></div><div class="sg-kpi"><b>3</b><span>CTAs no texto</span></div><div class="sg-kpi"><b>3–5</b><span>figuras</span></div><div class="sg-kpi"><b>6–10</b><span>fontes oficiais</span></div>
+  </div>
+</section>
+
+<section id="seo"><span class="sg-n">12</span><h2>SEO e silo</h2>
+  <ul class="sg-list"><li>URL <code>/&lt;tema&gt;/&lt;slug&gt;/</code>, slug curto e sem acentos.</li><li><code>seoTitle</code> até ~60 caracteres; <code>descricao</code> com 140–160.</li><li>Um H1 por página; H2 numerados ("1. …") para o índice.</li><li>Silo: artigo → página do tema → temas do mesmo grupo ("Leia também" e "Demandas correlatas").</li><li>Dados estruturados automáticos: Article, FAQPage, BreadcrumbList, WebSite, CollectionPage.</li><li>Imagem de compartilhamento padrão 1200×630 (<code>public/og-default.jpg</code>).</li></ul>
+</section>
+
+<section id="voz"><span class="sg-n">13</span><h2>Voz editorial e regras da OAB</h2>
+  <div class="sg-grid2">
+    <div class="sg-card"><b>Tom</b><p>Sóbrio, técnico, objetivo e acessível. Explica o termo jurídico na primeira vez. Fala com o leitor ("você"). Dados sempre com recorte e fonte. Análise em 1ª pessoa; Guia fala com o leitor. Doutrina por autor e obra (edição/página só se conferidas). Normas conferidas na fonte oficial.</p></div>
+    <div class="sg-card sg-warn"><b>Provimento CFOAB nº 205/2021 — obrigatório</b><p>Sem valores de honorários, forma de pagamento, gratuidade ou descontos (art. 3º, I). Sem resultados concretos de clientes; casos da base anonimizados em <code>CasoReal</code>. Sempre "sem promessa de resultado". Pode informar que o JEC não tem custas no 1º grau. Cargo: "Especialista em Legal Analytics".</p></div>
+  </div>
+</section>
+
+<section id="outro-chat"><span class="sg-n">14</span><h2>Usar em outro chat</h2>
+  <p>Cole o arquivo <code>docs/GUIA-DE-ESTILO.md</code> inteiro e este pedido:</p>
+  <pre><code>{code(`Você vai escrever um artigo para o site DefendaMe (Astro + MDX). Siga rigorosamente o Guia de Estilo
+(cores por tokens, DM Sans, formato analise ou guia, componentes Quote, CasoReal, Cta, AdSlot, Figura, StepFlow, BarChart, DataTable,
+EvidenceGrid, ProofGrid, Callout, Parecer, Sumula, LeiaTambem; estrutura conforme o formato; 3 CTAs; 2 AdSlots;
+FAQ e fontes no frontmatter; regras do Provimento 205/2021). Entregue UM arquivo .mdx a partir do
+docs/modelo-artigo.mdx, sem CSS nem HTML solto, sem inventar dados: use só os números que eu fornecer.`)}</code></pre>
+</section>
+
+    </div>
+  </div>
+</main>
+</BaseLayout>
+
+<style is:global>
+  .sg { max-width: 1240px; margin: 0 auto; padding: 32px 16px 80px; }
+  .sg-cover { border-radius: var(--r-lg); background: var(--bg-hero); border: 1px solid var(--border); padding: 56px 48px; margin-bottom: 40px; }
+  .sg-cover .wm { font-size: 40px; }
+  .sg-cover h1 { font-size: clamp(40px, 6vw, 72px); font-weight: 400; letter-spacing: -.045em; color: var(--navy); margin: 28px 0 10px; line-height: 1; }
+  .sg-cover p { font-size: 18px; color: var(--fg-mid); margin: 0; max-width: 640px; }
+  .sg-cover-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+  .sg-cover-meta span { font-size: 13px; padding: 6px 12px; border-radius: 20px; background: var(--surface); border: 1px solid var(--border); color: var(--fg-mid); }
+  .sg-wrap { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 48px; align-items: start; }
+  @media (max-width: 900px) { .sg-wrap { grid-template-columns: 1fr; } .sg-nav { position: static !important; } .sg-cover { padding: 36px 22px; } }
+  .sg-body { min-width: 0; }
+  .sg .chart-note { font-size: 12px !important; line-height: 1.5 !important; }
+  .sg-nav { position: sticky; top: 124px; }
+  .sg-nav ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+  .sg-nav a { display: flex; gap: 10px; padding: 7px 8px; border-radius: 8px; font-size: 14px; color: var(--fg-mid); text-decoration: none; }
+  .sg-nav a:hover { background: var(--teal-pale); color: var(--teal); }
+  .sg-nav a span { color: var(--teal); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .sg-dl { display: block; margin-top: 14px; font-size: 12.5px; color: var(--fg-muted) !important; }
+  .sg-body section { padding: 8px 0 48px; border-bottom: 1px solid var(--border); margin-bottom: 40px; scroll-margin-top: 120px; }
+  .sg-n { display: inline-block; font-size: 13px; font-weight: 600; color: var(--teal); letter-spacing: .08em; }
+  .sg-body h2 { font-size: clamp(28px, 3.4vw, 38px); font-weight: 400; letter-spacing: -.035em; color: var(--navy); margin: 4px 0 14px; }
+  .sg-body > section > p, .sg-body p { color: var(--fg-mid); font-size: 16px; line-height: 1.7; }
+  .sg-h3 { font-size: 16px; font-weight: 600; color: var(--navy); margin: 28px 0 12px; }
+  .sg-small { font-size: 13.5px !important; color: var(--fg-muted) !important; }
+  .sg-grid2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; margin: 16px 0; }
+  .sg-grid3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 16px; margin: 16px 0; }
+  .sg-grid4 { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 14px; margin: 16px 0; }
+  @media (max-width: 760px) { .sg-grid2, .sg-grid3, .sg-grid4 { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 480px) { .sg-grid2, .sg-grid3 { grid-template-columns: 1fr; } }
+  .sg-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 20px; }
+  .sg-card b { display: block; color: var(--navy); font-weight: 600; margin-bottom: 6px; }
+  .sg-card p { margin: 0; font-size: 14.5px !important; color: var(--fg-muted) !important; line-height: 1.6 !important; }
+  .sg-warn { border-color: rgba(217,119,6,.4); background: rgba(217,119,6,.06); }
+  .sg-logo { border-radius: var(--r-lg); padding: 40px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); }
+  .sg-logo .wm { font-size: 40px; }
+  .sg-light { background: #ffffff; } .sg-light .wm { color: #1d2939; }
+  .sg-dark { background: #0b1719; } .sg-dark .wm { color: #e6eef0; }
+  .sg-row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+  .sg-swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; margin: 16px 0; }
+  .sg-sw { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 10px; display: flex; flex-direction: column; gap: 4px; }
+  .sg-sw-c { display: flex; height: 64px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 6px; }
+  .sg-sw-c span { flex: 1; }
+  .sg-sw code { font-size: 13px; color: var(--navy); font-weight: 600; }
+  .sg-sw small { font-size: 12px; color: var(--fg-muted); }
+  .sg-hex { font-variant-numeric: tabular-nums; color: var(--fg-light) !important; }
+  .sg-type { border: 1px solid var(--border); border-radius: var(--r-lg); background: var(--surface); }
+  .sg-type-r { display: grid; grid-template-columns: 220px 1fr; gap: 20px; padding: 18px 22px; border-bottom: 1px solid var(--border); align-items: center; color: var(--navy); }
+  .sg-type-r:last-child { border: 0; }
+  .sg-type-r b { display: block; font-size: 14px; } .sg-type-r small { font-size: 12px; color: var(--fg-muted); }
+  @media (max-width: 640px) { .sg-type-r { grid-template-columns: 1fr; } }
+  .sg-radius { width: 100%; height: 56px; background: var(--teal-pale); border: 2px solid var(--teal); margin-bottom: 12px; }
+  .sg-list { color: var(--fg-mid); font-size: 15px; line-height: 1.7; padding-left: 20px; }
+  .sg-icons { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 10px; }
+  .sg-ic { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 14px 6px; border: 1px solid var(--border); border-radius: var(--r); background: var(--surface); }
+  .sg-ic .med-icon { margin: 0; width: 42px; height: 42px; }
+  .sg-ic code { font-size: 11.5px; color: var(--fg-muted); }
+  .sg-demo { border: 1px dashed var(--border); border-radius: var(--r-lg); padding: 22px; margin: 6px 0 10px; background: var(--bg); }
+  .sg-demo .cta-in, .sg-demo .expert-quote, .sg-demo .article-figure, .sg-demo .alert-box-warning, .sg-demo .sumula, .sg-demo .verdict-quote, .sg-demo .leia, .sg-demo .ad-slot { margin-top: 0; margin-bottom: 14px; }
+  .sg pre { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 14px 16px; overflow-x: auto; margin: 0 0 8px; }
+  .sg pre code, .sg code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12.5px; color: var(--fg-mid); }
+  .sg p code, .sg li code { background: var(--muted-bg); padding: 1px 5px; border-radius: 4px; }
+  .sg-rule { display: flex; gap: 14px; align-items: flex-start; padding: 18px 20px; border-radius: var(--r-lg); background: var(--teal-pale); border: 1px solid var(--line-teal); color: var(--teal); }
+  .sg-rule p { margin: 0; color: var(--navy) !important; }
+  .sg-steps { counter-reset: s; list-style: none; padding: 0; display: grid; gap: 8px; }
+  .sg-steps li { position: relative; padding: 12px 16px 12px 52px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); color: var(--fg-mid); font-size: 15px; }
+  .sg-steps li::before { counter-increment: s; content: counter(s); position: absolute; left: 14px; top: 11px; width: 26px; height: 26px; border-radius: 6px; background: var(--teal); color: #fff; font-weight: 600; font-size: 13px; display: flex; align-items: center; justify-content: center; }
+  .sg-steps b { color: var(--navy); }
+  .sg-kpi { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 16px; }
+  .sg-kpi b { display: block; font-size: 28px; font-weight: 400; letter-spacing: -.04em; color: var(--navy); }
+  .sg-kpi span { font-size: 13px; color: var(--fg-muted); }
+</style>

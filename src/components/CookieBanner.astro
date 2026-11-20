@@ -1,0 +1,27 @@
+---
+/** Aviso de cookies (LGPD). A escolha fica em localStorage "dm-consent" = "all" | "necessary".
+ *  Scripts de Analytics/AdSense só devem ser carregados em loadOptional(). */
+---
+<div class="ck" id="cookieBar" role="dialog" aria-label="Aviso de cookies" hidden>
+  <p>Usamos cookies necessários para o site funcionar e, com a sua autorização, cookies de desempenho e de publicidade. Saiba mais na <a href="/cookies/">Política de Cookies</a>.</p>
+  <div class="ck-act"><button type="button" class="btn btn-outline" data-ck="necessary">Somente necessários</button><button type="button" class="btn btn-primary" data-ck="all">Aceitar todos</button></div>
+</div>
+<script>
+  const bar = document.getElementById('cookieBar')!;
+  const KEY = 'dm-consent';
+  let v: string | null = null;
+  try { v = localStorage.getItem(KEY); } catch {}
+  function loadOptional() {
+    // Ex.: Google Analytics / AdSense — inserir aqui, somente após consentimento.
+  }
+  if (!v) bar.hidden = false; else if (v === 'all') loadOptional();
+  bar.addEventListener('click', (e) => {
+    const b = (e.target as HTMLElement).closest('[data-ck]'); if (!b) return;
+    const c = b.getAttribute('data-ck')!;
+    try { localStorage.setItem(KEY, c); } catch {}
+    bar.hidden = true; if (c === 'all') loadOptional();
+  });
+  document.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).closest('[data-cookie-prefs]')) { bar.hidden = false; (bar.querySelector('[data-ck="all"]') as HTMLElement)?.focus(); }
+  });
+</script>

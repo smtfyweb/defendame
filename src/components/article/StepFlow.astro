@@ -1,0 +1,21 @@
+---
+/** Fluxo em etapas (cartões "med-step" com setas). Até 4 etapas por linha.
+ *  etapas: [{ icone, titulo, texto, valor?, unidade? }] — "valor/unidade" mostra o número grande (ex.: 72 h). */
+import Icon from '../Icon.astro';
+interface Etapa { icone: string; titulo: string; texto: string; valor?: string; unidade?: string }
+interface Props { etapas: Etapa[]; setas?: boolean }
+const { etapas, setas = true } = Astro.props;
+const cols = etapas.length;
+const tpl = setas ? Array.from({ length: cols }, () => '1fr').join(' auto ') : `repeat(${cols}, minmax(0,1fr))`;
+---
+<div class="flow4" style={`grid-template-columns:${tpl}`}>
+  {etapas.map((e, i) => (<>
+    {i > 0 && setas && <span class="flow-arrow" aria-hidden="true"><Icon name="arrow-right" size={18} stroke={2} /></span>}
+    <div class="med-step">
+      <div class="med-top"><div class="med-icon"><Icon name={e.icone} stroke={2} /></div><div class="med-step-n">Etapa {String(i + 1).padStart(2, '0')}</div></div>
+      {e.valor && <div class="med-num">{e.valor}<span>{e.unidade}</span></div>}
+      <div class="med-time-label">{e.titulo}</div>
+      <div class="med-desc">{e.texto}</div>
+    </div>
+  </>))}
+</div>

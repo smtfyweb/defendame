@@ -1,0 +1,16 @@
+---
+/** Quadro de caso ilustrativo, extraído de decisão pública do TJSP e anonimizado.
+ *  Regra editorial (OAB): nunca é cliente; nomes e detalhes alterados; sem valores de condenação
+ *  apresentados como "resultado obtido". Use `origem` para comarca/ano/tipo de decisão. */
+import Icon from '../Icon.astro';
+interface Props { titulo: string; origem?: string; nome?: string }
+const { titulo, origem, nome } = Astro.props;
+---
+<aside class="caso" aria-label="Caso ilustrativo">
+  <div class="caso-head">
+    <span class="caso-ic"><Icon name="gavel" size={18} stroke={2} /></span>
+    <div><span class="caso-k">Caso da base · decisão analisada</span><strong class="caso-t">{titulo}</strong>{origem && <span class="caso-o">{origem}</span>}</div>
+  </div>
+  <div class="caso-body"><slot /></div>
+  <p class="caso-nota"><Icon name="lock" size={13} stroke={2.2} />Caso extraído de decisão pública do TJSP.{nome && ` "${nome}" é nome fictício, e outros`}{!nome && ' Nomes e'} detalhes foram alterados para proteger as partes. Não se trata de cliente.</p>
+</aside>

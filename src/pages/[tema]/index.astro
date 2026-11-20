@@ -1,0 +1,44 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+import AdSlot from '../../components/article/AdSlot.astro';
+import { TEMAS, GRUPOS, fmt, type Tema } from '../../data/temas';
+import { SITE, DATASET } from '../../data/site';
+
+export function getStaticPaths() { return TEMAS.map((t) => ({ params: { tema: t.slug }, props: { tema: t } })); }
+const { tema } = Astro.props as { tema: Tema };
+const artigos = (await getCollection('artigos', ({ data }) => data.tema === tema.slug && (import.meta.env.DEV || !data.rascunho)))
+  .sort((a, b) => +b.data.publicado - +a.data.publicado);
+const outros = TEMAS.filter((t) => t.grupo === tema.grupo && t.slug !== tema.slug);
+const data = (d: Date) => d.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+const jsonLd = [{ '@context': 'https://schema.org', '@type': 'CollectionPage', name: `${tema.nome} no Juizado Especial Cível`, url: new URL(`/${tema.slug}/`, SITE.url).href,
+  breadcrumb: { '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Início', item: SITE.url }, { '@type': 'ListItem', position: 2, name: tema.nome }] } }];
+---
+<BaseLayout title={`${tema.nome} no JEC: direitos, decisões e guias — ${SITE.name}`} description={`${tema.linha}. Artigos e dados de ${fmt(tema.decisoes)} decisões do TJSP sobre ${tema.nome.toLowerCase()} no Juizado Especial Cível.`} jsonLd={jsonLd}>
+<main class="inst">
+  <div class="inst-head">
+    <nav class="crumb" aria-label="Navegação"><a href="/">Início</a><span>›</span><a href="/#temas">Temas</a><span>›</span><span class="crumb-cur">{tema.nome}</span></nav>
+    <span class="post-vinheta">{GRUPOS[tema.grupo]}</span>
+    <h1>{tema.nome}</h1>
+    <p>{tema.linha}. Entenda seus direitos e veja como o Tribunal de Justiça de São Paulo tem decidido.</p>
+  </div>
+  <div class="big-stats" style="max-width:820px"><div><b>{fmt(tema.decisoes)}</b><span>decisões do TJSP mapeadas neste tema</span></div><div><b>{artigos.length}</b><span>{artigos.length === 1 ? 'artigo publicado' : 'artigos publicados'}</span></div><div><b>{DATASET.recorte}</b><span>Grande SP e Região de Campinas</span></div></div>
+  <div class="inst-wrap">
+    <div class="doc">
+      <h2 id="artigos">Artigos sobre {tema.nome.toLowerCase()}</h2>
+      {artigos.length ? (
+        <div class="slots">{artigos.map((a) => (
+          <a class="nx" href={`/${tema.slug}/${a.data.slug}/`}><span class="tcard-ic"><Icon name={tema.icone} /></span><span class="nx-b"><span class="nx-t">{a.data.titulo}</span><span class="nx-m"><span class={`post-fmt fmt-${a.data.formato}`}>{a.data.formato === 'guia' ? 'Guia' : 'Análise'}</span>{data(a.data.publicado)} · {a.data.leitura} min de leitura</span></span><span class="nx-go"><Icon name="arrow-right" size={16} stroke={2.2} /></span></a>
+        ))}</div>
+      ) : (
+        <p>Os artigos deste tema estão em produção. Enquanto isso, se você passou por um problema de {tema.nome.toLowerCase()}, pode relatar o seu caso.</p>
+      )}
+      <aside class="cta-in"><div><b>Passou por um problema de {tema.nome.toLowerCase()}?</b><span>Conte o que aconteceu e receba uma orientação sobre o caminho adequado no JEC.</span></div><a class="btn btn-primary" href="/#verificar" data-open-case data-cat={tema.slug}>Verificar meu caso <Icon name="arrow-right" size={16} stroke={2.2} /></a></aside>
+      <h2 id="correlatos">Outros temas de {GRUPOS[tema.grupo].toLowerCase()}</h2>
+      <div class="silo-grid">{outros.map((t) => <a href={`/${t.slug}/`} class="silo-card"><span class="silo-tag">{fmt(t.decisoes)} decisões</span><h4>{t.nome}</h4><p>{t.linha}</p></a>)}</div>
+    </div>
+    <aside class="inst-toc" style="display:flex;flex-direction:column;gap:20px"><AdSlot variant="side" /></aside>
+  </div>
+</main>
+</BaseLayout>

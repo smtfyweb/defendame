@@ -1,0 +1,7 @@
+---
+/** Espaço reservado para Google AdSense. variant: "in" (no texto), "side" (300×250), "wide" (horizontal).
+ *  Para ativar: inserir o bloco <ins class="adsbygoogle"> e carregá-lo somente após consentimento de cookies. */
+interface Props { variant?: 'in' | 'side' | 'wide' }
+const { variant = 'in' } = Astro.props;
+---
+<div class={`ad-slot ad-${variant}`} role="complementary" aria-label="Publicidade"><span>Publicidade</span></div>
