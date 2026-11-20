@@ -3,7 +3,7 @@ const _p = (path: string) => `${_B}/${path.replace(/^\//, '')}`;
 
 export const SITE = {
   name: 'DefendaMe',
-  url: 'https://defendame.online',
+  url: 'https://smtfyweb.github.io/defendame',
   tagline: 'Seus direitos no Juizado Especial Cível, explicados com dados',
   description: 'Artigos e guias sobre as demandas mais comuns do Juizado Especial Cível, construídos a partir de decisões reais do TJSP.',
   locale: 'pt_BR',
