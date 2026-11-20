@@ -8,6 +8,7 @@ const toc: [string, string][] = [
   ['terceiros', 'Cookies de terceiros'],
   ['mais', 'Mais informações']
 ];
+import { b } from '../utils/url';
 ---
 <PageLayout title="Política de Cookies — DefendaMe" description="Entenda quais cookies o DefendaMe usa e como gerenciar suas preferências." h1="Política de Cookies" lead="Quais cookies usamos, para que servem e como você controla suas preferências." atualizado="19 de novembro de 2026" toc={toc}>
 
@@ -27,6 +28,6 @@ const toc: [string, string][] = [
 <h2 id="terceiros">4. Cookies de terceiros</h2>
 <p>Quando ativados, serviços do Google seguem as políticas do próprio Google, disponíveis em <a href="https://policies.google.com/technologies/cookies" target="_blank" rel="noopener">policies.google.com/technologies/cookies</a>.</p>
 <h2 id="mais">5. Mais informações</h2>
-<p>Para saber como tratamos dados pessoais, leia a <a href="/privacidade/" >Política de Privacidade</a>. Dúvidas: <span class="fill">privacidade@defendame.online</span>.</p>
+<p>Para saber como tratamos dados pessoais, leia a <a href={b('privacidade/')} >Política de Privacidade</a>. Dúvidas: <span class="fill">privacidade@defendame.online</span>.</p>
 
 </PageLayout>

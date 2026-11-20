@@ -35,12 +35,13 @@ const jsonLd: object[] = [
     { '@type': 'ListItem', position: 3, name: d.titulo, item: url } ] },
 ];
 if (d.faq.length) jsonLd.push({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: d.faq.map((f) => ({ '@type': 'Question', name: f.pergunta, acceptedAnswer: { '@type': 'Answer', text: f.resposta } })) });
+import { b } from '../utils/url';
 ---
 <BaseLayout title={d.seoTitle ?? `${d.titulo} — ${SITE.name}`} description={d.descricao} image={d.ogImage} type="article" noindex={d.rascunho}
   jsonLd={jsonLd} article={{ published: d.publicado, modified: d.atualizado, section: tema.nome, tags: d.tags }}>
 <main class="post">
   <div class="post-top">
-    <nav class="crumb" aria-label="Navegação"><a href="/">Início</a><span>›</span><a href={`/${tema.slug}/`}>{tema.nome}</a><span>›</span><span class="crumb-cur">Artigo</span></nav>
+    <nav class="crumb" aria-label="Navegação"><a href={b()}>Início</a><span>›</span><a href={b(`${tema.slug}/`)}>{tema.nome}</a><span>›</span><span class="crumb-cur">Artigo</span></nav>
     <div class="post-kicker"><span class={`post-fmt fmt-${d.formato}`}>{FORMATOS[d.formato].rotulo}</span><span class="post-vinheta">{d.vinheta}</span></div>
     <h1 class="post-titulo">{d.titulo}</h1>
     <p class="post-sub" set:html={md(d.linhaFina)} />
@@ -49,7 +50,7 @@ if (d.faq.length) jsonLd.push({ '@context': 'https://schema.org', '@type': 'FAQP
         <><img class="post-meta-av" src={AUTHOR.photo} alt="" width="30" height="30" />
         <span>Por <a href={AUTHOR.url}>{AUTHOR.name}</a></span></>
       ) : (
-        <><img class="post-meta-av mark" src="/favicon.svg" alt="" width="30" height="30" />
+        <><img class="post-meta-av mark" src={b('favicon.svg')} alt="" width="30" height="30" />
         <span>Redação {SITE.name}</span><span class="dot">·</span>
         <span class="post-meta-rev"><img src={AUTHOR.photo} alt="" width="22" height="22" />Revisão técnica: <a href={AUTHOR.url}>{AUTHOR.name}</a></span></>
       )}
@@ -67,7 +68,7 @@ if (d.faq.length) jsonLd.push({ '@context': 'https://schema.org', '@type': 'FAQP
       <div class="pa-font" role="group" aria-label="Tamanho do texto"><button type="button" id="fMinus" aria-label="Diminuir fonte">A−</button><span></span><button type="button" id="fPlus" aria-label="Aumentar fonte">A+</button></div>
       <button class="pa-audio" id="listen" type="button" aria-pressed="false"><Icon name="volume" /><span>Ouvir</span></button>
       <span class="pa-toast" id="toast" role="status"></span>
-      <a class="pa-cta" href="/#verificar" data-open-case data-cat={d.tema}>Verificar meu caso <Icon name="arrow-right" size={16} stroke={2.2} /></a>
+      <a class="pa-cta" href={b('#verificar')} data-open-case data-cat={d.tema}>Verificar meu caso <Icon name="arrow-right" size={16} stroke={2.2} /></a>
     </div>
   </div>
 
@@ -95,9 +96,9 @@ if (d.faq.length) jsonLd.push({ '@context': 'https://schema.org', '@type': 'FAQP
         </section>
       )}
 
-      {d.tags.length > 0 && <div class="post-tags"><span>Tags:</span>{d.tags.map((t) => <a href={`/${tema.slug}/`}>{t}</a>)}</div>}
+      {d.tags.length > 0 && <div class="post-tags"><span>Tags:</span>{d.tags.map((t) => <a href={b(`${tema.slug}/`)}>{t}</a>)}</div>}
 
-      <a class="post-cta" href="/#verificar" data-open-case data-cat={d.tema}>
+      <a class="post-cta" href={b('#verificar')} data-open-case data-cat={d.tema}>
         <span class="post-cta-ic"><Icon name="chat" stroke={1.9} /></span>
         <span class="post-cta-b"><span class="post-cta-l">Verificar meu caso</span><span class="post-cta-t">Passou por algo parecido? Conte o que aconteceu.</span><span class="post-cta-s">Avaliamos o seu relato e indicamos o caminho adequado no Juizado Especial Cível.</span></span>
         <span class="post-cta-go">Começar <Icon name="arrow-right" size={16} stroke={2.2} /></span>
@@ -117,7 +118,7 @@ if (d.faq.length) jsonLd.push({ '@context': 'https://schema.org', '@type': 'FAQP
 
       <section class="post-body silo-section" id="demandas-relacionadas">
         <h2>Demandas correlatas no Juizado Especial Cível</h2>
-        <div class="silo-grid">{correlatos.map((t) => <a href={`/${t!.slug}/`} class="silo-card"><span class="silo-tag">{GRUPOS[t!.grupo]}</span><h4>{t!.nome}</h4><p>{t!.linha} · {fmt(t!.decisoes)} decisões analisadas.</p></a>)}</div>
+        <div class="silo-grid">{correlatos.map((t) => <a href={b(`${t!.slug}/`)} class="silo-card"><span class="silo-tag">{GRUPOS[t!.grupo]}</span><h4>{t!.nome}</h4><p>{t!.linha} · {fmt(t!.decisoes)} decisões analisadas.</p></a>)}</div>
       </section>
     </div>
 
@@ -131,7 +132,7 @@ if (d.faq.length) jsonLd.push({ '@context': 'https://schema.org', '@type': 'FAQP
           <div class="scard-body">{d.dadosComarca.linhas.map((l) => <div class="juri-row"><span class="juri-label">{l.rotulo}</span><span class={`juri-val${l.tom === 'bom' ? ' good' : l.tom === 'alerta' ? ' warn' : ''}`}>{l.valor}</span></div>)}</div></div>
       )}
       <AdSlot variant="side" />
-      <a class="side-cta" href="/#verificar" data-open-case data-cat={d.tema}><span class="side-cta-l">Verificar meu caso</span><span class="side-cta-t">Passou por algo parecido? Conte o que aconteceu.</span></a>
+      <a class="side-cta" href={b('#verificar')} data-open-case data-cat={d.tema}><span class="side-cta-l">Verificar meu caso</span><span class="side-cta-t">Passou por algo parecido? Conte o que aconteceu.</span></a>
     </aside>
   </div>
 </main>

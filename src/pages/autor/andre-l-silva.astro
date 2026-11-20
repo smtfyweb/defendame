@@ -29,6 +29,7 @@ const jsonLd = [
       { '@type': 'ListItem', position: 1, name: 'Início', item: SITE.url },
       { '@type': 'ListItem', position: 2, name: AUTHOR.name, item: url } ] },
 ];
+import { b } from '../../utils/url';
 ---
 <PageLayout title={`${AUTHOR.name} — ${AUTHOR.role} | ${SITE.name}`} description={`${AUTHOR.name}, ${AUTHOR.jobTitle}. Análises assinadas e guias revisados sobre o Juizado Especial Cível, a partir de ${DATASET.totalFmt} decisões do TJSP.`}
   h1={AUTHOR.name} lead={`${AUTHOR.jobTitle}. Lê decisões judiciais em escala para explicar, com dados, como o Juizado decide.`} toc={toc} jsonLd={jsonLd}>
@@ -56,15 +57,15 @@ const jsonLd = [
 
 {analises.length > 0 && <>
 <h2 id="analises">Análises assinadas</h2>
-<ul class="autor-list">{analises.map((a) => <li><a href={`/${a.data.tema}/${a.data.slug}/`}><span class="al-k"><span class="post-fmt fmt-analise">{FORMATOS.analise.rotulo}</span>{temaPorSlug(a.data.tema)?.nome} · {data(a.data.publicado)}</span><span class="al-t">{a.data.titulo}</span><span class="al-d">{a.data.descricao}</span></a></li>)}</ul>
+<ul class="autor-list">{analises.map((a) => <li><a href={b(`${a.data.tema}/${a.data.slug}/`)}><span class="al-k"><span class="post-fmt fmt-analise">{FORMATOS.analise.rotulo}</span>{temaPorSlug(a.data.tema)?.nome} · {data(a.data.publicado)}</span><span class="al-t">{a.data.titulo}</span><span class="al-d">{a.data.descricao}</span></a></li>)}</ul>
 </>}
 {guias.length > 0 && <>
 <h2 id="guias">Guias revisados</h2>
-<ul class="autor-list">{guias.map((a) => <li><a href={`/${a.data.tema}/${a.data.slug}/`}><span class="al-k"><span class="post-fmt fmt-guia">{FORMATOS.guia.rotulo}</span>{temaPorSlug(a.data.tema)?.nome} · {data(a.data.publicado)}</span><span class="al-t">{a.data.titulo}</span><span class="al-d">{a.data.descricao}</span></a></li>)}</ul>
+<ul class="autor-list">{guias.map((a) => <li><a href={b(`${a.data.tema}/${a.data.slug}/`)}><span class="al-k"><span class="post-fmt fmt-guia">{FORMATOS.guia.rotulo}</span>{temaPorSlug(a.data.tema)?.nome} · {data(a.data.publicado)}</span><span class="al-t">{a.data.titulo}</span><span class="al-d">{a.data.descricao}</span></a></li>)}</ul>
 </>}
 
 <h2 id="formacao">Formação</h2>
 <ul>{AUTHOR.alumniOf.map((n) => <li>{n}</li>)}</ul>
 
-<p><a class="btn btn-primary" href="/#verificar" data-open-case>Verificar meu caso <Icon name="arrow-right" size={16} stroke={2.2} /></a></p>
+<p><a class="btn btn-primary" href={b('#verificar')} data-open-case>Verificar meu caso <Icon name="arrow-right" size={16} stroke={2.2} /></a></p>
 </PageLayout>

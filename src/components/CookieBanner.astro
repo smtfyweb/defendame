@@ -1,9 +1,10 @@
 ---
 /** Aviso de cookies (LGPD). A escolha fica em localStorage "dm-consent" = "all" | "necessary".
  *  Scripts de Analytics/AdSense só devem ser carregados em loadOptional(). */
+import { b } from '../utils/url';
 ---
 <div class="ck" id="cookieBar" role="dialog" aria-label="Aviso de cookies" hidden>
-  <p>Usamos cookies necessários para o site funcionar e, com a sua autorização, cookies de desempenho e de publicidade. Saiba mais na <a href="/cookies/">Política de Cookies</a>.</p>
+  <p>Usamos cookies necessários para o site funcionar e, com a sua autorização, cookies de desempenho e de publicidade. Saiba mais na <a href={b('cookies/')}>Política de Cookies</a>.</p>
   <div class="ck-act"><button type="button" class="btn btn-outline" data-ck="necessary">Somente necessários</button><button type="button" class="btn btn-primary" data-ck="all">Aceitar todos</button></div>
 </div>
 <script>

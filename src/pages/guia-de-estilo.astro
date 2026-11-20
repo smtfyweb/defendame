@@ -29,6 +29,7 @@ const icones = {
 };
 const nav = [['principios', 'Princípios'], ['marca', 'Marca'], ['cores', 'Cores'], ['tipografia', 'Tipografia'], ['espaco', 'Espaço e forma'], ['icones', 'Ícones'], ['interface', 'Interface'], ['artigo', 'Componentes de artigo'], ['graficos', 'Técnica dos gráficos'], ['formatos', 'Formatos e autoria'], ['estrutura', 'Estrutura do artigo'], ['seo', 'SEO e silo'], ['voz', 'Voz e OAB'], ['outro-chat', 'Usar em outro chat']];
 const code = (s: string) => s.trim();
+import { b } from '../utils/url';
 ---
 <BaseLayout title="Guia de estilo — DefendaMe" description="Padrão visual, editorial e técnico do DefendaMe." noindex>
 <main class="sg">
@@ -60,7 +61,7 @@ const code = (s: string) => s.trim();
     <div class="sg-logo sg-light" data-theme="light"><Logo /></div>
     <div class="sg-logo sg-dark"><Logo /></div>
   </div>
-  <div class="sg-row"><img src="/favicon.svg" width="56" height="56" alt="Ícone" /><p class="sg-small">Ícone (favicon e avatar): só a caixa do D. Não usar escudo, balança, azul-marinho, laranja nem slogan junto do logo.</p></div>
+  <div class="sg-row"><img src={b('favicon.svg')} width="56" height="56" alt="Ícone" /><p class="sg-small">Ícone (favicon e avatar): só a caixa do D. Não usar escudo, balança, azul-marinho, laranja nem slogan junto do logo.</p></div>
 </section>
 
 <section id="cores"><span class="sg-n">03</span><h2>Cores</h2>
@@ -97,11 +98,11 @@ const code = (s: string) => s.trim();
 <section id="interface"><span class="sg-n">07</span><h2>Componentes de interface</h2>
   <h3 class="sg-h3">Botões e selos</h3>
   <div class="sg-demo sg-row"><a class="btn btn-primary">Verificar meu caso</a><a class="btn btn-outline">Ver as 5 provas</a><span class="section-eyebrow" style="margin:0">Guia prático</span><span class="feat-tag" style="margin:0">Fraude bancária e golpe do Pix</span></div>
-  <pre><code>{code(`<a class="btn btn-primary" href="/#verificar" data-open-case>Verificar meu caso</a>
+  <pre><code>{code(`<a class="btn btn-primary" href={b('#verificar')} data-open-case>Verificar meu caso</a>
 <a class="btn btn-outline" href="#">Ver as 5 provas</a>
 <span class="section-eyebrow">Guia prático</span>`)}</code></pre>
   <h3 class="sg-h3">Cartão de tema</h3>
-  <div class="sg-demo" style="max-width:340px"><a class="tcard" href="/golpe-pix/"><div class="tcard-top"><span class="tcard-ic"><Icon name="pix" /></span><span class="tcard-g">Bancos e crédito</span></div><h3 class="tcard-t">Fraude bancária e golpe do Pix</h3><p class="tcard-d">Falsa central, invasão de conta, contas "laranja"</p><div class="tcard-f"><span>657 decisões analisadas</span><span class="tcard-go">Ler artigos <Icon name="arrow-right" size={14} stroke={2.2} /></span></div></a></div>
+  <div class="sg-demo" style="max-width:340px"><a class="tcard" href={b('golpe-pix/')}><div class="tcard-top"><span class="tcard-ic"><Icon name="pix" /></span><span class="tcard-g">Bancos e crédito</span></div><h3 class="tcard-t">Fraude bancária e golpe do Pix</h3><p class="tcard-d">Falsa central, invasão de conta, contas "laranja"</p><div class="tcard-f"><span>657 decisões analisadas</span><span class="tcard-go">Ler artigos <Icon name="arrow-right" size={14} stroke={2.2} /></span></div></a></div>
   <h3 class="sg-h3">Formulário "Verificar meu caso"</h3>
   <p>Modal em 3 etapas. Abre com qualquer elemento que tenha <code>data-open-case</code>; com <code>data-cat="golpe-pix"</code> já entra na etapa 2 com o tema escolhido. As perguntas de cada demanda ficam em <code>src/data/caseForms.ts</code>.</p>
   <div class="sg-demo sg-row"><button class="btn btn-primary" data-open-case data-cat="transporte-aereo">Abrir o formulário (Voo)</button></div>
@@ -194,7 +195,7 @@ Fatos do caso (decisão pública, anonimizada).
     <div class="sg-card"><b><span class="post-fmt fmt-analise">Análise</span></b><p>"Por André L. Silva", em 1ª pessoa. Interpreta os dados da base. Olhos com <code>Quote rotulo</code>, caso em <code>CasoReal</code>, conclusão em <code>Parecer</code>. JSON-LD OpinionNewsArticle com autor Person. 1.800–3.500 palavras.</p></div>
     <div class="sg-card"><b><span class="post-fmt fmt-guia">Guia</span></b><p>"Redação DefendaMe · Revisão técnica: André L. Silva". Passo a passo em ordem cronológica, fala com o leitor. 1 <code>Quote</code> do revisor e checklist final. JSON-LD Article com autor Organization e reviewedBy. 900–1.600 palavras.</p></div>
   </div>
-  <p>Cada tema deve ter o par Análise + Guia, com link cruzado. A página <a href="/autor/andre-l-silva/">/autor/andre-l-silva/</a> lista os dois automaticamente.</p>
+  <p>Cada tema deve ter o par Análise + Guia, com link cruzado. A página <a href={b('autor/andre-l-silva/')}>/autor/andre-l-silva/</a> lista os dois automaticamente.</p>
 </section>
 
 <section id="estrutura"><span class="sg-n">11</span><h2>Estrutura padrão de um artigo</h2>

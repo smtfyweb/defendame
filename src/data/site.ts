@@ -1,3 +1,6 @@
+const _B = import.meta.env.BASE_URL.replace(/\/$/, '');
+const _p = (path: string) => `${_B}/${path.replace(/^\//, '')}`;
+
 export const SITE = {
   name: 'DefendaMe',
   url: 'https://defendame.online',
@@ -7,7 +10,7 @@ export const SITE = {
   email: 'contato@defendame.online',          // confirmar
   privacyEmail: 'privacidade@defendame.online', // confirmar
   substack: 'https://substack.com/@andreluisilv',
-  ogDefault: '/og-default.jpg',
+  ogDefault: _p('og-default.jpg'),
   // Endpoint que recebe o formulário "Verificar meu caso" (Formspree, Cloudflare Worker, etc.)
   formEndpoint: import.meta.env.PUBLIC_FORM_ENDPOINT ?? '',
 };
@@ -17,8 +20,8 @@ export const AUTHOR = {
   role: 'Especialista em Legal Analytics',
   city: 'Barueri/SP',
   jobTitle: 'Especialista em Legal Analytics e Juizados Especiais Cíveis',
-  photo: '/images/andre-l-silva.jpg',
-  url: '/autor/andre-l-silva/',
+  photo: _p('images/andre-l-silva.jpg'),
+  url: _p('autor/andre-l-silva/'),
   alumniOf: ['Universidade Paulista (UNIP)', 'Pontifícia Universidade Católica do Paraná (PUC-PR)', 'Escola Paulista de Negócios (EPN)', 'Universidade de Mogi das Cruzes (UMC)'],
 };
 
