@@ -64,6 +64,7 @@ import { b } from '../utils/url';
       <a class="pa fb" href={`https://www.facebook.com/sharer/sharer.php?u=${enc(url)}`} target="_blank" rel="noopener" title="Compartilhar no Facebook" aria-label="Compartilhar no Facebook"><Icon name="facebook" /></a>
       <a class="pa ig" href={SITE.instagram} target="_blank" rel="noopener" title="Seguir no Instagram" aria-label="Seguir no Instagram"><Icon name="instagram" /></a>
       <a class="pa sub" href={SITE.substack} target="_blank" rel="noopener" title="Seguir no Substack" aria-label="Seguir no Substack"><Icon name="substack" /></a>
+      <button class="pa" id="shareBtn" type="button" data-url={url} data-title={d.titulo} title="Compartilhar" aria-label="Compartilhar"><Icon name="share" stroke={2} /></button>
       <button class="pa" id="copyLink" type="button" data-url={url} title="Copiar link" aria-label="Copiar link"><Icon name="link" stroke={2} /></button>
       <div class="pa-font" role="group" aria-label="Tamanho do texto"><button type="button" id="fMinus" aria-label="Diminuir fonte">A−</button><span></span><button type="button" id="fPlus" aria-label="Aumentar fonte">A+</button></div>
       <button class="pa-audio" id="listen" type="button" aria-pressed="false"><Icon name="volume" /><span>Ouvir</span></button>
@@ -149,12 +150,18 @@ import { b } from '../utils/url';
   setF(i);
   document.getElementById('fMinus')?.addEventListener('click', () => setF(i - 1));
   document.getElementById('fPlus')?.addEventListener('click', () => setF(i + 1));
-  // copiar link
+  // copiar link + compartilhar
   const toast = document.getElementById('toast')!; let tt: number;
   const say = (m: string) => { toast.textContent = m; toast.classList.add('on'); clearTimeout(tt); tt = window.setTimeout(() => toast.classList.remove('on'), 2200); };
   document.getElementById('copyLink')?.addEventListener('click', (e) => {
     const u = (e.currentTarget as HTMLElement).dataset.url!;
     navigator.clipboard?.writeText(u).then(() => say('Link copiado'), () => say(u)) ?? say(u);
+  });
+  const shareEl = document.getElementById('shareBtn') as HTMLButtonElement;
+  shareEl?.addEventListener('click', async () => {
+    const u = shareEl.dataset.url ?? location.href, t = shareEl.dataset.title ?? document.title;
+    if (navigator.share) { try { await navigator.share({ title: t, url: u }); } catch {} }
+    else { navigator.clipboard?.writeText(u).catch(() => {}); say('Link copiado'); }
   });
   // ouvir (voz do navegador)
   const lb = document.getElementById('listen') as HTMLButtonElement; const synth = window.speechSynthesis;

@@ -560,7 +560,7 @@ body.cz-lock { overflow: hidden; }
 .post-titulo { font-size: clamp(32px, 4.6vw, 52px); font-weight: 400; letter-spacing: -.04em; line-height: 1.08; color: var(--navy); margin: 0 0 18px; text-wrap: balance; }
 .post-sub { font-size: clamp(17px, 1.6vw, 20px); color: var(--fg-mid); line-height: 1.55; margin: 0 0 22px; }
 .post-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 14px; color: var(--fg-muted); margin-bottom: 18px; }
-.post-meta-av { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
+.post-meta-av { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; object-position: top; }
 .post-meta a { color: var(--navy); font-weight: 600; text-decoration: none; } .post-meta a:hover { color: var(--teal); }
 .post-meta .dot { color: var(--fg-light); }
 .post-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 14px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 32px; position: relative; }
@@ -800,7 +800,7 @@ body.cz-lock { overflow: hidden; }
 .aut-sub svg { width: 15px; height: 15px; color: #ff6719; }
 .aut-sub:hover { border-color: #ff6719; color: #ff6719; }
 .pa.sub:hover { color: #ff6719; border-color: #ff6719; }
-.pa.xt:hover  { color: #000;    border-color: #000; }
+.pa.xt:hover  { color: var(--fg); border-color: var(--fg); }
 .pa.fb:hover  { color: #1877F2; border-color: #1877F2; }
 .pa.ig:hover  { color: #E1306C; border-color: #E1306C; }
 
