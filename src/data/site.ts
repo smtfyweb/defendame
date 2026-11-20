@@ -10,6 +10,7 @@ export const SITE = {
   email: 'contato@defendame.online',          // confirmar
   privacyEmail: 'privacidade@defendame.online', // confirmar
   substack: 'https://substack.com/@andreluisilv',
+  instagram: 'https://www.instagram.com/defendame.online/',
   ogDefault: _p('og-default.jpg'),
   // Endpoint que recebe o formulário "Verificar meu caso" (Formspree, Cloudflare Worker, etc.)
   formEndpoint: import.meta.env.PUBLIC_FORM_ENDPOINT ?? '',

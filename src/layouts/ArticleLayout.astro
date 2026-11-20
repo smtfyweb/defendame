@@ -60,9 +60,9 @@ import { b } from '../utils/url';
     </div>
     <div class="post-actions">
       <a class="pa wa" href={`https://api.whatsapp.com/send?text=${enc(d.titulo + ' — ' + url)}`} target="_blank" rel="noopener" title="Compartilhar no WhatsApp" aria-label="Compartilhar no WhatsApp"><Icon name="whatsapp" /></a>
-      <a class="pa" href={`https://twitter.com/intent/tweet?text=${enc(d.titulo)}&url=${enc(url)}`} target="_blank" rel="noopener" title="Compartilhar no X" aria-label="Compartilhar no X"><Icon name="x-brand" /></a>
-      <a class="pa" href={`https://www.facebook.com/sharer/sharer.php?u=${enc(url)}`} target="_blank" rel="noopener" title="Compartilhar no Facebook" aria-label="Compartilhar no Facebook"><Icon name="facebook" /></a>
-      <a class="pa" href={`https://www.linkedin.com/sharing/share-offsite/?url=${enc(url)}`} target="_blank" rel="noopener" title="Compartilhar no LinkedIn" aria-label="Compartilhar no LinkedIn"><Icon name="linkedin" /></a>
+      <a class="pa xt" href={`https://twitter.com/intent/tweet?text=${enc(d.titulo)}&url=${enc(url)}`} target="_blank" rel="noopener" title="Compartilhar no X" aria-label="Compartilhar no X"><Icon name="x-brand" /></a>
+      <a class="pa fb" href={`https://www.facebook.com/sharer/sharer.php?u=${enc(url)}`} target="_blank" rel="noopener" title="Compartilhar no Facebook" aria-label="Compartilhar no Facebook"><Icon name="facebook" /></a>
+      <a class="pa ig" href={SITE.instagram} target="_blank" rel="noopener" title="Seguir no Instagram" aria-label="Seguir no Instagram"><Icon name="instagram" /></a>
       <a class="pa sub" href={SITE.substack} target="_blank" rel="noopener" title="Seguir no Substack" aria-label="Seguir no Substack"><Icon name="substack" /></a>
       <button class="pa" id="copyLink" type="button" data-url={url} title="Copiar link" aria-label="Copiar link"><Icon name="link" stroke={2} /></button>
       <div class="pa-font" role="group" aria-label="Tamanho do texto"><button type="button" id="fMinus" aria-label="Diminuir fonte">A−</button><span></span><button type="button" id="fPlus" aria-label="Aumentar fonte">A+</button></div>
@@ -124,7 +124,7 @@ import { b } from '../utils/url';
 
     <aside class="post-side">
       <div class="aut" id="autor"><span class="aut-k">{analise ? 'Autor' : 'Revisão técnica'}</span>
-        <div class="aut-top"><img src={AUTHOR.photo} alt={AUTHOR.name} width="64" height="64" /><div><a class="aut-n" href={AUTHOR.url}>{AUTHOR.name}</a><span class="aut-c">{AUTHOR.role} · {AUTHOR.city}</span></div></div>
+        <div class="aut-top"><img src={AUTHOR.photo} alt={AUTHOR.name} width="80" height="80" /><div><a class="aut-n" href={AUTHOR.url}>{AUTHOR.name}</a><span class="aut-c">{AUTHOR.role} · {AUTHOR.city}</span></div></div>
         <div class="aut-links"><a class="aut-sub" href={AUTHOR.url}><Icon name="user" size={15} stroke={2} />Perfil e análises</a>
         <a class="aut-sub" href={SITE.substack} target="_blank" rel="noopener"><Icon name="substack" size={15} />Substack</a></div></div>
       {d.dadosComarca && (

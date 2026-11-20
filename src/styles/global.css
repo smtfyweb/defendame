@@ -795,17 +795,20 @@ body.cz-lock { overflow: hidden; }
 .ad-wide { max-width: 1170px; min-height: 110px; margin: 0 auto 40px; }
 /* bio enxuta */
 .aut-top { margin-bottom: 0 !important; }
-.aut-top img { min-width: 64px; }
+.aut-top img { min-width: 80px; width: 80px; height: 80px; border-radius: 50%; object-fit: cover; }
 .aut-sub { display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; height: 38px; padding: 0 14px; border: 1px solid var(--border); border-radius: var(--r-btn); font-size: 14px; font-weight: 600; color: var(--fg-mid); text-decoration: none; }
 .aut-sub svg { width: 15px; height: 15px; color: #ff6719; }
 .aut-sub:hover { border-color: #ff6719; color: #ff6719; }
 .pa.sub:hover { color: #ff6719; border-color: #ff6719; }
+.pa.xt:hover  { color: #000;    border-color: #000; }
+.pa.fb:hover  { color: #1877F2; border-color: #1877F2; }
+.pa.ig:hover  { color: #E1306C; border-color: #E1306C; }
 
 /* Citações do especialista — versão compacta */
 .expert-quote.eq { margin: 30px 0; padding: 4px 0 4px 22px; background: none; box-shadow: none; border-radius: 0; border-left: 3px solid var(--teal); }
 .eq-head { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--fg-muted); margin-bottom: 10px; }
 .eq-head b { color: var(--navy); font-weight: 600; }
-.eq-av { width: 28px; height: 28px; border-radius: 50%; background: url(/images/andre-l-silva.jpg) center/cover; flex-shrink: 0; border: 1.5px solid var(--line-teal); }
+.eq-av { width: 28px; height: 28px; border-radius: 50%; background: url(/defendame/images/andre-l-silva.jpg) center/cover; flex-shrink: 0; border: 1.5px solid var(--line-teal); }
 .eq-body { position: relative; }
 .post-body .expert-quote.eq p { font-size: var(--pf) !important; line-height: 1.75 !important; color: var(--fg-mid) !important; font-style: italic; margin: 0 !important; letter-spacing: 0; }
 .eq-lead { font-style: normal; font-weight: 600; color: var(--navy); }
