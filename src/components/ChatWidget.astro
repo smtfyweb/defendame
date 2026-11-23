@@ -5,10 +5,14 @@
  * Em estrita conformidade com o Provimento CFOAB nº 205/2021:
  * Caráter puramente didático e informativo de jurimetria sobre dados públicos do TJSP.
  * Não constitui serviço advocatício, não substitui consulta e não gera contratação.
- * Interface 100% harmoniosa: todos os botões com ícones SVG e quinas de 6px.
+ * Interface 100% harmoniosa:
+ * - Launcher flutuante sem foto, apenas com o termo "Dúvidas sobre o JEC?" e quinas de 6px.
+ * - Topo do chat com a Logo da DefendaMe centralizada (sem foto).
+ * - Todos os botões internos de navegação com ícones SVG estilizados e quinas de 6px.
  */
+import Logo from './Logo.astro';
 import Icon from './Icon.astro';
-import { AUTHOR, SITE } from '../data/site';
+import { SITE } from '../data/site';
 import { TEMAS } from '../data/temas';
 import { CASE_FORMS } from '../data/caseForms';
 
@@ -17,31 +21,22 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
 ---
 
 <div id="defendaChat" class="dc-root" aria-live="polite">
-  <!-- Botão Flutuante: Launcher padrão com quinas de 6px -->
-  <button type="button" id="dcToggle" class="dc-launcher" aria-label="Abrir pesquisa jurimétrica didática online" aria-expanded="false">
-    <div class="dc-launcher-avatar">
-      <img src={AUTHOR.photo} alt={AUTHOR.name} width="40" height="40" loading="lazy" />
+  <!-- Botão Flutuante: Padrão DefendaMe com quinas de 6px, sem foto -->
+  <button type="button" id="dcToggle" class="dc-launcher" aria-label="Dúvidas sobre o JEC?" aria-expanded="false">
+    <div class="dc-launcher-icon">
+      <Icon name="chat" size={17} stroke={2.2} />
       <span class="dc-status-dot" id="dcDot"></span>
     </div>
-    <div class="dc-launcher-label">
-      <span class="dc-lbl-top">Jurimetria no JEC</span>
-      <span class="dc-lbl-sub" id="dcStatusShort">Pesquisa Didática</span>
-    </div>
+    <span class="dc-launcher-text">Dúvidas sobre o JEC?</span>
   </button>
 
   <!-- Janela do Chat -->
   <div id="dcWindow" class="dc-window" hidden role="dialog" aria-modal="true" aria-labelledby="dcHeaderTitle">
-    <!-- Cabeçalho -->
+    <!-- Cabeçalho com Logo DefendaMe Centralizada -->
     <div class="dc-header">
-      <div class="dc-header-info">
-        <div class="dc-header-avatar">
-          <img src={AUTHOR.photo} alt={AUTHOR.name} width="38" height="38" />
-          <span class="dc-status-dot-sm" id="dcHeaderDot"></span>
-        </div>
-        <div>
-          <h3 id="dcHeaderTitle" class="dc-name">{AUTHOR.name}</h3>
-          <p class="dc-role" id="dcHeaderStatus">Jurimetria Forense e Análise do TJSP</p>
-        </div>
+      <div class="dc-header-spacer"></div>
+      <div class="dc-header-center">
+        <Logo href="javascript:void(0)" class="dc-header-logo" />
       </div>
       <button type="button" id="dcClose" class="dc-close-btn" aria-label="Fechar pesquisa">
         <Icon name="x" size={18} stroke={2.2} />
@@ -103,11 +98,7 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
   var msgs = document.getElementById('dcMessages');
   var chipsWrap = document.getElementById('dcChips');
   var dot = document.getElementById('dcDot');
-  var headerDot = document.getElementById('dcHeaderDot');
-  var headerStatus = document.getElementById('dcHeaderStatus');
-  var statusShort = document.getElementById('dcStatusShort');
   var noticeBar = document.getElementById('dcNoticeBar');
-  var noticeText = document.getElementById('dcNoticeText');
 
   // Checagem de Horário Comercial
   var now = new Date();
@@ -116,17 +107,11 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
   var isComercial = (day >= 1 && day <= 5 && hour >= 9 && hour < 18);
 
   if (isComercial) {
-    dot.classList.add('online');
-    headerDot.classList.add('online');
-    statusShort.textContent = 'Plantão ativo';
-    headerStatus.textContent = 'Jurimetria Forense e Análise do TJSP';
-    noticeBar.classList.add('is-open');
+    if (dot) dot.classList.add('online');
+    if (noticeBar) noticeBar.classList.add('is-open');
   } else {
-    dot.classList.add('plantao');
-    headerDot.classList.add('plantao');
-    statusShort.textContent = 'Plantão Jurimétrico';
-    headerStatus.textContent = 'Jurimetria Forense e Precedentes TJSP';
-    noticeBar.classList.add('is-plantao');
+    if (dot) dot.classList.add('plantao');
+    if (noticeBar) noticeBar.classList.add('is-plantao');
   }
 
   function openChat() {
@@ -206,19 +191,21 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
   // Resolve automaticamente o melhor ícone para cada opção de botão
   function resolveOptionIcon(label, fieldId) {
     var t = (label || '').toLowerCase();
-    if (fieldId === 'cidade' || t.indexOf('capital') !== -1 || t.indexOf('região') !== -1 || t.indexOf('comarca') !== -1 || t.indexOf('interior') !== -1 || t.indexOf('abc') !== -1 || t.indexOf('santista') !== -1) return 'pin';
-    if (fieldId === 'valor' || t.indexOf('r$') !== -1 || t.indexOf('reais') !== -1 || t.indexOf('custo') !== -1 || t.indexOf('gasto') !== -1 || t.indexOf('prejuízo') !== -1) return 'receipt';
-    if (fieldId === 'data' || t.indexOf('hoje') !== -1 || t.indexOf('semana') !== -1 || t.indexOf('mês') !== -1 || t.indexOf('dias') !== -1 || t.indexOf('horas') !== -1) return 'clock';
+    var f = (fieldId || '').toLowerCase();
+
+    if (f === 'cidade' || f === 'cidade_cartorio' || t.indexOf('capital') !== -1 || t.indexOf('região') !== -1 || t.indexOf('comarca') !== -1 || t.indexOf('interior') !== -1 || t.indexOf('abc') !== -1 || t.indexOf('santista') !== -1) return 'pin';
+    if (f === 'valor' || f === 'renda' || f === 'parcelas' || f === 'gastos' || t.indexOf('r$') !== -1 || t.indexOf('reais') !== -1 || t.indexOf('custo') !== -1 || t.indexOf('gasto') !== -1 || t.indexOf('prejuízo') !== -1) return 'receipt';
+    if (f === 'data' || f === 'desde' || t.indexOf('hoje') !== -1 || t.indexOf('semana') !== -1 || t.indexOf('mês') !== -1 || t.indexOf('dias') !== -1 || t.indexOf('horas') !== -1) return 'clock';
     if (t.indexOf('sim') === 0 || t.indexOf('já tenho') !== -1 || t.indexOf('positivo') !== -1 || t.indexOf('concordo') !== -1) return 'check';
     if (t.indexOf('não') === 0 || t.indexOf('nunca') !== -1 || t.indexOf('recusou') !== -1 || t.indexOf('sem acréscimo') !== -1) return 'x';
-    if (t.indexOf('outro') !== -1 || t.indexOf('digitar') !== -1 || t.indexOf('escrever') !== -1 || t.indexOf('acrescentar') !== -1) return 'pencil';
-    if (t.indexOf('banco') !== -1 || t.indexOf('nubank') !== -1 || t.indexOf('itaú') !== -1 || t.indexOf('bradesco') !== -1 || t.indexOf('santander') !== -1 || t.indexOf('caixa') !== -1 || t.indexOf('inter') !== -1 || t.indexOf('c6') !== -1) return 'bank';
-    if (t.indexOf('latam') !== -1 || t.indexOf('gol') !== -1 || t.indexOf('azul') !== -1 || t.indexOf('voo') !== -1 || t.indexOf('aéreo') !== -1 || t.indexOf('atraso') !== -1 || t.indexOf('cancelamento') !== -1) return 'plane';
-    if (t.indexOf('enel') !== -1 || t.indexOf('cpfl') !== -1 || t.indexOf('energia') !== -1 || t.indexOf('luz') !== -1) return 'zap';
-    if (t.indexOf('claro') !== -1 || t.indexOf('vivo') !== -1 || t.indexOf('tim') !== -1 || t.indexOf('telefonia') !== -1 || t.indexOf('ligação') !== -1) return 'phone';
-    if (t.indexOf('cartão') !== -1 || t.indexOf('fatura') !== -1 || t.indexOf('anuidade') !== -1) return 'card';
-    if (t.indexOf('boletim') !== -1 || t.indexOf('documento') !== -1 || t.indexOf('contrato') !== -1 || t.indexOf('serasa') !== -1 || t.indexOf('spc') !== -1) return 'doc';
-    if (t.indexOf('golpe') !== -1 || t.indexOf('fraude') !== -1 || t.indexOf('falso') !== -1 || t.indexOf('invasão') !== -1 || t.indexOf('alerta') !== -1) return 'alert';
+    if (t.indexOf('outro') !== -1 || t.indexOf('digitar') !== -1 || t.indexOf('escrever') !== -1 || t.indexOf('informar') !== -1 || t.indexOf('acrescentar') !== -1) return 'pencil';
+    if (f === 'banco' || t.indexOf('banco') !== -1 || t.indexOf('nubank') !== -1 || t.indexOf('itaú') !== -1 || t.indexOf('bradesco') !== -1 || t.indexOf('santander') !== -1 || t.indexOf('caixa') !== -1 || t.indexOf('inter') !== -1 || t.indexOf('c6') !== -1 || t.indexOf('pan') !== -1 || t.indexOf('bmg') !== -1 || t.indexOf('safra') !== -1) return 'bank';
+    if (f === 'cia' || t.indexOf('latam') !== -1 || t.indexOf('gol') !== -1 || t.indexOf('azul') !== -1 || t.indexOf('passaredo') !== -1 || t.indexOf('voo') !== -1 || t.indexOf('aéreo') !== -1 || t.indexOf('atraso') !== -1 || t.indexOf('cancelamento') !== -1 || t.indexOf('overbooking') !== -1 || t.indexOf('conexão') !== -1) return 'plane';
+    if (t.indexOf('enel') !== -1 || t.indexOf('cpfl') !== -1 || t.indexOf('energia') !== -1 || t.indexOf('luz') !== -1 || t.indexOf('sabesp') !== -1 || t.indexOf('comgás') !== -1) return 'zap';
+    if (f === 'operadora' || t.indexOf('claro') !== -1 || t.indexOf('vivo') !== -1 || t.indexOf('tim') !== -1 || t.indexOf('telefonia') !== -1 || t.indexOf('ligação') !== -1 || t.indexOf('linha') !== -1) return 'phone';
+    if (t.indexOf('cartão') !== -1 || t.indexOf('fatura') !== -1 || t.indexOf('anuidade') !== -1 || t.indexOf('rmc') !== -1 || t.indexOf('rcc') !== -1) return 'card';
+    if (f === 'orgao' || f === 'bo' || t.indexOf('boletim') !== -1 || t.indexOf('documento') !== -1 || t.indexOf('contrato') !== -1 || t.indexOf('serasa') !== -1 || t.indexOf('spc') !== -1 || t.indexOf('boa vista') !== -1) return 'doc';
+    if (t.indexOf('golpe') !== -1 || t.indexOf('fraude') !== -1 || t.indexOf('falso') !== -1 || t.indexOf('invasão') !== -1 || t.indexOf('alerta') !== -1 || t.indexOf('clonado') !== -1) return 'alert';
     if (t.indexOf('med') !== -1 || t.indexOf('segurança') !== -1 || t.indexOf('bloqueio') !== -1) return 'shield';
     return 'check';
   }
@@ -280,7 +267,7 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
 
     // Caso 1: Campo com opções predefinidas (Select)
     if (f.tipo === 'select' && f.opcoes && f.opcoes.length) {
-      addBotMsg('<p><b>' + rotuloLimpo + '</b></p>');
+      addBotMsg('<p>Selecione uma opção sobre <b>' + rotuloLimpo + '</b>:</p>');
       renderButtonOptions(f.opcoes, function(selectedVal){
         caso[f.id] = selectedVal;
         addUserMsg(selectedVal);
@@ -291,10 +278,11 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     }
 
     // Caso 2: Pergunta sobre Banco ou Empresa Envolvida
-    if (f.id === 'banco' || f.id === 'empresa' || f.id === 'operadora' || f.id === 'loja') {
-      addBotMsg('<p><b>' + rotuloLimpo + '</b></p>');
+    if (f.id === 'banco' || f.id === 'empresa' || f.id === 'operadora' || f.id === 'loja' || f.id === 'cia') {
+      var tipoNome = (f.id === 'banco') ? 'o banco ou instituição financeira' : (f.id === 'cia' ? 'a companhia aérea' : 'a empresa');
+      addBotMsg('<p>Qual é <b>' + tipoNome + '</b> envolvida no caso?</p>');
       var sugestoes = BANCOS_SUGERIDOS;
-      if (caso.slug === 'transporte-aereo' || caso.slug === 'bagagem') sugestoes = CIAS_SUGERIDAS;
+      if (caso.slug === 'transporte-aereo' || caso.slug === 'bagagem' || f.id === 'cia') sugestoes = CIAS_SUGERIDAS;
       else if (caso.slug === 'energia-eletrica' || caso.slug === 'telefonia') sugestoes = CONCESSOES_SUGERIDAS;
 
       renderButtonOptions(sugestoes, function(selectedVal){
@@ -308,7 +296,7 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
 
     // Caso 3: Pergunta sobre Valores Envolvidos
     if (f.tipo === 'money' || f.id === 'valor') {
-      addBotMsg('<p><b>' + rotuloLimpo + '</b></p>');
+      addBotMsg('<p>Qual é a <b>faixa de valor</b> envolvida?</p>');
       renderButtonOptions(VALORES_SUGERIDOS, function(selectedVal){
         caso[f.id] = selectedVal;
         addUserMsg(selectedVal);
@@ -320,7 +308,7 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
 
     // Caso 4: Campos de Data com opções imediatas de botões
     if (f.tipo === 'date' || f.tipo === 'month') {
-      addBotMsg('<p><b>' + rotuloLimpo + '</b></p>');
+      addBotMsg('<p>Quando ocorreu o fato? Selecione o <b>período aproximado</b>:</p>');
       renderButtonOptions(DATAS_SUGERIDAS, function(selectedData){
         caso[f.id] = selectedData;
         addUserMsg(selectedData);
@@ -331,7 +319,7 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     }
 
     // Caso Geral: Texto simples
-    addBotMsg('<p><b>' + rotuloLimpo + '</b></p>');
+    addBotMsg('<p>Informe um detalhe sobre <b>' + rotuloLimpo + '</b>:</p>');
     renderHarmoniousInput(f.id, rotuloLimpo, 'text', f.placeholder || 'Informe este detalhe...');
   }
 
@@ -417,7 +405,7 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
 
   // Etapa: Cidade do Estado de SP com Botões de Localização
   function askCity() {
-    addBotMsg('<p><b>Em qual comarca ou região do Estado de São Paulo você reside?</b></p>');
+    addBotMsg('<p>Em qual comarca ou região do Estado de São Paulo você reside?</p>');
     renderButtonOptions(CIDADES_SUGERIDAS, function(cidadeEscolhida){
       caso.cidade = cidadeEscolhida;
       addUserMsg(cidadeEscolhida);
@@ -427,7 +415,7 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
 
   // Etapa: Detalhes Complementares com Botões Didáticos
   function askFreeDetails() {
-    addBotMsg('<p><b>Deseja acrescentar algum detalhe específico com suas próprias palavras?</b></p>');
+    addBotMsg('<p>Deseja acrescentar algum detalhe específico com suas próprias palavras?</p>');
 
     var chips = document.createElement('div');
     chips.className = 'dc-chips dc-field-chips';
@@ -477,7 +465,7 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
 
   // Etapa Final: Identificação para Retorno com Aviso Didático
   function askContact() {
-    addBotMsg('<p>Excelente. Para onde devemos enviar o relatório didático de jurimetria e a relação de provas? Informe seus dados para retorno:</p>');
+    addBotMsg('<p>Excelente. Para onde devemos enviar o relatório didático de jurimetria do TJSP e a relação de provas? Informe seus dados para retorno:</p>');
 
     var formBox = document.createElement('div');
     formBox.className = 'dc-input-line dc-input-line-col dc-card-contact';
@@ -572,14 +560,14 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     font-family: inherit;
   }
 
-  /* Launcher Flutuante: Padrão DefendaMe quadrado com quina quebrada (6px) */
+  /* Launcher Flutuante: Padrão DefendaMe quadrado com quina quebrada (6px) sem foto */
   .dc-launcher {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 10px;
+    gap: 9px;
     background: var(--navy);
     border: 1px solid var(--border);
-    padding: 6px 14px 6px 6px;
+    padding: 10px 16px;
     border-radius: 6px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
     cursor: pointer;
@@ -592,32 +580,26 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     border-color: var(--teal);
   }
   .dc-launcher.active {
-    opacity: 0.88;
+    opacity: 0.9;
     transform: scale(0.98);
+    border-color: var(--teal);
   }
-
-  .dc-launcher-avatar {
+  .dc-launcher-icon {
     position: relative;
-    width: 40px;
-    height: 40px;
-    border-radius: 4px;
-    overflow: visible;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--teal);
+    flex-shrink: 0;
   }
-  .dc-launcher-avatar img {
-    width: 40px;
-    height: 40px;
-    border-radius: 4px;
-    object-fit: cover;
-    display: block;
-    border: 1.5px solid var(--teal);
-  }
-
   .dc-status-dot {
     position: absolute;
-    bottom: -2px;
+    top: -2px;
     right: -2px;
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     border: 1.5px solid var(--navy);
   }
@@ -629,22 +611,13 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     background: #F59E0B;
     box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3);
   }
-
-  .dc-launcher-label {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-  }
-  .dc-lbl-top {
-    font-size: 13px;
+  .dc-launcher-text {
+    font-size: 13.5px;
     font-weight: 600;
     color: #FFFFFF;
     line-height: 1.2;
-  }
-  .dc-lbl-sub {
-    font-size: 11px;
-    color: var(--teal);
-    line-height: 1.2;
+    white-space: nowrap;
+    letter-spacing: 0.01em;
   }
 
   /* Janela do Chat: quina de 8px */
@@ -670,7 +643,7 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     to { opacity: 1; transform: translateY(0) scale(1); }
   }
 
-  /* Header do Chat */
+  /* Header do Chat com Logo Centralizada */
   .dc-header {
     background: var(--navy);
     padding: 12px 14px;
@@ -679,63 +652,46 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     justify-content: space-between;
     border-bottom: 1px solid var(--border);
   }
-  .dc-header-info {
+  .dc-header-spacer {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+  }
+  .dc-header-center {
+    flex: 1;
     display: flex;
+    justify-content: center;
     align-items: center;
-    gap: 10px;
   }
-  .dc-header-avatar {
-    position: relative;
-    width: 36px;
-    height: 36px;
+  .dc-header-logo {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    cursor: default;
   }
-  .dc-header-avatar img {
-    width: 36px;
-    height: 36px;
-    border-radius: 4px;
-    object-fit: cover;
-    border: 1.5px solid var(--teal);
-  }
-  .dc-status-dot-sm {
-    position: absolute;
-    bottom: -1px;
-    right: -1px;
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    border: 1.5px solid var(--navy);
-  }
-  .dc-status-dot-sm.online { background: #10B981; }
-  .dc-status-dot-sm.plantao { background: #F59E0B; }
-
-  .dc-name {
-    font-size: 14.5px;
-    font-weight: 600;
-    color: #FFFFFF;
-    margin: 0;
-    line-height: 1.2;
-  }
-  .dc-role {
-    font-size: 11.5px;
-    color: var(--teal);
-    margin: 0;
-    line-height: 1.2;
+  .dc-header-logo :global(.wm) {
+    font-size: 21px !important;
+    color: #FFFFFF !important;
+    line-height: 1 !important;
   }
   .dc-close-btn {
+    width: 30px;
+    height: 30px;
     background: transparent;
     border: none;
     color: var(--fg-muted);
     cursor: pointer;
-    padding: 6px;
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 4px;
     transition: all 0.15s ease;
+    flex-shrink: 0;
   }
   .dc-close-btn:hover {
     color: #FFFFFF;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.1);
   }
 
   /* Barra de Aviso Institucional e Ético */
@@ -809,28 +765,31 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     align-self: flex-end;
   }
 
-  /* Opções e Chips: padrão quina quebrada (6px) com ícones */
+  /* Opções e Chips: padrão quina quebrada (6px) com ícones em todas as telas */
   .dc-chips {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 4px;
+    gap: 8px;
+    margin-top: 6px;
+    margin-bottom: 4px;
   }
   .dc-chip {
     background: var(--bg-card);
     border: 1px solid var(--border);
     color: var(--fg);
     border-radius: 6px;
-    padding: 6px 11px;
-    font-size: 12px;
+    padding: 7px 12px;
+    font-size: 12.5px;
+    font-weight: 500;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 7px;
     cursor: pointer;
     transition: all 0.15s ease;
     user-select: none;
     font-family: inherit;
-    line-height: 1.2;
+    line-height: 1.25;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   }
   .dc-chip-ic {
     flex-shrink: 0;
@@ -843,15 +802,23 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     border-color: var(--teal);
     color: var(--teal);
     background: var(--bg-hover);
-    transform: translateY(-1px);
+    transform: translateY(-1.5px);
+    box-shadow: 0 4px 12px rgba(13, 148, 136, 0.15);
+  }
+  .dc-chip:active {
+    transform: scale(0.98);
   }
   .dc-chip-write {
     border-style: dashed;
     border-color: var(--teal);
     color: var(--teal);
+    background: rgba(13, 148, 136, 0.04);
   }
   .dc-chip-write .dc-chip-ic {
     color: var(--teal);
+  }
+  .dc-chip-write:hover {
+    background: rgba(13, 148, 136, 0.1);
   }
   .dc-chip-submit {
     background: var(--teal);
@@ -1049,15 +1016,12 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
       bottom: 60px;
       height: 480px;
     }
-    .dc-lbl-top {
-      display: none;
-    }
     .dc-launcher {
-      padding: 4px;
+      padding: 8px 12px;
       border-radius: 6px;
     }
-    .dc-launcher-label {
-      display: none;
+    .dc-launcher-text {
+      font-size: 12.5px;
     }
   }
 </style>
