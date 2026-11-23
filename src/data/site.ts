@@ -8,7 +8,7 @@ export const SITE = {
   privacyEmail: 'privacidade@defendame.online', // confirmar
   youtube: 'https://www.youtube.com/@defendame',
   instagram: 'https://www.instagram.com/defendame.online',
-  whatsapp: 'https://wa.me/5511999999999',
+  whatsapp: 'https://wa.me/5511966016189',
   linkedin: 'https://www.linkedin.com/company/defendame',
   twitter: 'https://x.com/defendame',
   ogDefault: '/og-default.jpg',

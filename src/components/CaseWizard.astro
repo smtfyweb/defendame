@@ -61,7 +61,12 @@ const UFS = ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','P
         <h3>Relato recebido para avaliação</h3>
         <p>Recebemos o seu relato. O diagnóstico preliminar da demanda e a relação de documentos indispensáveis serão enviados para o WhatsApp informado.</p>
         <p class="cz-proto">Protocolo <b id="czProto"></b></p>
-        <button type="button" class="btn btn-outline" data-cz-close>Voltar ao site</button>
+        <div class="cz-done-actions">
+          <a id="czWhatsBtn" href="#" target="_blank" rel="noopener" class="btn btn-whatsapp">
+            <Icon name="whatsapp" size={19} /> Iniciar atendimento no WhatsApp
+          </a>
+          <button type="button" class="btn btn-outline" data-cz-close>Voltar ao site</button>
+        </div>
       </section>
       <div class="cz-foot" id="czFoot">
         <button type="button" class="cz-back" id="czBack" hidden><Icon name="arrow-left" size={16} stroke={2.2} /> Voltar</button>
@@ -133,8 +138,16 @@ const UFS = ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','P
   form.addEventListener('submit',function(e){ e.preventDefault(); if(!validate(panes[2])) return;
     var fd=new FormData(form), data={categoria:LABELS[cat]}; fd.forEach(function(v,k){ data[k]=v; });
     var proto='DM-'+new Date().toISOString().slice(2,10).replace(/-/g,'')+'-'+Math.random().toString(36).slice(2,6).toUpperCase();
-    data.protocolo=proto; data.pagina=location.pathname;
-    var done=function(){ document.getElementById('czProto').textContent=proto; go(4); };
+    data.protocolo=proto; data.pagina=location.pathname; data.origem="Formulário Modal";
+    var done=function(){
+      document.getElementById('czProto').textContent=proto;
+      var wBtn=document.getElementById('czWhatsBtn');
+      if(wBtn){
+        var msg='Olá André Silva, acabei de enviar meu caso no portal DefendaMe sob o protocolo '+proto+' sobre '+(LABELS[cat]||'demanda no JEC')+' e gostaria de agilizar minha avaliação.';
+        wBtn.href='https://api.whatsapp.com/send?phone=5511966016189&text='+encodeURIComponent(msg);
+      }
+      go(4);
+    };
     if(!ENDPOINT){ console.warn('[DefendaMe] PUBLIC_FORM_ENDPOINT não configurado — caso não enviado', data); done(); return; }
     sendB.disabled=true;
     fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(data)})
@@ -149,3 +162,36 @@ const UFS = ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','P
   window.addEventListener('hashchange',function(){ if(location.hash==='#verificar') open(); });
 })();
 </script>
+
+<style>
+  .cz-done-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-width: 320px;
+    margin: 18px auto 0;
+  }
+  .btn-whatsapp {
+    background: #25D366;
+    color: #FFFFFF !important;
+    border: 1px solid #25D366;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: var(--radius-sm, 6px);
+    padding: 11px 18px;
+    font-size: 15px;
+    transition: all 0.15s ease;
+    box-shadow: 0 4px 14px rgba(37, 211, 102, 0.25);
+  }
+  .btn-whatsapp:hover {
+    background: #1EBE5D;
+    border-color: #1EBE5D;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(37, 211, 102, 0.35);
+  }
+</style>

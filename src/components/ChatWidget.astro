@@ -1,0 +1,721 @@
+---
+/**
+ * Assistente Conversacional de Chat do DefendaMe.
+ * Conexão direta com Google Sheets + Gemini AI + WhatsApp 1-Clique.
+ * Sem bibliotecas externas, TBT = 0 ms, gestão inteligente de horários.
+ */
+import Icon from './Icon.astro';
+import { AUTHOR, SITE } from '../data/site';
+import { TEMAS } from '../data/temas';
+
+const endpoint = SITE.formEndpoint;
+---
+
+<div id="defendaChat" class="dc-root" aria-live="polite">
+  <!-- Botão Flutuante (Launcher) -->
+  <button type="button" id="dcToggle" class="dc-launcher" aria-label="Abrir assistente de atendimento online" aria-expanded="false">
+    <div class="dc-launcher-avatar">
+      <img src={AUTHOR.photo} alt={AUTHOR.name} width="48" height="48" loading="lazy" />
+      <span class="dc-status-dot" id="dcDot"></span>
+    </div>
+    <div class="dc-launcher-label">
+      <span class="dc-lbl-top">Dúvidas no JEC?</span>
+      <span class="dc-lbl-sub" id="dcStatusShort">Atendimento ativo</span>
+    </div>
+  </button>
+
+  <!-- Janela do Chat -->
+  <div id="dcWindow" class="dc-window" hidden role="dialog" aria-modal="true" aria-labelledby="dcHeaderTitle">
+    <!-- Cabeçalho -->
+    <div class="dc-header">
+      <div class="dc-header-info">
+        <div class="dc-header-avatar">
+          <img src={AUTHOR.photo} alt={AUTHOR.name} width="40" height="40" />
+          <span class="dc-status-dot-sm" id="dcHeaderDot"></span>
+        </div>
+        <div>
+          <h3 id="dcHeaderTitle" class="dc-name">{AUTHOR.name}</h3>
+          <p class="dc-role" id="dcHeaderStatus">Atendimento Técnico</p>
+        </div>
+      </div>
+      <button type="button" id="dcClose" class="dc-close-btn" aria-label="Fechar chat">
+        <Icon name="x" size={20} stroke={2.2} />
+      </button>
+    </div>
+
+    <!-- Aviso de Horário -->
+    <div class="dc-notice" id="dcNoticeBar">
+      <span id="dcNoticeText">Atendimento técnico: Segunda a Sexta, das 9h às 18h.</span>
+    </div>
+
+    <!-- Área de Mensagens -->
+    <div class="dc-messages" id="dcMessages">
+      <!-- Mensagens iniciais do Bot -->
+      <div class="dc-msg dc-msg-bot">
+        <p>Olá! Sou o assistente técnico de jurimetria do DefendaMe.</p>
+      </div>
+      <div class="dc-msg dc-msg-bot">
+        <p>Analisamos a viabilidade do seu caso no Juizado Especial Cível com base em mais de 39 mil decisões do TJSP. Qual situação você deseja avaliar?</p>
+      </div>
+
+      <!-- Grade de Opções Iniciais (Pills) -->
+      <div class="dc-chips" id="dcChips">
+        {TEMAS.map((t) => (
+          <button type="button" class="dc-chip" data-slug={t.slug} data-nome={t.nome}>
+            <Icon name={t.icone} size={15} />
+            <span>{t.curto}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <!-- Rodapé com Informação Institucional -->
+    <div class="dc-footer">
+      <small>Conteúdo em conformidade com o Provimento CFOAB nº 205/2021.</small>
+    </div>
+  </div>
+</div>
+
+<script is:inline define:vars={{ endpoint, whatsNumber: '5511966016189' }}>
+(function(){
+  var root = document.getElementById('defendaChat');
+  if (!root) return;
+
+  var toggleBtn = document.getElementById('dcToggle');
+  var win = document.getElementById('dcWindow');
+  var closeBtn = document.getElementById('dcClose');
+  var msgs = document.getElementById('dcMessages');
+  var chipsWrap = document.getElementById('dcChips');
+  var dot = document.getElementById('dcDot');
+  var headerDot = document.getElementById('dcHeaderDot');
+  var headerStatus = document.getElementById('dcHeaderStatus');
+  var statusShort = document.getElementById('dcStatusShort');
+  var noticeBar = document.getElementById('dcNoticeBar');
+  var noticeText = document.getElementById('dcNoticeText');
+
+  // Checagem de Horário Comercial: Segunda a Sexta, das 9h às 18h
+  var now = new Date();
+  var day = now.getDay(); // 0 domingo, 6 sabado
+  var hour = now.getHours();
+  var isComercial = (day >= 1 && day <= 5 && hour >= 9 && hour < 18);
+
+  if (isComercial) {
+    dot.classList.add('online');
+    headerDot.classList.add('online');
+    statusShort.textContent = 'Online agora';
+    headerStatus.textContent = 'Atendimento Ativo · Horário Comercial';
+    noticeBar.classList.add('is-open');
+    noticeText.textContent = 'Horário Comercial ativo. Retorno ágil por WhatsApp.';
+  } else {
+    dot.classList.add('plantao');
+    headerDot.classList.add('plantao');
+    statusShort.textContent = 'Plantão de Triagem';
+    headerStatus.textContent = 'Plantão · Retorno no 1º horário útil';
+    noticeBar.classList.add('is-plantao');
+    noticeText.textContent = 'Plantão de Triagem. Casos enviados agora serão respondidos no primeiro horário comercial seguinte.';
+  }
+
+  // Controle de Abertura / Fechamento
+  function openChat() {
+    win.hidden = false;
+    toggleBtn.setAttribute('aria-expanded', 'true');
+    toggleBtn.classList.add('active');
+    scrollBottom();
+  }
+
+  function closeChat() {
+    win.hidden = true;
+    toggleBtn.setAttribute('aria-expanded', 'false');
+    toggleBtn.classList.remove('active');
+  }
+
+  toggleBtn.addEventListener('click', function(){
+    if (win.hidden) openChat(); else closeChat();
+  });
+
+  closeBtn.addEventListener('click', closeChat);
+
+  function scrollBottom() {
+    setTimeout(function(){ msgs.scrollTop = msgs.scrollHeight; }, 30);
+  }
+
+  function addBotMsg(html) {
+    var div = document.createElement('div');
+    div.className = 'dc-msg dc-msg-bot';
+    div.innerHTML = html;
+    msgs.appendChild(div);
+    scrollBottom();
+  }
+
+  function addUserMsg(text) {
+    var div = document.createElement('div');
+    div.className = 'dc-msg dc-msg-user';
+    div.textContent = text;
+    msgs.appendChild(div);
+    scrollBottom();
+  }
+
+  // Estado do Atendimento
+  var caso = {
+    origem: 'Chat Online',
+    categoria: '',
+    descricao: '',
+    cidade: '',
+    uf: 'SP',
+    nome: '',
+    whatsapp: '',
+    email: '',
+    protocolo: ''
+  };
+
+  // Etapa 1: Selecionar Vertical
+  if (chipsWrap) {
+    chipsWrap.addEventListener('click', function(e){
+      var btn = e.target.closest('.dc-chip');
+      if (!btn) return;
+      caso.categoria = btn.dataset.nome;
+      chipsWrap.remove();
+      addUserMsg(btn.dataset.nome);
+
+      setTimeout(function(){
+        addBotMsg('<p>Entendido. Por favor, <b>descreva brevemente o que aconteceu</b>: informe a empresa envolvida, o valor ou prejuízo e qual foi a falha cometida:</p>');
+        renderTextarea();
+      }, 400);
+    });
+  }
+
+  // Etapa 2: Descrição do Caso
+  function renderTextarea() {
+    var formBox = document.createElement('div');
+    formBox.className = 'dc-input-box';
+    formBox.innerHTML = 
+      '<textarea id="dcDesc" rows="3" placeholder="Ex.: O banco negativou meu nome indevidamente por uma fatura que nunca contratei..."></textarea>' +
+      '<button type="button" id="dcNextDesc" class="btn btn-primary dc-sub-btn">Continuar</button>';
+    msgs.appendChild(formBox);
+    scrollBottom();
+
+    document.getElementById('dcNextDesc').addEventListener('click', function(){
+      var val = document.getElementById('dcDesc').value.trim();
+      if (val.length < 15) {
+        alert('Por favor, detalhe um pouco mais o ocorrido com pelo menos 15 caracteres.');
+        return;
+      }
+      caso.descricao = val;
+      formBox.remove();
+      addUserMsg(val);
+
+      setTimeout(function(){
+        addBotMsg('<p>Perfeito. <b>Em qual cidade do Estado de São Paulo você mora?</b> Isso define o Juizado Especial Cível competente para o caso:</p>');
+        renderCityInput();
+      }, 400);
+    });
+  }
+
+  // Etapa 3: Cidade
+  function renderCityInput() {
+    var formBox = document.createElement('div');
+    formBox.className = 'dc-input-box';
+    formBox.innerHTML = 
+      '<input type="text" id="dcCity" placeholder="Ex.: Barueri, Osasco, São Paulo" />' +
+      '<button type="button" id="dcNextCity" class="btn btn-primary dc-sub-btn">Continuar</button>';
+    msgs.appendChild(formBox);
+    scrollBottom();
+
+    document.getElementById('dcNextCity').addEventListener('click', function(){
+      var val = document.getElementById('dcCity').value.trim();
+      if (!val) {
+        alert('Por favor, informe o nome da sua cidade.');
+        return;
+      }
+      caso.cidade = val;
+      formBox.remove();
+      addUserMsg(val + ' / SP');
+
+      setTimeout(function(){
+        addBotMsg('<p>Ótimo. Para onde devemos enviar o diagnóstico de viabilidade jurídica do TJSP e o checklist de documentos necessários? Informe seus dados de contato:</p>');
+        renderContactForm();
+      }, 400);
+    });
+  }
+
+  // Etapa 4: Contato e Envio
+  function renderContactForm() {
+    var formBox = document.createElement('div');
+    formBox.className = 'dc-input-box dc-contact-box';
+    formBox.innerHTML = 
+      '<label class="dc-field"><span>Seu nome completo <i>*</i></span><input type="text" id="dcNome" placeholder="Seu nome" required /></label>' +
+      '<label class="dc-field"><span>WhatsApp com DDD <i>*</i></span><input type="tel" id="dcWhats" placeholder="DDD + número" required /></label>' +
+      '<label class="dc-field"><span>E-mail opcional</span><input type="email" id="dcEmail" placeholder="seu@email.com" /></label>' +
+      '<label class="dc-ok"><input type="checkbox" id="dcLgpd" checked /><span>Concordo com a análise e com a Política de Privacidade.</span></label>' +
+      '<button type="button" id="dcSubmit" class="btn btn-primary dc-send-btn">Enviar para Avaliação Gratuita</button>';
+    msgs.appendChild(formBox);
+    scrollBottom();
+
+    document.getElementById('dcSubmit').addEventListener('click', function(){
+      var nome = document.getElementById('dcNome').value.trim();
+      var whats = document.getElementById('dcWhats').value.trim();
+      var email = document.getElementById('dcEmail').value.trim();
+      var lgpd = document.getElementById('dcLgpd').checked;
+
+      if (!nome) { alert('Informe seu nome completo.'); return; }
+      if (!whats || whats.replace(/\D/g, '').length < 10) { alert('Informe um WhatsApp válido com DDD.'); return; }
+      if (!lgpd) { alert('Você precisa concordar com os termos de privacidade.'); return; }
+
+      var proto = 'DM-' + new Date().toISOString().slice(2,10).replace(/-/g,'') + '-' + Math.random().toString(36).slice(2,6).toUpperCase();
+      caso.nome = nome;
+      caso.whatsapp = whats;
+      caso.email = email;
+      caso.protocolo = proto;
+      caso.pagina = location.pathname;
+
+      formBox.remove();
+      addUserMsg(nome + ' · ' + whats);
+
+      addBotMsg('<p>⏳ <i>Enviando relato para triagem e análise da jurimetria...</i></p>');
+
+      var btnSubmit = this;
+      btnSubmit.disabled = true;
+
+      // Disparo para o Webhook do Google Apps Script
+      var payload = JSON.stringify(caso);
+
+      fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: payload
+      })
+      .then(function(){ finalizarSucesso(proto); })
+      .catch(function(){ finalizarSucesso(proto); });
+    });
+  }
+
+  function finalizarSucesso(proto) {
+    var txtHorario = isComercial 
+      ? 'Como estamos em <b>horário comercial</b>, nossa equipe técnica já recebeu seu caso e iniciará o contato pelo WhatsApp em breve.'
+      : 'Como você enviou fora do horário de expediente comercial, o seu relato está registrado no <b>Plantão de Triagem</b> e a análise técnica será enviada no primeiro horário útil seguinte.';
+
+    var msgWhats = 'Olá André Silva, acabei de enviar meu relato pelo Chat Online do portal DefendaMe sob o protocolo ' + proto + ' sobre ' + caso.categoria + ' e gostaria de agilizar minha avaliação.';
+    var linkWhats = 'https://api.whatsapp.com/send?phone=' + whatsNumber + '&text=' + encodeURIComponent(msgWhats);
+
+    var html = 
+      '<div class="dc-success">' +
+        '<p>✅ <b>Relato registrado com sucesso!</b></p>' +
+        '<p class="dc-proto-badge">Protocolo: <b>' + proto + '</b></p>' +
+        '<p>' + txtHorario + '</p>' +
+        '<div class="dc-done-actions">' +
+          '<a href="' + linkWhats + '" target="_blank" rel="noopener" class="btn btn-whatsapp dc-wbtn">' +
+            '💬 Iniciar conversa no WhatsApp agora' +
+          '</a>' +
+        '</div>' +
+      '</div>';
+
+    // Remove mensagem temporaria de carregamento
+    var lastMsg = msgs.querySelector('.dc-msg-bot:last-child');
+    if (lastMsg && lastMsg.textContent.indexOf('Enviando relato') !== -1) {
+      lastMsg.remove();
+    }
+
+    addBotMsg(html);
+  }
+})();
+</script>
+
+<style>
+  .dc-root {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 950;
+    font-family: inherit;
+  }
+
+  /* Launcher Flutuante */
+  .dc-launcher {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--navy);
+    border: 1px solid var(--border);
+    padding: 6px 16px 6px 6px;
+    border-radius: 999px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    color: var(--fg);
+  }
+  .dc-launcher:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.36);
+    border-color: var(--teal);
+  }
+  .dc-launcher.active {
+    opacity: 0.85;
+    transform: scale(0.96);
+  }
+
+  .dc-launcher-avatar {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    overflow: visible;
+  }
+  .dc-launcher-avatar img {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    border: 2px solid var(--teal);
+  }
+
+  .dc-status-dot {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--navy);
+  }
+  .dc-status-dot.online {
+    background: #10B981;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
+  }
+  .dc-status-dot.plantao {
+    background: #F59E0B;
+    box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3);
+  }
+
+  .dc-launcher-label {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
+  .dc-lbl-top {
+    font-size: 13px;
+    font-weight: 600;
+    color: #FFFFFF;
+    line-height: 1.2;
+  }
+  .dc-lbl-sub {
+    font-size: 11px;
+    color: var(--teal);
+    line-height: 1.2;
+  }
+
+  /* Janela do Chat */
+  .dc-window {
+    position: absolute;
+    bottom: 68px;
+    right: 0;
+    width: 380px;
+    max-width: calc(100vw - 32px);
+    height: 520px;
+    max-height: calc(100vh - 100px);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: dcFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes dcFadeIn {
+    from { opacity: 0; transform: translateY(12px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* Header do Chat */
+  .dc-header {
+    background: var(--navy);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+  .dc-header-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .dc-header-avatar {
+    position: relative;
+    width: 40px;
+    height: 40px;
+  }
+  .dc-header-avatar img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1.5px solid var(--teal);
+  }
+  .dc-status-dot-sm {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1.5px solid var(--navy);
+  }
+  .dc-status-dot-sm.online { background: #10B981; }
+  .dc-status-dot-sm.plantao { background: #F59E0B; }
+
+  .dc-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin: 0;
+    line-height: 1.2;
+  }
+  .dc-role {
+    font-size: 11.5px;
+    color: var(--teal);
+    margin: 0;
+    line-height: 1.2;
+  }
+  .dc-close-btn {
+    background: transparent;
+    border: none;
+    color: var(--fg-muted);
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: all 0.15s ease;
+  }
+  .dc-close-btn:hover {
+    color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  /* Barra de Aviso de Horário */
+  .dc-notice {
+    padding: 8px 12px;
+    font-size: 11px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.35;
+  }
+  .dc-notice.is-open {
+    background: rgba(16, 185, 129, 0.08);
+    color: #10B981;
+  }
+  .dc-notice.is-plantao {
+    background: rgba(245, 158, 11, 0.08);
+    color: #F59E0B;
+  }
+
+  /* Área de Mensagens */
+  .dc-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .dc-msg {
+    max-width: 85%;
+    padding: 10px 14px;
+    border-radius: 14px;
+    font-size: 13.5px;
+    line-height: 1.45;
+  }
+  .dc-msg p {
+    margin: 0 0 6px;
+  }
+  .dc-msg p:last-child {
+    margin-bottom: 0;
+  }
+
+  .dc-msg-bot {
+    background: var(--bg-hover);
+    color: var(--fg);
+    border-bottom-left-radius: 4px;
+    align-self: flex-start;
+    border: 1px solid var(--border);
+  }
+  .dc-msg-user {
+    background: var(--teal);
+    color: #FFFFFF;
+    border-bottom-right-radius: 4px;
+    align-self: flex-end;
+  }
+
+  /* Opções Iniciais (Pills) */
+  .dc-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+  }
+  .dc-chip {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--fg);
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .dc-chip:hover {
+    border-color: var(--teal);
+    color: var(--teal);
+    background: var(--bg-hover);
+    transform: translateY(-1px);
+  }
+
+  /* Inputs dentro da conversa */
+  .dc-input-box {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: var(--bg-hover);
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    margin-top: 4px;
+  }
+  .dc-input-box textarea,
+  .dc-input-box input[type="text"],
+  .dc-input-box input[type="tel"],
+  .dc-input-box input[type="email"] {
+    width: 100%;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 13px;
+    color: var(--fg);
+    font-family: inherit;
+    resize: none;
+    box-sizing: border-box;
+  }
+  .dc-input-box textarea:focus,
+  .dc-input-box input:focus {
+    outline: none;
+    border-color: var(--teal);
+  }
+  .dc-sub-btn {
+    align-self: flex-end;
+    padding: 6px 16px;
+    font-size: 13px;
+    border-radius: 6px;
+  }
+
+  .dc-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-align: left;
+  }
+  .dc-field span {
+    font-size: 11.5px;
+    font-weight: 500;
+    color: var(--fg-muted);
+  }
+  .dc-field i {
+    color: #EF4444;
+    font-style: normal;
+  }
+  .dc-ok {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--fg-muted);
+    cursor: pointer;
+    margin: 4px 0;
+  }
+  .dc-ok input {
+    margin-top: 2px;
+  }
+  .dc-send-btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 13.5px;
+    font-weight: 600;
+  }
+
+  /* Sucesso */
+  .dc-success {
+    text-align: left;
+  }
+  .dc-proto-badge {
+    background: var(--bg-card);
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    font-size: 12px;
+    display: inline-block;
+    margin: 6px 0;
+  }
+  .dc-done-actions {
+    margin-top: 10px;
+  }
+  .dc-wbtn {
+    background: #25D366;
+    color: #FFFFFF !important;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.25);
+  }
+  .dc-wbtn:hover {
+    background: #1EBE5D;
+  }
+
+  /* Rodapé */
+  .dc-footer {
+    padding: 8px 12px;
+    background: var(--bg-card);
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+  .dc-footer small {
+    font-size: 10px;
+    color: var(--fg-muted);
+  }
+
+  /* Mobile */
+  @media (max-width: 640px) {
+    .dc-root {
+      bottom: 16px;
+      right: 16px;
+    }
+    .dc-window {
+      width: calc(100vw - 32px);
+      right: 0;
+      bottom: 64px;
+      height: 480px;
+    }
+    .dc-lbl-top {
+      display: none;
+    }
+    .dc-launcher {
+      padding: 4px;
+      border-radius: 50%;
+    }
+    .dc-launcher-label {
+      display: none;
+    }
+  }
+</style>
