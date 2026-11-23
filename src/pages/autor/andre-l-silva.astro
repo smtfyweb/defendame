@@ -12,7 +12,8 @@ const data = (dt: Date) => dt.toLocaleDateString('pt-BR', { timeZone: 'UTC', day
 const url = new URL(AUTHOR.url, SITE.url).href;
 
 const toc: [string, string][] = [
-  ['atuacao', 'Atuação Técnica e Legal Analytics'],
+  ['experiencia', 'Experiência Corporativa e Trajetória'],
+  ['atuacao', 'Legal Analytics e Análise Probatória'],
   ['formacao', 'Formação Acadêmica e Multidisciplinar'],
   ['etica', 'Compromisso Ético e CFOAB nº 205/2021'],
   ...(analises.length ? [['analises', 'Análises Técnicas Assinadas'] as [string, string]] : []),
@@ -58,9 +59,9 @@ const jsonLd = [
 
 <PageLayout
   title={`${AUTHOR.name} — ${AUTHOR.role} | ${SITE.name}`}
-  description={`${AUTHOR.name}, ${AUTHOR.jobTitle}. Pesquisador forense e analista de dados: estruturação estatística de decisões judiciais do TJSP para subsidiar o contencioso de consumo no Juizado Especial Cível.`}
+  description={`${AUTHOR.name}, ${AUTHOR.jobTitle}. Experiência executiva em grandes corporações, formação jurídica e legal analytics aplicado a decisões judiciais do TJSP no Juizado Especial Cível.`}
   h1={AUTHOR.name}
-  lead={`${AUTHOR.jobTitle}. Estrutura decisões judiciais em escala para explicar, com métricas empíricas e fundamentação técnica, os padrões decisórios do Juizado Especial Cível no Estado de São Paulo.`}
+  lead={`${AUTHOR.jobTitle}. Alia experiência executiva em grandes corporações, sólida formação jurídica e ciência de dados para decodificar os padrões decisórios do Juizado Especial Cível paulista.`}
   toc={toc}
   jsonLd={jsonLd}
 >
@@ -71,12 +72,12 @@ const jsonLd = [
     <b>{AUTHOR.name}</b>
     <span class="ah-r">{AUTHOR.role}</span>
     <p style="margin: 6px 0 16px; font-size: 14.5px; color: var(--fg-mid); line-height: 1.55;">
-      Pesquisador forense e especialista em jurimetria aplicada ao contencioso de consumo. Responsável pela modelagem estatística, auditoria de decisões colegiadas do Tribunal de Justiça de São Paulo e tradução analítica dos requisitos probatórios perante os Juizados Especiais Cíveis.
+      Pesquisador forense e especialista em jurimetria aplicada ao contencioso de consumo. Reúne sólida vivência comercial em grandes grupos corporativos, formação jurídica e inteligência em ciência de dados para estruturar a jurisprudência das Turmas Recursais e Varas do Juizado Especial Cível do Tribunal de Justiça de São Paulo.
     </p>
     <div class="aut-links">
-      <a class="aut-sub" href="#atuacao"><Icon name="chart" size={15} stroke={2} />Atuação Técnica</a>
+      <a class="aut-sub" href="#experiencia"><Icon name="bank" size={15} stroke={2} />Experiência Corporativa</a>
+      <a class="aut-sub" href="#atuacao"><Icon name="chart" size={15} stroke={2} />Análise Probatória</a>
       <a class="aut-sub" href="#formacao"><Icon name="doc" size={15} stroke={2} />Formação Acadêmica</a>
-      <a class="aut-sub" href="#etica"><Icon name="shield" size={15} stroke={2} />Diretrizes Éticas</a>
     </div>
   </div>
 </div>
@@ -96,60 +97,93 @@ const jsonLd = [
   </div>
 </div>
 
-<h2 id="atuacao">Atuação Técnica e Legal Analytics</h2>
+<h2 id="experiencia">Experiência Corporativa e Trajetória</h2>
 <p>
-  A atuação de André L. Silva no DefendaMe é centrada na redução da assimetria informacional entre consumidores e grandes corporações no âmbito dos Juizados Especiais Cíveis paulistas.
+  Antes de estruturar a pesquisa jurimétrica do DefendaMe, André L. Silva construiu uma sólida trajetória de atuação executiva e comercial em grandes grupos corporativos. Essa vivência nas engrenagens empresariais confere à sua análise uma compreensão profunda sobre a dinâmica interna dos grandes fornecedores:
+</p>
+<ul style="margin: 16px 0 20px; line-height: 1.7;">
+  <li><strong>Arquitetura operacional das grandes corporações:</strong> compreensão prática dos fluxos de atendimento ao cliente, canais de SAC e ouvidoria, sistemas automatizados de cobrança e rotinas de esteira bancária e aérea;</li>
+  <li><strong>Origem fática dos litígios de massa:</strong> identificação dos pontos de fricção e diretrizes de mercado que dão causa a cobranças indevidas, fraudes eletrônicas, atrasos operacionais e desassistência material ao consumidor;</li>
+  <li><strong>Visão pragmática e realista:</strong> interpretação que transcende a teoria dogmática abstrata, conectando as práticas corporativas de mercado às exigências probatórias formuladas pelos magistrados no momento da sentença.</li>
+</ul>
+<p>
+  Essa experiência executiva permite que a jurimetria do DefendaMe não seja apenas um agrupamento de números, mas uma leitura estratégica dos conflitos entre cidadãos e grandes empresas, compreendendo os dois lados da relação de consumo.
+</p>
+
+<h2 id="atuacao">Legal Analytics e Análise Probatória</h2>
+<p>
+  A pesquisa jurimétrica do DefendaMe atua diretamente na redução da assimetria informacional, fornecendo parâmetros objetivos para a atuação perante os Juizados Especiais Cíveis paulistas.
 </p>
 <p>
-  Mediante mineração e análise jurimétrica de acórdãos e sentenças públicas, a pesquisa extrai parâmetros técnicos concretos sobre o comportamento do Judiciário:
+  A partir da mineração e auditoria estatística de decisões colegiadas e sentenças públicas, o trabalho extrai indicadores concretos para o esclarecimento das demandas:
 </p>
 <ul style="margin: 16px 0 20px; line-height: 1.7;">
   <li><strong>Percentuais históricos de desfecho:</strong> mensuração da taxa real de procedência, procedência parcial e improcedência por espécie de falha na prestação do serviço;</li>
-  <li><strong>Consistência do acervo probatório:</strong> identificamos nos acórdãos quais peças documentais compõem com frequência o conjunto probatório das demandas acolhidas e, em contrapartida, em quais cenários a documentação se revelou insuficiente ou frágil para sustentar o pedido;</li>
-  <li><strong>Dosimetria de indenizações:</strong> quantificação de valores medianos e faixas interquartis fixados pelas Turmas Recursais a título de danos materiais e compensações morais;</li>
-  <li><strong>Duração do processo:</strong> tempo médio verificado desde a petição inicial até a prolação da sentença em primeiro grau.</li>
+  <li><strong>Composição do conjunto probatório:</strong> identificamos nos acórdãos do Tribunal quais documentos integraram com maior frequência o conjunto probatório das demandas acolhidas e, em contrapartida, em quais hipóteses a documentação apresentada se mostrou insuficiente, frágil ou desprovida de lastro fático para demonstrar a falha de serviço ou o prejuízo alegado;</li>
+  <li><strong>Dosimetria indenizatória:</strong> quantificação de valores medianos e faixas interquartis arbitrados pelas Turmas Recursais a título de danos materiais e morais;</li>
+  <li><strong>Tempo médio processual:</strong> intervalo médio verificado entre a distribuição da petição inicial e a prolação da sentença em primeiro grau.</li>
 </ul>
 
 <h2 id="formacao">Formação Acadêmica e Multidisciplinar</h2>
 <p>
-  O trabalho jurimétrico alia fundamentação jurídica em Direito Processual Civil a ferramentas quantitativas de ciência de dados e inteligência analítica:
+  A sólida fundamentação analítica resulta de uma trajetória acadêmica multidisciplinar que integra Direito Processual Civil, Ciência de Dados, Marketing Estratégico e Governança Corporativa:
 </p>
 
-<div class="about-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px;">
-  <div class="about-card">
-    <span class="med-icon"><Icon name="doc" size={22} stroke={2} /></span>
-    <span class="post-fmt fmt-analise" style="margin-bottom: 8px; display: inline-block;">Graduação · Concluído</span>
-    <h3>Bacharelado em Direito</h3>
-    <p><strong>UNIP — Universidade Paulista</strong><br>Formação com ênfase em Direito Processual Civil, Teoria Geral da Responsabilidade Civil, Direito do Consumidor e microssistema dos Juizados Especiais sob a Lei nº 9.099 de 1995.</p>
+<div class="bio-timeline">
+  <div class="bio-entry">
+    <div class="bio-header">
+      <h3 class="bio-title">Bacharelado em Direito</h3>
+      <span class="bio-status concluido">Graduação · Concluído</span>
+    </div>
+    <div class="bio-inst">UNIP — Universidade Paulista</div>
+    <p class="bio-desc">
+      Formação jurídica alicerçada na dogmática do Direito Privado, na Teoria Geral da Responsabilidade Civil e no Direito Processual Civil. Dedicação aos institutos fundamentais do microssistema do Código de Defesa do Consumidor, com ênfase no fato e no vício do serviço, na inversão do ônus da prova e na teoria do desvio produtivo. Pesquisa direcionada à dinâmica forense da Lei Federal nº 9.099 de 1995, examinando critérios de admissibilidade probatória, dosimetria de danos materiais e extrapatrimoniais, e a jurisprudência das Turmas Recursais do Tribunal de Justiça de São Paulo.
+    </p>
   </div>
 
-  <div class="about-card">
-    <span class="med-icon"><Icon name="bank" size={22} stroke={2} /></span>
-    <span class="post-fmt fmt-analise" style="margin-bottom: 8px; display: inline-block;">Graduação · Concluído</span>
-    <h3>Graduação em Marketing</h3>
-    <p><strong>UMC — Universidade de Mogi das Cruzes</strong><br>Estudo de comportamento de consumo, dinâmica de mercados, relações de fornecimento e comunicação institucional.</p>
+  <div class="bio-entry">
+    <div class="bio-header">
+      <h3 class="bio-title">Graduação em Marketing</h3>
+      <span class="bio-status concluido">Graduação · Concluído</span>
+    </div>
+    <div class="bio-inst">UMC — Universidade de Mogi das Cruzes</div>
+    <p class="bio-desc">
+      Formação voltada à compreensão analítica das relações mercadológicas, canais de distribuição, comportamento do consumidor e práticas concorrenciais. Estudo das dinâmicas comerciais e contratuais que regem as relações entre fornecedores de grande porte e o consumidor final, conectando a análise de mercado às vulnerabilidades contratuais contemporâneas.
+    </p>
   </div>
 
-  <div class="about-card">
-    <span class="med-icon"><Icon name="shield" size={22} stroke={2} /></span>
-    <span class="post-fmt fmt-analise" style="margin-bottom: 8px; display: inline-block;">Pós-Graduação · Concluído</span>
-    <h3>MBA em Gestão Estratégica Mercadológica</h3>
-    <p><strong>EPN — Escola Paulista de Negócios</strong><br>Capacitação voltada a planejamento estratégico corporativo, governança da informação e integridade de dados.</p>
+  <div class="bio-entry">
+    <div class="bio-header">
+      <h3 class="bio-title">MBA em Gestão Estratégica Mercadológica</h3>
+      <span class="bio-status concluido">Pós-Graduação · Concluído</span>
+    </div>
+    <div class="bio-inst">EPN — Escola Paulista de Negócios</div>
+    <p class="bio-desc">
+      Especialização executiva focada em planejamento estratégico, governança corporativa, gestão de operações em larga escala e integridade da informação. Desenvolvimento de visão sistêmica sobre estruturação de processos corporativos e mitigação de riscos em ambientes de alta concorrência.
+    </p>
   </div>
 
-  <div class="about-card">
-    <span class="med-icon"><Icon name="gavel" size={22} stroke={2} /></span>
-    <span class="post-fmt fmt-guia" style="margin-bottom: 8px; display: inline-block;">Pós-Graduação · Em curso</span>
-    <h3>MBA Executivo em Direito do Consumidor, Mercados Digitais e Defesa Concorrencial</h3>
-    <p><strong>Pós-graduando</strong><br>Especialização nos desafios da tutela do consumidor no comércio eletrônico, concorrência em plataformas tecnológicas e regulação de mercados digitais.</p>
+  <div class="bio-entry">
+    <div class="bio-header">
+      <h3 class="bio-title">MBA Executivo em Direito do Consumidor, Mercados Digitais e Defesa Concorrencial</h3>
+      <span class="bio-status em-curso">Pós-Graduação · Em curso</span>
+    </div>
+    <div class="bio-inst">Pós-graduando</div>
+    <p class="bio-desc">
+      Aprofundamento na tutela do consumidor no comércio eletrônico, economia das plataformas digitais, regulação concorrencial e práticas comerciais abusivas em ambientes virtuais. Estudo dos reflexos da Lei Geral de Proteção de Dados Pessoais nas relações de consumo e das novas assimetrias decorrentes da contratação digital massificada.
+    </p>
   </div>
-</div>
 
-<div class="about-card" style="margin-top: 16px;">
-  <span class="med-icon"><Icon name="chart" size={22} stroke={2} /></span>
-  <span class="post-fmt fmt-guia" style="margin-bottom: 8px; display: inline-block;">Pós-Graduação · Em curso</span>
-  <h3>Data Science, Inteligência Artificial e Analytics Aplicado</h3>
-  <p><strong>PUC-PR — Pontifícia Universidade Católica do Paraná · Pós-graduando</strong><br>Formação técnica em mineração de dados judiciais, processamento de linguagem natural aplicado a jurisprudência, modelagem probabilística e algoritmos para jurimetria.</p>
+  <div class="bio-entry">
+    <div class="bio-header">
+      <h3 class="bio-title">Data Science, Inteligência Artificial e Analytics Aplicado</h3>
+      <span class="bio-status em-curso">Pós-Graduação · Em curso</span>
+    </div>
+    <div class="bio-inst">PUC-PR — Pontifícia Universidade Católica do Paraná · Pós-graduando</div>
+    <p class="bio-desc">
+      Formação quantitativa avançada voltada à jurimetria e inteligência analítica judiciária. Mineração de dados textuais em repositórios jurisprudenciais públicos, processamento de linguagem natural aplicado a sentenças e acórdãos, modelagem probabilística de desfechos processuais e análise estatística da dispersão de indenizações nos tribunais estaduais.
+    </p>
+  </div>
 </div>
 
 <h2 id="etica">Compromisso Ético e CFOAB nº 205/2021</h2>
@@ -188,3 +222,54 @@ const jsonLd = [
 <p style="margin-top: 36px;"><a class="btn btn-primary" href="/#verificar" data-open-case>Verificar meu caso no Juizado <Icon name="arrow-right" size={16} stroke={2.2} /></a></p>
 
 </PageLayout>
+
+<style>
+  .bio-timeline {
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0 28px;
+    border-top: 1px solid var(--border);
+  }
+  .bio-entry {
+    padding: 20px 0 22px;
+    border-bottom: 1px solid var(--border);
+  }
+  .bio-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .bio-title {
+    margin: 0;
+    font-size: 17.5px;
+    font-weight: 600;
+    color: var(--navy);
+  }
+  .bio-status {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+  .bio-status.concluido {
+    color: var(--fg-muted);
+  }
+  .bio-status.em-curso {
+    color: var(--teal);
+    font-weight: 600;
+  }
+  .bio-inst {
+    font-size: 14.5px;
+    font-weight: 600;
+    color: var(--teal);
+    margin-bottom: 8px;
+  }
+  .bio-desc {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--fg-mid);
+    line-height: 1.65;
+  }
+</style>
