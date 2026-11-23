@@ -1,9 +1,9 @@
 ---
 /**
- * Assistente Conversacional de Chat do DefendaMe.
+ * Assistente Conversacional de Triagem Informativa do DefendaMe.
  * Conexão direta com Google Sheets + Gemini AI + WhatsApp 1-Clique.
- * Fluxo indutivo 100% alinhado com as 14 verticais de CASE_FORMS.
- * Design sóbrio com cantos de 6px (quinas quebradas), TBT = 0 ms.
+ * Em estrita conformidade com o Provimento CFOAB nº 205/2021 (caráter educativo e informativo).
+ * Interface 100% harmoniosa baseada em botões e quinas de 6px (sem blocos cinzas genéricos).
  */
 import Icon from './Icon.astro';
 import { AUTHOR, SITE } from '../data/site';
@@ -15,15 +15,15 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
 ---
 
 <div id="defendaChat" class="dc-root" aria-live="polite">
-  <!-- Botão Flutuante (Launcher com quina de 6px) -->
-  <button type="button" id="dcToggle" class="dc-launcher" aria-label="Abrir assistente de atendimento online" aria-expanded="false">
+  <!-- Botão Flutuante (Launcher padrão com quinas de 6px) -->
+  <button type="button" id="dcToggle" class="dc-launcher" aria-label="Abrir triagem informativa online" aria-expanded="false">
     <div class="dc-launcher-avatar">
       <img src={AUTHOR.photo} alt={AUTHOR.name} width="40" height="40" loading="lazy" />
       <span class="dc-status-dot" id="dcDot"></span>
     </div>
     <div class="dc-launcher-label">
       <span class="dc-lbl-top">Dúvidas no JEC?</span>
-      <span class="dc-lbl-sub" id="dcStatusShort">Atendimento ativo</span>
+      <span class="dc-lbl-sub" id="dcStatusShort">Triagem informativa</span>
     </div>
   </button>
 
@@ -38,30 +38,30 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
         </div>
         <div>
           <h3 id="dcHeaderTitle" class="dc-name">{AUTHOR.name}</h3>
-          <p class="dc-role" id="dcHeaderStatus">Atendimento Técnico</p>
+          <p class="dc-role" id="dcHeaderStatus">Triagem Informativa · Lei 9.099/1995</p>
         </div>
       </div>
-      <button type="button" id="dcClose" class="dc-close-btn" aria-label="Fechar chat">
+      <button type="button" id="dcClose" class="dc-close-btn" aria-label="Fechar triagem">
         <Icon name="x" size={18} stroke={2.2} />
       </button>
     </div>
 
-    <!-- Barra de Aviso de Horário -->
+    <!-- Barra de Aviso de Horário e Finalidade -->
     <div class="dc-notice" id="dcNoticeBar">
-      <span id="dcNoticeText">Atendimento técnico: Segunda a Sexta, das 9h às 18h.</span>
+      <span id="dcNoticeText">Atendimento informativo: Segunda a Sexta, das 9h às 18h.</span>
     </div>
 
     <!-- Área de Mensagens da Conversa -->
     <div class="dc-messages" id="dcMessages">
-      <!-- Mensagens Iniciais -->
+      <!-- Mensagens Iniciais do Bot -->
       <div class="dc-msg dc-msg-bot">
-        <p>Olá! Sou o assistente técnico de jurimetria do DefendaMe.</p>
+        <p>Olá! Sou o assistente de triagem informativa do DefendaMe.</p>
       </div>
       <div class="dc-msg dc-msg-bot">
-        <p>Analisamos a viabilidade do seu caso no Juizado Especial Cível com base em mais de 39 mil decisões do TJSP. Qual situação você deseja avaliar?</p>
+        <p>Orientamos o cidadão sobre os requisitos da Lei 9.099 de 1995 e a jurimetria do TJSP para o exercício da atermação direta. Qual situação você deseja verificar?</p>
       </div>
 
-      <!-- Grade de Verticais Iniciais -->
+      <!-- Grade de Botões Iniciais das 14 Verticais -->
       <div class="dc-chips" id="dcChips">
         {TEMAS.map((t) => (
           <button type="button" class="dc-chip" data-slug={t.slug} data-nome={t.nome}>
@@ -72,9 +72,9 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
       </div>
     </div>
 
-    <!-- Rodapé Institucional -->
+    <!-- Rodapé em Conformidade Rigorosa com a OAB -->
     <div class="dc-footer">
-      <small>Conteúdo em conformidade com o Provimento CFOAB nº 205/2021.</small>
+      <small>Conteúdo educativo em conformidade com o Provimento CFOAB nº 205/2021. Sem promessa de resultado.</small>
     </div>
   </div>
 </div>
@@ -101,7 +101,7 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
   var noticeBar = document.getElementById('dcNoticeBar');
   var noticeText = document.getElementById('dcNoticeText');
 
-  // Checagem de Horário Comercial: Segunda a Sexta, das 9h às 18h
+  // Checagem de Horário Comercial
   var now = new Date();
   var day = now.getDay();
   var hour = now.getHours();
@@ -110,17 +110,17 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
   if (isComercial) {
     dot.classList.add('online');
     headerDot.classList.add('online');
-    statusShort.textContent = 'Online agora';
-    headerStatus.textContent = 'Atendimento Ativo · Horário Comercial';
+    statusShort.textContent = 'Plantão ativo';
+    headerStatus.textContent = 'Triagem Informativa · Horário Comercial';
     noticeBar.classList.add('is-open');
-    noticeText.textContent = 'Horário Comercial ativo. Retorno ágil por WhatsApp.';
+    noticeText.textContent = 'Horário Comercial ativo. Retorno informativo por WhatsApp.';
   } else {
     dot.classList.add('plantao');
     headerDot.classList.add('plantao');
     statusShort.textContent = 'Plantão de Triagem';
     headerStatus.textContent = 'Plantão · Retorno no 1º horário útil';
     noticeBar.classList.add('is-plantao');
-    noticeText.textContent = 'Plantão de Triagem. Casos enviados agora serão respondidos no primeiro horário comercial seguinte.';
+    noticeText.textContent = 'Plantão de Triagem. Demandas enviadas agora serão analisadas no primeiro horário útil seguinte.';
   }
 
   function openChat() {
@@ -143,7 +143,7 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
   closeBtn.addEventListener('click', closeChat);
 
   function scrollBottom() {
-    setTimeout(function(){ msgs.scrollTop = msgs.scrollHeight; }, 30);
+    setTimeout(function(){ msgs.scrollTop = msgs.scrollHeight; }, 35);
   }
 
   function addBotMsg(html) {
@@ -162,11 +162,18 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     scrollBottom();
   }
 
-  // Remove parênteses de qualquer rótulo para conformidade visual
+  // Remove qualquer parênteses de rótulos
   function limpaTexto(str) {
     if (!str) return '';
     return str.replace(/\s*\([^)]*\)/g, '').trim();
   }
+
+  // Sugestões de Botões Harmoniosos para campos de texto frequentes
+  var BANCOS_SUGERIDOS = ['Nubank', 'Itaú', 'Bradesco', 'Santander', 'Banco C6', 'Caixa', 'Banco Inter'];
+  var CIAS_SUGERIDAS = ['LATAM', 'GOL', 'Azul', 'Passaredo'];
+  var CONCESSOES_SUGERIDAS = ['Enel SP', 'CPFL', 'Sabesp', 'Comgás', 'Claro', 'Vivo', 'TIM'];
+  var CIDADES_SUGERIDAS = ['São Paulo Capital', 'Barueri ou Alphaville', 'Osasco e Região', 'Guarulhos', 'Campinas e Interior', 'Grande ABC', 'Baixada Santista'];
+  var VALORES_SUGERIDOS = ['Até R$ 1.000', 'De R$ 1.000 a R$ 5.000', 'De R$ 5.000 a R$ 15.000', 'Acima de R$ 15.000'];
 
   // Estado da Sessão
   var caso = {
@@ -179,7 +186,7 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
   var fieldsQueue = [];
   var fieldIdx = 0;
 
-  // Etapa 1: Selecionar Vertical
+  // Etapa 1: Usuário escolhe a Vertical
   if (chipsWrap) {
     chipsWrap.addEventListener('click', function(e){
       var btn = e.target.closest('.dc-chip');
@@ -196,92 +203,128 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
       fieldIdx = 0;
 
       setTimeout(function(){
-        addBotMsg('<p>Perfeito. Vamos avaliar os requisitos jurídicos de <b>' + nome + '</b> perante as decisões do TJSP.</p>');
+        addBotMsg('<p>Entendido. Vamos verificar os critérios do TJSP e o lastro probatório para <b>' + nome + '</b>.</p>');
         setTimeout(processNextField, 350);
       }, 350);
     });
   }
 
-  // Processador Indutivo Campo a Campo
+  // Processamento Dinâmico dos Campos
   function processNextField() {
     if (fieldIdx < fieldsQueue.length) {
       var f = fieldsQueue[fieldIdx];
-      renderDynamicField(f);
+      renderFieldStep(f);
     } else {
       askCity();
     }
   }
 
-  function renderDynamicField(f) {
+  function renderFieldStep(f) {
     var rotuloLimpo = limpaTexto(f.rotulo);
 
+    // Caso 1: Campo com opções predefinidas (Select)
     if (f.tipo === 'select' && f.opcoes && f.opcoes.length) {
       addBotMsg('<p><b>' + rotuloLimpo + '</b></p>');
-
-      var chips = document.createElement('div');
-      chips.className = 'dc-chips dc-field-chips';
-
-      f.opcoes.forEach(function(op){
-        var btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'dc-chip';
-        btn.textContent = limpaTexto(op);
-        btn.dataset.val = op;
-        chips.appendChild(btn);
-      });
-
-      // Opção extra de Digitar caso queira especificar algo diferente
-      var btnOutro = document.createElement('button');
-      btnOutro.type = 'button';
-      btnOutro.className = 'dc-chip dc-chip-write';
-      btnOutro.textContent = '✏️ Escrever outro detalhe';
-      chips.appendChild(btnOutro);
-
-      msgs.appendChild(chips);
-      scrollBottom();
-
-      chips.addEventListener('click', function(e){
-        var b = e.target.closest('.dc-chip');
-        if (!b) return;
-
-        if (b.classList.contains('dc-chip-write')) {
-          chips.remove();
-          renderSingleInput(f.id, rotuloLimpo, 'text', 'Digite seu relato sobre ' + rotuloLimpo.toLowerCase() + '...');
-          return;
-        }
-
-        var val = b.dataset.val;
-        caso[f.id] = val;
-        chips.remove();
-        addUserMsg(val);
+      renderButtonOptions(f.opcoes, function(selectedVal){
+        caso[f.id] = selectedVal;
+        addUserMsg(selectedVal);
         fieldIdx++;
         setTimeout(processNextField, 350);
-      });
-    } else if (f.tipo === 'money') {
-      addBotMsg('<p><b>' + rotuloLimpo + '</b></p>');
-      renderSingleInput(f.id, rotuloLimpo, 'text', f.placeholder ? 'Ex.: ' + f.placeholder : 'Ex.: 1.500,00', true);
-    } else if (f.tipo === 'date' || f.tipo === 'month') {
-      addBotMsg('<p><b>' + rotuloLimpo + '</b></p>');
-      renderSingleInput(f.id, rotuloLimpo, f.tipo, '');
-    } else {
-      addBotMsg('<p><b>' + rotuloLimpo + '</b></p>');
-      renderSingleInput(f.id, rotuloLimpo, 'text', f.placeholder || 'Informe o detalhe...');
+      }, '✏️ Outro detalhe');
+      return;
     }
+
+    // Caso 2: Pergunta sobre Banco ou Empresa Envolvida
+    if (f.id === 'banco' || f.id === 'empresa' || f.id === 'operadora' || f.id === 'loja') {
+      addBotMsg('<p><b>' + rotuloLimpo + '</b></p>');
+      var sugestoes = BANCOS_SUGERIDOS;
+      if (caso.slug === 'transporte-aereo' || caso.slug === 'bagagem') sugestoes = CIAS_SUGERIDAS;
+      else if (caso.slug === 'energia-eletrica' || caso.slug === 'telefonia') sugestoes = CONCESSOES_SUGERIDAS;
+
+      renderButtonOptions(sugestoes, function(selectedVal){
+        caso[f.id] = selectedVal;
+        addUserMsg(selectedVal);
+        fieldIdx++;
+        setTimeout(processNextField, 350);
+      }, '✏️ Digitar outro nome');
+      return;
+    }
+
+    // Caso 3: Pergunta sobre Valores Envolvidos
+    if (f.tipo === 'money' || f.id === 'valor') {
+      addBotMsg('<p><b>' + rotuloLimpo + '</b></p>');
+      renderButtonOptions(VALORES_SUGERIDOS, function(selectedVal){
+        caso[f.id] = selectedVal;
+        addUserMsg(selectedVal);
+        fieldIdx++;
+        setTimeout(processNextField, 350);
+      }, '✏️ Informar valor exato');
+      return;
+    }
+
+    // Caso 4: Campos de Data
+    if (f.tipo === 'date' || f.tipo === 'month') {
+      addBotMsg('<p><b>' + rotuloLimpo + '</b></p>');
+      renderHarmoniousInput(f.id, rotuloLimpo, f.tipo, 'Selecione a data');
+      return;
+    }
+
+    // Caso Geral: Texto simples
+    addBotMsg('<p><b>' + rotuloLimpo + '</b></p>');
+    renderHarmoniousInput(f.id, rotuloLimpo, 'text', f.placeholder || 'Informe este detalhe...');
   }
 
-  function renderSingleInput(fieldId, rotulo, inputType, placeholder, isMoney) {
+  // Renderizador de Botões Harmoniosos
+  function renderButtonOptions(opcoesList, onSelectCallback, textoBotaoCustom) {
+    var container = document.createElement('div');
+    container.className = 'dc-chips dc-field-chips';
+
+    opcoesList.forEach(function(item){
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'dc-chip';
+      btn.textContent = limpaTexto(item);
+      container.appendChild(btn);
+
+      btn.addEventListener('click', function(){
+        container.remove();
+        onSelectCallback(item);
+      });
+    });
+
+    if (textoBotaoCustom) {
+      var btnCustom = document.createElement('button');
+      btnCustom.type = 'button';
+      btnCustom.className = 'dc-chip dc-chip-write';
+      btnCustom.textContent = textoBotaoCustom;
+      container.appendChild(btnCustom);
+
+      btnCustom.addEventListener('click', function(){
+        container.remove();
+        renderHarmoniousInput('custom_val', 'Detalhe', 'text', 'Digite aqui o detalhe desejado...', function(digitado){
+          onSelectCallback(digitado);
+        });
+      });
+    }
+
+    msgs.appendChild(container);
+    scrollBottom();
+  }
+
+  // Campo de Entrada Harmonioso (Discreto e Alinhado)
+  function renderHarmoniousInput(fieldId, rotulo, inputType, placeholder, customCallback) {
     var box = document.createElement('div');
-    box.className = 'dc-input-box';
+    box.className = 'dc-input-line';
 
     var inp = document.createElement('input');
     inp.type = inputType;
     inp.placeholder = placeholder;
-    if (isMoney) inp.inputMode = 'decimal';
+    inp.className = 'dc-text-input';
 
     var btn = document.createElement('button');
     btn.type = 'button';
-    btn.className = 'btn btn-primary dc-sub-btn';
-    btn.textContent = 'Continuar';
+    btn.className = 'btn btn-primary dc-inline-btn';
+    btn.textContent = 'OK';
 
     box.appendChild(inp);
     box.appendChild(btn);
@@ -289,106 +332,99 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     scrollBottom();
     inp.focus();
 
-    if (isMoney) {
-      inp.addEventListener('input', function(){
-        var d = inp.value.replace(/\D/g, '');
-        if (!d) { inp.value = ''; return; }
-        var n = (parseInt(d, 10) / 100).toFixed(2).split('.');
-        inp.value = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ',' + n[1];
-      });
-    }
-
     function commit() {
       var val = inp.value.trim();
-      if (!val && fieldId !== 'bo' && fieldId !== 'desde') {
-        alert('Por favor, preencha este campo para continuarmos.');
+      if (!val) {
+        alert('Por favor, informe este detalhe para continuarmos.');
         return;
       }
-      caso[fieldId] = val || 'Não informado';
       box.remove();
-      addUserMsg(val ? (isMoney ? 'R$ ' + val : val) : 'Não informado');
-      fieldIdx++;
-      setTimeout(processNextField, 350);
+      if (customCallback) {
+        customCallback(val);
+      } else {
+        caso[fieldId] = val;
+        addUserMsg(val);
+        fieldIdx++;
+        setTimeout(processNextField, 350);
+      }
     }
 
     btn.addEventListener('click', commit);
     inp.addEventListener('keydown', function(e){ if (e.key === 'Enter') commit(); });
   }
 
-  // Etapa: Cidade
+  // Etapa: Cidade do Estado de SP
   function askCity() {
-    addBotMsg('<p><b>Em qual cidade do Estado de São Paulo você mora?</b> Isso define o fórum e o Juizado Especial competente:</p>');
-
-    var box = document.createElement('div');
-    box.className = 'dc-input-box';
-    box.innerHTML = 
-      '<input type="text" id="dcCity" placeholder="Ex.: Barueri, Osasco, São Paulo, Santos" />' +
-      '<button type="button" id="dcNextCity" class="btn btn-primary dc-sub-btn">Continuar</button>';
-    msgs.appendChild(box);
-    scrollBottom();
-
-    var inp = document.getElementById('dcCity');
-    inp.focus();
-
-    function commitCity() {
-      var val = inp.value.trim();
-      if (!val) { alert('Informe sua cidade.'); return; }
-      caso.cidade = val;
-      box.remove();
-      addUserMsg(val + ' / SP');
-      setTimeout(askDescription, 350);
-    }
-
-    document.getElementById('dcNextCity').addEventListener('click', commitCity);
-    inp.addEventListener('keydown', function(e){ if (e.key === 'Enter') commitCity(); });
+    addBotMsg('<p><b>Em qual comarca ou região do Estado de São Paulo você mora?</b></p>');
+    renderButtonOptions(CIDADES_SUGERIDAS, function(cidadeEscolhida){
+      caso.cidade = cidadeEscolhida;
+      addUserMsg(cidadeEscolhida);
+      setTimeout(askFreeDetails, 350);
+    }, '✏️ Outra comarca paulista');
   }
 
-  // Etapa: Detalhe Livre (Opcional ou Complementar)
-  function askDescription() {
-    var pExemplo = caso.slug === 'golpe-pix' 
-      ? 'Ex.: Transferi via Pix após ligação da falsa central telefônica que dizia ser do banco...' 
-      : 'Conte com suas palavras o que a empresa fez ou deixou de fazer e quais prejuízos você teve:';
+  // Etapa: Detalhes Complementares (Com botões)
+  function askFreeDetails() {
+    addBotMsg('<p><b>Deseja acrescentar algum detalhe específico com suas próprias palavras?</b></p>');
 
-    addBotMsg('<p><b>Deseja acrescentar mais algum detalhe com suas próprias palavras?</b></p>');
+    var chips = document.createElement('div');
+    chips.className = 'dc-chips dc-field-chips';
 
-    var box = document.createElement('div');
-    box.className = 'dc-input-box';
-    box.innerHTML = 
-      '<textarea id="dcDesc" rows="3" placeholder="' + pExemplo + '"></textarea>' +
-      '<div class="dc-box-actions">' +
-        '<button type="button" id="dcSkipDesc" class="btn btn-outline dc-sub-btn">Pular</button>' +
-        '<button type="button" id="dcNextDesc" class="btn btn-primary dc-sub-btn">Continuar</button>' +
-      '</div>';
-    msgs.appendChild(box);
+    var btnNao = document.createElement('button');
+    btnNao.type = 'button';
+    btnNao.className = 'dc-chip';
+    btnNao.textContent = 'Não, as opções acima já cobrem meu caso';
+
+    var btnSim = document.createElement('button');
+    btnSim.type = 'button';
+    btnSim.className = 'dc-chip dc-chip-write';
+    btnSim.textContent = '✏️ Sim, quero acrescentar um breve texto';
+
+    chips.appendChild(btnNao);
+    chips.appendChild(btnSim);
+    msgs.appendChild(chips);
     scrollBottom();
 
-    document.getElementById('dcNextDesc').addEventListener('click', function(){
-      var val = document.getElementById('dcDesc').value.trim();
-      caso.descricao = val || 'Relato estruturado via perguntas indutivas do chat.';
-      box.remove();
-      if (val) addUserMsg(val);
+    btnNao.addEventListener('click', function(){
+      chips.remove();
+      caso.descricao = 'Caso estruturado via triagem indutiva de perguntas objetivas.';
+      addUserMsg('Sem acréscimos adicionais');
       setTimeout(askContact, 350);
     });
 
-    document.getElementById('dcSkipDesc').addEventListener('click', function(){
-      caso.descricao = 'Relato estruturado via perguntas indutivas do chat.';
-      box.remove();
-      setTimeout(askContact, 350);
+    btnSim.addEventListener('click', function(){
+      chips.remove();
+      var box = document.createElement('div');
+      box.className = 'dc-input-line dc-input-line-col';
+      box.innerHTML = 
+        '<textarea id="dcDescText" rows="3" class="dc-textarea" placeholder="Descreva sucintamente outros pontos relevantes..."></textarea>' +
+        '<button type="button" id="dcSaveDesc" class="btn btn-primary dc-inline-btn">Avançar</button>';
+      msgs.appendChild(box);
+      scrollBottom();
+      document.getElementById('dcDescText').focus();
+
+      document.getElementById('dcSaveDesc').addEventListener('click', function(){
+        var val = document.getElementById('dcDescText').value.trim();
+        caso.descricao = val || 'Relato estruturado via triagem indutiva.';
+        box.remove();
+        if (val) addUserMsg(val);
+        setTimeout(askContact, 350);
+      });
     });
   }
 
-  // Etapa Final: Contato
+  // Etapa Final: Identificação para Retorno da Análise
   function askContact() {
-    addBotMsg('<p>Excelente. Para onde devemos enviar o diagnóstico de viabilidade jurídica do TJSP e a minuta inicial? Informe seus dados para retorno:</p>');
+    addBotMsg('<p>Excelente. Para onde devemos enviar o diagnóstico preliminar do TJSP e a relação de provas necessárias? Informe seus dados para retorno:</p>');
 
     var formBox = document.createElement('div');
-    formBox.className = 'dc-input-box dc-contact-box';
+    formBox.className = 'dc-input-line dc-input-line-col dc-card-contact';
     formBox.innerHTML = 
-      '<label class="dc-field"><span>Seu nome completo <i>*</i></span><input type="text" id="dcNome" placeholder="Seu nome" required /></label>' +
-      '<label class="dc-field"><span>WhatsApp com DDD <i>*</i></span><input type="tel" id="dcWhats" placeholder="DDD + número" required /></label>' +
-      '<label class="dc-field"><span>E-mail opcional</span><input type="email" id="dcEmail" placeholder="seu@email.com" /></label>' +
-      '<label class="dc-ok"><input type="checkbox" id="dcLgpd" checked /><span>Concordo com a análise deste caso e com a Política de Privacidade.</span></label>' +
-      '<button type="button" id="dcSubmit" class="btn btn-primary dc-send-btn">Enviar para Avaliação Gratuita</button>';
+      '<label class="dc-field"><span>Seu nome completo <i>*</i></span><input type="text" id="dcNome" class="dc-text-input" placeholder="Seu nome" required /></label>' +
+      '<label class="dc-field"><span>WhatsApp com DDD <i>*</i></span><input type="tel" id="dcWhats" class="dc-text-input" placeholder="DDD + número" required /></label>' +
+      '<label class="dc-field"><span>E-mail opcional</span><input type="email" id="dcEmail" class="dc-text-input" placeholder="seu@email.com" /></label>' +
+      '<label class="dc-ok"><input type="checkbox" id="dcLgpd" checked /><span>Autorizo o envio das orientações nos termos da LGPD e do Provimento CFOAB nº 205/2021.</span></label>' +
+      '<button type="button" id="dcSubmit" class="btn btn-primary dc-send-btn">Receber Análise Informativa Gratuita</button>';
     msgs.appendChild(formBox);
     scrollBottom();
 
@@ -400,7 +436,7 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
 
       if (!nome) { alert('Informe seu nome completo.'); return; }
       if (!whats || whats.replace(/\D/g, '').length < 10) { alert('Informe um WhatsApp válido com DDD.'); return; }
-      if (!lgpd) { alert('Você precisa concordar com os termos de privacidade.'); return; }
+      if (!lgpd) { alert('Você precisa concordar com os termos informativos.'); return; }
 
       var proto = 'DM-' + new Date().toISOString().slice(2,10).replace(/-/g,'') + '-' + Math.random().toString(36).slice(2,6).toUpperCase();
       caso.nome = nome;
@@ -412,7 +448,7 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
       formBox.remove();
       addUserMsg(nome + ' · ' + whats);
 
-      addBotMsg('<p>⏳ <i>Enviando relato para triagem e análise da jurimetria...</i></p>');
+      addBotMsg('<p>⏳ <i>Enviando relato para análise da jurimetria...</i></p>');
 
       this.disabled = true;
 
@@ -428,15 +464,15 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
 
   function finalizarSucesso(proto) {
     var txtHorario = isComercial 
-      ? 'Como estamos em <b>horário comercial</b>, nossa equipe técnica já recebeu seu caso e iniciará o contato pelo WhatsApp em breve.'
-      : 'Como você enviou fora do horário de expediente comercial, o seu relato está registrado no <b>Plantão de Triagem</b> e a análise técnica será enviada no primeiro horário útil seguinte.';
+      ? 'Como estamos em <b>horário comercial</b>, o diagnóstico preliminar e a relação probatória serão enviados para o seu WhatsApp em breve.'
+      : 'Como você enviou fora do horário de expediente comercial, o seu protocolo está registrado no <b>Plantão de Triagem</b> e será respondido no primeiro horário útil seguinte.';
 
-    var msgWhats = 'Olá André Silva, acabei de enviar meu relato pelo Chat Online do portal DefendaMe sob o protocolo ' + proto + ' sobre ' + caso.categoria + ' e gostaria de agilizar minha avaliação.';
+    var msgWhats = 'Olá André Silva, acabei de enviar meu relato pelo Chat do portal DefendaMe sob o protocolo ' + proto + ' sobre ' + caso.categoria + ' e gostaria de receber a análise informativa.';
     var linkWhats = 'https://api.whatsapp.com/send?phone=' + whatsNumber + '&text=' + encodeURIComponent(msgWhats);
 
     var html = 
       '<div class="dc-success">' +
-        '<p>✅ <b>Relato registrado com sucesso!</b></p>' +
+        '<p>✅ <b>Triagem registrada com sucesso!</b></p>' +
         '<p class="dc-proto-badge">Protocolo: <b>' + proto + '</b></p>' +
         '<p>' + txtHorario + '</p>' +
         '<div class="dc-done-actions">' +
@@ -715,23 +751,33 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     color: var(--teal);
   }
 
-  /* Inputs dentro da conversa */
-  .dc-input-box {
+  /* Linhas Discretas de Entrada */
+  .dc-input-line {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-    background: var(--bg-hover);
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid var(--border);
+    align-items: center;
+    gap: 6px;
     margin-top: 4px;
   }
-  .dc-input-box textarea,
-  .dc-input-box input[type="text"],
-  .dc-input-box input[type="tel"],
-  .dc-input-box input[type="date"],
-  .dc-input-box input[type="month"],
-  .dc-input-box input[type="email"] {
+  .dc-input-line-col {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .dc-text-input {
+    flex: 1;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 7px 10px;
+    font-size: 13px;
+    color: var(--fg);
+    font-family: inherit;
+    box-sizing: border-box;
+  }
+  .dc-text-input:focus {
+    outline: none;
+    border-color: var(--teal);
+  }
+  .dc-textarea {
     width: 100%;
     background: var(--bg-card);
     border: 1px solid var(--border);
@@ -743,31 +789,32 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     resize: none;
     box-sizing: border-box;
   }
-  .dc-input-box textarea:focus,
-  .dc-input-box input:focus {
+  .dc-textarea:focus {
     outline: none;
     border-color: var(--teal);
   }
+  .dc-inline-btn {
+    padding: 7px 14px;
+    font-size: 12px;
+    border-radius: 6px;
+    align-self: flex-end;
+  }
 
-  .dc-box-actions {
-    display: flex;
-    justify-content: flex-end;
+  .dc-card-contact {
+    background: var(--bg-hover);
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
     gap: 8px;
   }
-  .dc-sub-btn {
-    padding: 6px 14px;
-    font-size: 12.5px;
-    border-radius: 6px;
-  }
-
   .dc-field {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 3px;
     text-align: left;
   }
   .dc-field span {
-    font-size: 11.5px;
+    font-size: 11px;
     font-weight: 500;
     color: var(--fg-muted);
   }
@@ -779,10 +826,11 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     display: flex;
     align-items: flex-start;
     gap: 6px;
-    font-size: 11px;
+    font-size: 10.5px;
     color: var(--fg-muted);
     cursor: pointer;
-    margin: 4px 0;
+    margin: 2px 0;
+    line-height: 1.35;
   }
   .dc-ok input {
     margin-top: 2px;
@@ -790,7 +838,7 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
   .dc-send-btn {
     width: 100%;
     padding: 9px;
-    font-size: 13.5px;
+    font-size: 13px;
     font-weight: 600;
     border-radius: 6px;
   }
@@ -839,6 +887,8 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
   .dc-footer small {
     font-size: 10px;
     color: var(--fg-muted);
+    line-height: 1.3;
+    display: block;
   }
 
   /* Mobile */
