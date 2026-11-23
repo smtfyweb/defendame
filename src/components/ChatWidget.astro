@@ -2,16 +2,15 @@
 /**
  * Assistente Conversacional de Pesquisa Jurimétrica do DefendaMe.
  * Conexão direta com Google Sheets + Gemini AI + WhatsApp 1-Clique.
- * Em estrita conformidade com o Provimento CFOAB nº 205/2021:
- * Caráter puramente didático e informativo de jurimetria sobre dados públicos do TJSP.
- * Não constitui serviço advocatício, não substitui consulta e não gera contratação.
+ * Em estrita conformidade com o Provimento CFOAB nº 205/2021.
  * 
- * Paleta de Cores Oficial do Projeto (Tokens DataNova):
- * - Fundo da janela e cabeçalho: var(--surface) (#ffffff)
- * - Área de conversa: var(--bg) (#f6fbfa)
- * - Botão launcher: var(--teal) (#12857e) com quinas de 6px
- * - Logo DefendaMe 100% visível e centralizada no cabeçalho
- * - Botões e chips em var(--surface) com hover em var(--teal-pale) (#e6f4f2)
+ * Atualizações de Design e Comportamento:
+ * 1. Paleta clara fixa e imune a temas dark:
+ *    Fundo branco, texto marinho, acentos em teal e logo 100% nítida em qualquer tema.
+ * 2. Header limpo com Logo centralizada e Slogan Técnico:
+ *    Substituído o bloco de texto redundante pelo slogan "Jurimetria Forense e Análise do TJSP".
+ * 3. Comportamento inteligente de expansão e retração:
+ *    Abre sob demanda, fecha por clique externo, tecla Escape e retrai automaticamente após inatividade.
  */
 import Logo from './Logo.astro';
 import Icon from './Icon.astro';
@@ -34,27 +33,17 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
   </button>
 
   <!-- Janela do Chat -->
-  <div id="dcWindow" class="dc-window" hidden role="dialog" aria-modal="true" aria-labelledby="dcHeaderTitle">
-    <!-- Cabeçalho com Logo DefendaMe Centralizada em Fundo Surface Oficial -->
+  <div id="dcWindow" class="dc-window" hidden role="dialog" aria-modal="true" aria-labelledby="dcHeaderSlogan">
+    <!-- Cabeçalho com Logo Centralizada e Slogan Técnico Limpo -->
     <div class="dc-header">
       <div class="dc-header-spacer"></div>
       <div class="dc-header-center">
         <Logo href="javascript:void(0)" class="dc-header-logo" />
+        <span class="dc-header-slogan" id="dcHeaderSlogan">Jurimetria Forense e Análise do TJSP</span>
       </div>
       <button type="button" id="dcClose" class="dc-close-btn" aria-label="Fechar pesquisa">
         <Icon name="x" size={18} stroke={2.2} />
       </button>
-    </div>
-
-    <!-- Barra de Aviso Ético e Didático em Teal Claro -->
-    <div class="dc-notice" id="dcNoticeBar">
-      <div class="dc-notice-head">
-        <Icon name="shield" size={13} stroke={2.2} />
-        <span class="dc-notice-title">Pesquisa Didática · Sem Vínculo Advocatício</span>
-      </div>
-      <p class="dc-notice-body" id="dcNoticeText">
-        Este serviço trata-se exclusivamente de pesquisa jurimétrica sobre dados do TJSP para fins didáticos e informativos. Não se trata de consultoria jurídica nem contratação de advocacia e não substitui a análise de um advogado. Havendo demanda contenciosa, procure um advogado especializado.
-      </p>
     </div>
 
     <!-- Área de Mensagens da Conversa -->
@@ -101,20 +90,29 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
   var msgs = document.getElementById('dcMessages');
   var chipsWrap = document.getElementById('dcChips');
   var dot = document.getElementById('dcDot');
-  var noticeBar = document.getElementById('dcNoticeBar');
 
-  // Checagem de Horário Comercial
+  // Controle de Horário Comercial
   var now = new Date();
   var day = now.getDay();
   var hour = now.getHours();
   var isComercial = (day >= 1 && day <= 5 && hour >= 9 && hour < 18);
 
-  if (isComercial) {
-    if (dot) dot.classList.add('online');
-    if (noticeBar) noticeBar.classList.add('is-open');
-  } else {
-    if (dot) dot.classList.add('plantao');
-    if (noticeBar) noticeBar.classList.add('is-plantao');
+  if (dot) {
+    if (isComercial) dot.classList.add('online');
+    else dot.classList.add('plantao');
+  }
+
+  // Timer de Retração Automática por Inatividade (35 segundos)
+  var inactivityTimer = null;
+  var INACTIVITY_DELAY = 35000;
+
+  function resetInactivityTimer() {
+    clearTimeout(inactivityTimer);
+    if (!win.hidden) {
+      inactivityTimer = setTimeout(function(){
+        closeChat();
+      }, INACTIVITY_DELAY);
+    }
   }
 
   function openChat() {
@@ -122,18 +120,46 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     toggleBtn.setAttribute('aria-expanded', 'true');
     toggleBtn.classList.add('active');
     scrollBottom();
+    resetInactivityTimer();
   }
 
   function closeChat() {
     win.hidden = true;
     toggleBtn.setAttribute('aria-expanded', 'false');
     toggleBtn.classList.remove('active');
+    clearTimeout(inactivityTimer);
   }
 
-  toggleBtn.addEventListener('click', function(){
+  toggleBtn.addEventListener('click', function(e){
+    e.stopPropagation();
     if (win.hidden) openChat(); else closeChat();
   });
-  closeBtn.addEventListener('click', closeChat);
+
+  closeBtn.addEventListener('click', function(e){
+    e.stopPropagation();
+    closeChat();
+  });
+
+  // Fecha automaticamente se clicar fora do componente
+  document.addEventListener('click', function(e){
+    if (win.hidden) return;
+    if (!root.contains(e.target)) {
+      closeChat();
+    }
+  });
+
+  // Fecha ao teclar Escape
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && !win.hidden) {
+      closeChat();
+    }
+  });
+
+  // Atividades do usuário dentro da janela do chat resetam o timer de inatividade
+  win.addEventListener('mousemove', resetInactivityTimer);
+  win.addEventListener('click', resetInactivityTimer);
+  win.addEventListener('keydown', resetInactivityTimer);
+  win.addEventListener('scroll', resetInactivityTimer);
 
   function scrollBottom() {
     setTimeout(function(){
@@ -147,6 +173,7 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     div.innerHTML = html;
     msgs.appendChild(div);
     scrollBottom();
+    resetInactivityTimer();
   }
 
   function addUserMsg(text) {
@@ -155,6 +182,7 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     div.textContent = text;
     msgs.appendChild(div);
     scrollBottom();
+    resetInactivityTimer();
   }
 
   // Remove qualquer parênteses de rótulos
@@ -535,7 +563,7 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
         '<p>✅ <b>Pesquisa Jurimétrica Registrada!</b></p>' +
         '<p class="dc-proto-badge">Protocolo: <b>' + proto + '</b></p>' +
         '<p>' + txtHorario + '</p>' +
-        '<p class="dc-notice-legal" style="margin-top:8px; font-size:11px; color:var(--fg-muted); line-height:1.35;">Lembramos que este relatório tem caráter didático e informativo, não configurando prestação de serviços advocatícios. Havendo necessidade de processo judicial, procure um advogado especializado.</p>' +
+        '<p class="dc-notice-legal" style="margin-top:8px; font-size:11px; color:#667085; line-height:1.35;">Lembramos que este relatório tem caráter didático e informativo, não configurando prestação de serviços advocatícios. Havendo necessidade de processo judicial, procure um advogado especializado.</p>' +
         '<div class="dc-done-actions">' +
           '<a href="' + linkWhats + '" target="_blank" rel="noopener" class="btn btn-whatsapp dc-wbtn">' +
             makeSvg('whatsapp', 16) +
@@ -555,12 +583,27 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
 </script>
 
 <style>
+  /* 
+   * Paleta Clara FIXA (Imune a qualquer modo dark do sistema ou site)
+   */
   .dc-root {
     position: fixed;
     bottom: 24px;
     right: 24px;
     z-index: 950;
     font-family: inherit;
+    color-scheme: light !important;
+    --dc-bg: #F6FBFA;
+    --dc-surface: #FFFFFF;
+    --dc-border: #E3E8EC;
+    --dc-line-teal: #CFE7E3;
+    --dc-teal: #12857E;
+    --dc-teal-h: #0F736D;
+    --dc-teal-pale: #E6F4F2;
+    --dc-navy: #1D2939;
+    --dc-fg: #1D2939;
+    --dc-fg-mid: #3B475A;
+    --dc-fg-muted: #667085;
   }
 
   /* Launcher Flutuante: Padrão DefendaMe em Teal com quinas de 6px, sem foto */
@@ -568,19 +611,19 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     display: inline-flex;
     align-items: center;
     gap: 9px;
-    background: var(--teal);
+    background: var(--dc-teal);
     border: 2px solid transparent;
     padding: 10px 18px;
-    border-radius: var(--r-btn, 6px);
-    box-shadow: 0 4px 18px rgba(18, 133, 126, 0.32);
+    border-radius: 6px;
+    box-shadow: 0 4px 18px rgba(18, 133, 126, 0.35);
     cursor: pointer;
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     color: #FFFFFF;
   }
   .dc-launcher:hover {
-    background: var(--teal-h);
+    background: var(--dc-teal-h);
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(18, 133, 126, 0.42);
+    box-shadow: 0 8px 24px rgba(18, 133, 126, 0.45);
   }
   .dc-launcher.active {
     opacity: 0.95;
@@ -622,17 +665,17 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     letter-spacing: 0.01em;
   }
 
-  /* Janela do Chat: quina de 8px e fundo surface oficial */
+  /* Janela do Chat: quina de 8px e fundo surface fixo claro */
   .dc-window {
     position: absolute;
     bottom: 64px;
     right: 0;
     width: 390px;
     max-width: calc(100vw - 32px);
-    height: 540px;
+    height: 520px;
     max-height: calc(100vh - 90px);
-    background: var(--surface);
-    border: 1px solid var(--border);
+    background: var(--dc-surface);
+    border: 1px solid var(--dc-border);
     border-radius: 8px;
     box-shadow: 0 16px 48px rgba(16, 24, 40, 0.16);
     display: flex;
@@ -647,12 +690,12 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
 
   /* Header do Chat com Fundo Surface e Logo Centralizada */
   .dc-header {
-    background: var(--surface);
-    padding: 13px 16px;
+    background: var(--dc-surface);
+    padding: 12px 16px 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--dc-border);
   }
   .dc-header-spacer {
     width: 32px;
@@ -662,8 +705,10 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
   .dc-header-center {
     flex: 1;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    text-align: center;
   }
   .dc-header-logo {
     display: inline-flex;
@@ -673,69 +718,42 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
   }
   .dc-header-logo :global(.wm) {
     font-size: 22px !important;
-    color: var(--navy) !important;
+    color: var(--dc-navy) !important;
     line-height: 1 !important;
   }
   .dc-header-logo :global(.wm-txt) {
-    color: var(--navy) !important;
+    color: var(--dc-navy) !important;
+  }
+  .dc-header-slogan {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--dc-teal);
+    letter-spacing: 0.01em;
+    margin-top: 3px;
+    line-height: 1.2;
   }
   .dc-close-btn {
     width: 32px;
     height: 32px;
     background: transparent;
     border: 1px solid transparent;
-    color: var(--fg-muted);
+    color: var(--dc-fg-muted);
     cursor: pointer;
     padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: var(--r-btn, 6px);
+    border-radius: 6px;
     transition: all 0.15s ease;
     flex-shrink: 0;
   }
   .dc-close-btn:hover {
-    color: var(--teal);
-    background: var(--teal-pale);
-    border-color: var(--line-teal);
+    color: var(--dc-teal);
+    background: var(--dc-teal-pale);
+    border-color: var(--dc-line-teal);
   }
 
-  /* Barra de Aviso Institucional e Didático em Teal Claro */
-  .dc-notice {
-    padding: 8px 14px;
-    font-size: 11px;
-    text-align: left;
-    border-bottom: 1px solid var(--line-teal);
-    line-height: 1.35;
-    background: var(--teal-pale);
-    border-left: 3px solid var(--teal);
-  }
-  .dc-notice-head {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-bottom: 2px;
-    color: var(--teal);
-    font-weight: 600;
-    font-size: 11px;
-  }
-  .dc-notice-title {
-    letter-spacing: 0.01em;
-  }
-  .dc-notice-body {
-    margin: 0;
-    font-size: 10px;
-    color: var(--fg-mid);
-    line-height: 1.35;
-  }
-  .dc-notice.is-open {
-    border-left-color: var(--teal);
-  }
-  .dc-notice.is-plantao {
-    border-left-color: #F59E0B;
-  }
-
-  /* Área de Mensagens com Fundo Mint/Suave Oficial */
+  /* Área de Mensagens com Fundo Mint Suave */
   .dc-messages {
     flex: 1;
     overflow-y: auto;
@@ -743,13 +761,13 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     display: flex;
     flex-direction: column;
     gap: 10px;
-    background: var(--bg);
+    background: var(--dc-bg);
   }
 
   .dc-msg {
     max-width: 88%;
     padding: 9px 12px;
-    border-radius: var(--r-btn, 6px);
+    border-radius: 6px;
     font-size: 13.5px;
     line-height: 1.45;
   }
@@ -761,14 +779,14 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
   }
 
   .dc-msg-bot {
-    background: var(--surface);
-    color: var(--fg);
+    background: var(--dc-surface);
+    color: var(--dc-fg);
     align-self: flex-start;
-    border: 1px solid var(--border);
+    border: 1px solid var(--dc-border);
     box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
   }
   .dc-msg-user {
-    background: var(--teal);
+    background: var(--dc-teal);
     color: #FFFFFF;
     align-self: flex-end;
   }
@@ -782,10 +800,10 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     margin-bottom: 4px;
   }
   .dc-chip {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    color: var(--navy);
-    border-radius: var(--r-btn, 6px);
+    background: var(--dc-surface);
+    border: 1px solid var(--dc-border);
+    color: var(--dc-navy);
+    border-radius: 6px;
     padding: 7px 12px;
     font-size: 12.5px;
     font-weight: 500;
@@ -804,12 +822,12 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: var(--teal);
+    color: var(--dc-teal);
   }
   .dc-chip:hover {
-    border-color: var(--teal);
-    color: var(--teal);
-    background: var(--teal-pale);
+    border-color: var(--dc-teal);
+    color: var(--dc-teal);
+    background: var(--dc-teal-pale);
     transform: translateY(-1.5px);
     box-shadow: 0 4px 12px rgba(18, 133, 126, 0.15);
   }
@@ -818,28 +836,28 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
   }
   .dc-chip-write {
     border-style: dashed;
-    border-color: var(--teal);
-    color: var(--teal);
-    background: var(--teal-pale);
+    border-color: var(--dc-teal);
+    color: var(--dc-teal);
+    background: var(--dc-teal-pale);
   }
   .dc-chip-write .dc-chip-ic {
-    color: var(--teal);
+    color: var(--dc-teal);
   }
   .dc-chip-write:hover {
     background: #d4ece8;
   }
   .dc-chip-submit {
-    background: var(--teal);
+    background: var(--dc-teal);
     color: #FFFFFF;
-    border-color: var(--teal);
+    border-color: var(--dc-teal);
     font-weight: 600;
   }
   .dc-chip-submit .dc-chip-ic {
     color: #FFFFFF;
   }
   .dc-chip-submit:hover {
-    background: var(--teal-h);
-    border-color: var(--teal-h);
+    background: var(--dc-teal-h);
+    border-color: var(--dc-teal-h);
     color: #FFFFFF;
   }
 
@@ -856,61 +874,61 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
   }
   .dc-text-input {
     flex: 1;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--r-btn, 6px);
+    background: var(--dc-surface);
+    border: 1px solid var(--dc-border);
+    border-radius: 6px;
     padding: 8px 11px;
     font-size: 13px;
-    color: var(--fg);
+    color: var(--dc-fg);
     font-family: inherit;
     box-sizing: border-box;
   }
   .dc-text-input:focus {
     outline: none;
-    border-color: var(--teal);
+    border-color: var(--dc-teal);
     box-shadow: 0 0 0 3px rgba(18, 133, 126, 0.12);
   }
   .dc-textarea {
     width: 100%;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--r-btn, 6px);
+    background: var(--dc-surface);
+    border: 1px solid var(--dc-border);
+    border-radius: 6px;
     padding: 8px 10px;
     font-size: 13px;
-    color: var(--fg);
+    color: var(--dc-fg);
     font-family: inherit;
     resize: none;
     box-sizing: border-box;
   }
   .dc-textarea:focus {
     outline: none;
-    border-color: var(--teal);
+    border-color: var(--dc-teal);
     box-shadow: 0 0 0 3px rgba(18, 133, 126, 0.12);
   }
 
   .dc-card-contact {
-    background: var(--surface);
+    background: var(--dc-surface);
     padding: 12px;
-    border-radius: var(--r-btn, 6px);
-    border: 1px solid var(--border);
-    box-shadow: 0 2px 8px rgba(16, 24, 40, 0.05);
+    border-radius: 6px;
+    border: 1px solid var(--dc-border);
+    box-shadow: 0 1px 3px rgba(16, 24, 40, 0.05);
     gap: 8px;
   }
   .dc-legal-badge {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: var(--teal-pale);
-    border: 1px solid var(--line-teal);
+    background: var(--dc-teal-pale);
+    border: 1px solid var(--dc-line-teal);
     border-radius: 4px;
     padding: 4px 8px;
     font-size: 10.5px;
-    color: var(--teal);
+    color: var(--dc-teal);
     font-weight: 500;
     margin-bottom: 4px;
   }
   .dc-legal-badge .dc-chip-ic {
-    color: var(--teal);
+    color: var(--dc-teal);
   }
   .dc-field {
     display: flex;
@@ -921,7 +939,7 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
   .dc-field span {
     font-size: 11px;
     font-weight: 500;
-    color: var(--fg-muted);
+    color: var(--dc-fg-muted);
   }
   .dc-field i {
     color: #EF4444;
@@ -932,7 +950,7 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     align-items: flex-start;
     gap: 6px;
     font-size: 10.5px;
-    color: var(--fg-muted);
+    color: var(--dc-fg-muted);
     cursor: pointer;
     margin: 2px 0;
     line-height: 1.35;
@@ -945,10 +963,10 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     padding: 10px;
     font-size: 13px;
     font-weight: 600;
-    border-radius: var(--r-btn, 6px);
-    background: var(--teal);
+    border-radius: 6px;
+    background: var(--dc-teal);
     color: #FFFFFF;
-    border: 1px solid var(--teal);
+    border: 1px solid var(--dc-teal);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -960,8 +978,8 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     color: #FFFFFF;
   }
   .dc-send-btn:hover {
-    background: var(--teal-h);
-    border-color: var(--teal-h);
+    background: var(--dc-teal-h);
+    border-color: var(--dc-teal-h);
   }
 
   /* Sucesso */
@@ -969,11 +987,11 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     text-align: left;
   }
   .dc-proto-badge {
-    background: var(--teal-pale);
-    color: var(--teal);
+    background: var(--dc-teal-pale);
+    color: var(--dc-teal);
     padding: 5px 8px;
     border-radius: 4px;
-    border: 1px solid var(--line-teal);
+    border: 1px solid var(--dc-line-teal);
     font-size: 12px;
     display: inline-block;
     margin: 6px 0;
@@ -992,7 +1010,7 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     font-weight: 600;
     font-size: 13px;
     padding: 10px 12px;
-    border-radius: var(--r-btn, 6px);
+    border-radius: 6px;
     box-shadow: 0 4px 12px rgba(37, 211, 102, 0.25);
   }
   .dc-wbtn .dc-chip-ic {
@@ -1005,13 +1023,13 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
   /* Rodapé */
   .dc-footer {
     padding: 8px 12px;
-    background: var(--surface);
-    border-top: 1px solid var(--border);
+    background: var(--dc-surface);
+    border-top: 1px solid var(--dc-border);
     text-align: center;
   }
   .dc-footer small {
     font-size: 10px;
-    color: var(--fg-muted);
+    color: var(--dc-fg-muted);
     line-height: 1.3;
     display: block;
   }
@@ -1030,7 +1048,7 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     }
     .dc-launcher {
       padding: 8px 12px;
-      border-radius: var(--r-btn, 6px);
+      border-radius: 6px;
     }
     .dc-launcher-text {
       font-size: 12.5px;
