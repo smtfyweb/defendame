@@ -169,6 +169,13 @@ def auditar_artigo(arquivo: Path) -> List[str]:
         if re.search(r"(vit[óo]ria\s+certa|ganho\s+certo|desmonta\s+sumariamente|n[ãa]o\s+h[áa]\s+como\s+perder)", texto_parecer, re.IGNORECASE):
             erros.append("[PERSONA ANDRÉ L. SILVA] Tom incompatível com jurista/pesquisador empírico. Proibido triunfalismo ou promessas de resultado no Parecer.")
 
+    # 5. Crivo Dialético de Enunciados do JEC (FONAJE / FOJESP / Colégios Recursais)
+    # Se o artigo detalhar o teto de 40 salários mínimos do JEC, deve obrigatoriamente
+    # integrar os Enunciados pertinentes (ex: Enunciado 170 FONAJE ou Enunciados FOJESP)
+    if re.search(r"40\s+sal[áa]rios\s+m[íi]nimos", corpo, re.IGNORECASE):
+        if not re.search(r"(FONAJE|FOJESP|Enunciado)", corpo, re.IGNORECASE):
+            erros.append("[CRIVO JEC / SQUAD] Menção ao teto de 40 salários mínimos sem fundamentação em Enunciados do FONAJE ou FOJESP sobre alçada e cumulação.")
+
     return erros
 
 
