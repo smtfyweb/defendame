@@ -5,9 +5,11 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
+    "prebuild": "python3 scripts/auditoria_dogmatica.py",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "check:legal": "python3 scripts/auditoria_dogmatica.py"
   },
   "dependencies": {
     "astro": "7.4.5",
