@@ -2,20 +2,23 @@
 /**
  * Assistente Conversacional de Chat do DefendaMe.
  * Conexão direta com Google Sheets + Gemini AI + WhatsApp 1-Clique.
- * Sem bibliotecas externas, TBT = 0 ms, gestão inteligente de horários.
+ * Fluxo indutivo 100% alinhado com as 14 verticais de CASE_FORMS.
+ * Design sóbrio com cantos de 6px (quinas quebradas), TBT = 0 ms.
  */
 import Icon from './Icon.astro';
 import { AUTHOR, SITE } from '../data/site';
 import { TEMAS } from '../data/temas';
+import { CASE_FORMS } from '../data/caseForms';
 
 const endpoint = SITE.formEndpoint;
+const caseFormsJson = JSON.stringify(CASE_FORMS);
 ---
 
 <div id="defendaChat" class="dc-root" aria-live="polite">
-  <!-- Botão Flutuante (Launcher) -->
+  <!-- Botão Flutuante (Launcher com quina de 6px) -->
   <button type="button" id="dcToggle" class="dc-launcher" aria-label="Abrir assistente de atendimento online" aria-expanded="false">
     <div class="dc-launcher-avatar">
-      <img src={AUTHOR.photo} alt={AUTHOR.name} width="48" height="48" loading="lazy" />
+      <img src={AUTHOR.photo} alt={AUTHOR.name} width="40" height="40" loading="lazy" />
       <span class="dc-status-dot" id="dcDot"></span>
     </div>
     <div class="dc-launcher-label">
@@ -30,7 +33,7 @@ const endpoint = SITE.formEndpoint;
     <div class="dc-header">
       <div class="dc-header-info">
         <div class="dc-header-avatar">
-          <img src={AUTHOR.photo} alt={AUTHOR.name} width="40" height="40" />
+          <img src={AUTHOR.photo} alt={AUTHOR.name} width="38" height="38" />
           <span class="dc-status-dot-sm" id="dcHeaderDot"></span>
         </div>
         <div>
@@ -39,18 +42,18 @@ const endpoint = SITE.formEndpoint;
         </div>
       </div>
       <button type="button" id="dcClose" class="dc-close-btn" aria-label="Fechar chat">
-        <Icon name="x" size={20} stroke={2.2} />
+        <Icon name="x" size={18} stroke={2.2} />
       </button>
     </div>
 
-    <!-- Aviso de Horário -->
+    <!-- Barra de Aviso de Horário -->
     <div class="dc-notice" id="dcNoticeBar">
       <span id="dcNoticeText">Atendimento técnico: Segunda a Sexta, das 9h às 18h.</span>
     </div>
 
-    <!-- Área de Mensagens -->
+    <!-- Área de Mensagens da Conversa -->
     <div class="dc-messages" id="dcMessages">
-      <!-- Mensagens iniciais do Bot -->
+      <!-- Mensagens Iniciais -->
       <div class="dc-msg dc-msg-bot">
         <p>Olá! Sou o assistente técnico de jurimetria do DefendaMe.</p>
       </div>
@@ -58,7 +61,7 @@ const endpoint = SITE.formEndpoint;
         <p>Analisamos a viabilidade do seu caso no Juizado Especial Cível com base em mais de 39 mil decisões do TJSP. Qual situação você deseja avaliar?</p>
       </div>
 
-      <!-- Grade de Opções Iniciais (Pills) -->
+      <!-- Grade de Verticais Iniciais -->
       <div class="dc-chips" id="dcChips">
         {TEMAS.map((t) => (
           <button type="button" class="dc-chip" data-slug={t.slug} data-nome={t.nome}>
@@ -69,17 +72,22 @@ const endpoint = SITE.formEndpoint;
       </div>
     </div>
 
-    <!-- Rodapé com Informação Institucional -->
+    <!-- Rodapé Institucional -->
     <div class="dc-footer">
       <small>Conteúdo em conformidade com o Provimento CFOAB nº 205/2021.</small>
     </div>
   </div>
 </div>
 
+<script type="application/json" id="dcFormsData" set:html={caseFormsJson} />
+
 <script is:inline define:vars={{ endpoint, whatsNumber: '5511966016189' }}>
 (function(){
   var root = document.getElementById('defendaChat');
   if (!root) return;
+
+  var formsEl = document.getElementById('dcFormsData');
+  var CASE_FORMS = formsEl ? JSON.parse(formsEl.textContent) : {};
 
   var toggleBtn = document.getElementById('dcToggle');
   var win = document.getElementById('dcWindow');
@@ -95,7 +103,7 @@ const endpoint = SITE.formEndpoint;
 
   // Checagem de Horário Comercial: Segunda a Sexta, das 9h às 18h
   var now = new Date();
-  var day = now.getDay(); // 0 domingo, 6 sabado
+  var day = now.getDay();
   var hour = now.getHours();
   var isComercial = (day >= 1 && day <= 5 && hour >= 9 && hour < 18);
 
@@ -115,7 +123,6 @@ const endpoint = SITE.formEndpoint;
     noticeText.textContent = 'Plantão de Triagem. Casos enviados agora serão respondidos no primeiro horário comercial seguinte.';
   }
 
-  // Controle de Abertura / Fechamento
   function openChat() {
     win.hidden = false;
     toggleBtn.setAttribute('aria-expanded', 'true');
@@ -155,98 +162,232 @@ const endpoint = SITE.formEndpoint;
     scrollBottom();
   }
 
-  // Estado do Atendimento
+  // Remove parênteses de qualquer rótulo para conformidade visual
+  function limpaTexto(str) {
+    if (!str) return '';
+    return str.replace(/\s*\([^)]*\)/g, '').trim();
+  }
+
+  // Estado da Sessão
   var caso = {
     origem: 'Chat Online',
     categoria: '',
-    descricao: '',
-    cidade: '',
-    uf: 'SP',
-    nome: '',
-    whatsapp: '',
-    email: '',
+    slug: '',
     protocolo: ''
   };
+
+  var fieldsQueue = [];
+  var fieldIdx = 0;
 
   // Etapa 1: Selecionar Vertical
   if (chipsWrap) {
     chipsWrap.addEventListener('click', function(e){
       var btn = e.target.closest('.dc-chip');
       if (!btn) return;
-      caso.categoria = btn.dataset.nome;
+      var slug = btn.dataset.slug;
+      var nome = btn.dataset.nome;
+      caso.categoria = nome;
+      caso.slug = slug;
       chipsWrap.remove();
-      addUserMsg(btn.dataset.nome);
+      addUserMsg(nome);
+
+      var formData = CASE_FORMS[slug];
+      fieldsQueue = formData ? formData.campos : [];
+      fieldIdx = 0;
 
       setTimeout(function(){
-        addBotMsg('<p>Entendido. Por favor, <b>descreva brevemente o que aconteceu</b>: informe a empresa envolvida, o valor ou prejuízo e qual foi a falha cometida:</p>');
-        renderTextarea();
-      }, 400);
+        addBotMsg('<p>Perfeito. Vamos avaliar os requisitos jurídicos de <b>' + nome + '</b> perante as decisões do TJSP.</p>');
+        setTimeout(processNextField, 350);
+      }, 350);
     });
   }
 
-  // Etapa 2: Descrição do Caso
-  function renderTextarea() {
-    var formBox = document.createElement('div');
-    formBox.className = 'dc-input-box';
-    formBox.innerHTML = 
-      '<textarea id="dcDesc" rows="3" placeholder="Ex.: O banco negativou meu nome indevidamente por uma fatura que nunca contratei..."></textarea>' +
-      '<button type="button" id="dcNextDesc" class="btn btn-primary dc-sub-btn">Continuar</button>';
-    msgs.appendChild(formBox);
+  // Processador Indutivo Campo a Campo
+  function processNextField() {
+    if (fieldIdx < fieldsQueue.length) {
+      var f = fieldsQueue[fieldIdx];
+      renderDynamicField(f);
+    } else {
+      askCity();
+    }
+  }
+
+  function renderDynamicField(f) {
+    var rotuloLimpo = limpaTexto(f.rotulo);
+
+    if (f.tipo === 'select' && f.opcoes && f.opcoes.length) {
+      addBotMsg('<p><b>' + rotuloLimpo + '</b></p>');
+
+      var chips = document.createElement('div');
+      chips.className = 'dc-chips dc-field-chips';
+
+      f.opcoes.forEach(function(op){
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'dc-chip';
+        btn.textContent = limpaTexto(op);
+        btn.dataset.val = op;
+        chips.appendChild(btn);
+      });
+
+      // Opção extra de Digitar caso queira especificar algo diferente
+      var btnOutro = document.createElement('button');
+      btnOutro.type = 'button';
+      btnOutro.className = 'dc-chip dc-chip-write';
+      btnOutro.textContent = '✏️ Escrever outro detalhe';
+      chips.appendChild(btnOutro);
+
+      msgs.appendChild(chips);
+      scrollBottom();
+
+      chips.addEventListener('click', function(e){
+        var b = e.target.closest('.dc-chip');
+        if (!b) return;
+
+        if (b.classList.contains('dc-chip-write')) {
+          chips.remove();
+          renderSingleInput(f.id, rotuloLimpo, 'text', 'Digite seu relato sobre ' + rotuloLimpo.toLowerCase() + '...');
+          return;
+        }
+
+        var val = b.dataset.val;
+        caso[f.id] = val;
+        chips.remove();
+        addUserMsg(val);
+        fieldIdx++;
+        setTimeout(processNextField, 350);
+      });
+    } else if (f.tipo === 'money') {
+      addBotMsg('<p><b>' + rotuloLimpo + '</b></p>');
+      renderSingleInput(f.id, rotuloLimpo, 'text', f.placeholder ? 'Ex.: ' + f.placeholder : 'Ex.: 1.500,00', true);
+    } else if (f.tipo === 'date' || f.tipo === 'month') {
+      addBotMsg('<p><b>' + rotuloLimpo + '</b></p>');
+      renderSingleInput(f.id, rotuloLimpo, f.tipo, '');
+    } else {
+      addBotMsg('<p><b>' + rotuloLimpo + '</b></p>');
+      renderSingleInput(f.id, rotuloLimpo, 'text', f.placeholder || 'Informe o detalhe...');
+    }
+  }
+
+  function renderSingleInput(fieldId, rotulo, inputType, placeholder, isMoney) {
+    var box = document.createElement('div');
+    box.className = 'dc-input-box';
+
+    var inp = document.createElement('input');
+    inp.type = inputType;
+    inp.placeholder = placeholder;
+    if (isMoney) inp.inputMode = 'decimal';
+
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'btn btn-primary dc-sub-btn';
+    btn.textContent = 'Continuar';
+
+    box.appendChild(inp);
+    box.appendChild(btn);
+    msgs.appendChild(box);
+    scrollBottom();
+    inp.focus();
+
+    if (isMoney) {
+      inp.addEventListener('input', function(){
+        var d = inp.value.replace(/\D/g, '');
+        if (!d) { inp.value = ''; return; }
+        var n = (parseInt(d, 10) / 100).toFixed(2).split('.');
+        inp.value = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ',' + n[1];
+      });
+    }
+
+    function commit() {
+      var val = inp.value.trim();
+      if (!val && fieldId !== 'bo' && fieldId !== 'desde') {
+        alert('Por favor, preencha este campo para continuarmos.');
+        return;
+      }
+      caso[fieldId] = val || 'Não informado';
+      box.remove();
+      addUserMsg(val ? (isMoney ? 'R$ ' + val : val) : 'Não informado');
+      fieldIdx++;
+      setTimeout(processNextField, 350);
+    }
+
+    btn.addEventListener('click', commit);
+    inp.addEventListener('keydown', function(e){ if (e.key === 'Enter') commit(); });
+  }
+
+  // Etapa: Cidade
+  function askCity() {
+    addBotMsg('<p><b>Em qual cidade do Estado de São Paulo você mora?</b> Isso define o fórum e o Juizado Especial competente:</p>');
+
+    var box = document.createElement('div');
+    box.className = 'dc-input-box';
+    box.innerHTML = 
+      '<input type="text" id="dcCity" placeholder="Ex.: Barueri, Osasco, São Paulo, Santos" />' +
+      '<button type="button" id="dcNextCity" class="btn btn-primary dc-sub-btn">Continuar</button>';
+    msgs.appendChild(box);
+    scrollBottom();
+
+    var inp = document.getElementById('dcCity');
+    inp.focus();
+
+    function commitCity() {
+      var val = inp.value.trim();
+      if (!val) { alert('Informe sua cidade.'); return; }
+      caso.cidade = val;
+      box.remove();
+      addUserMsg(val + ' / SP');
+      setTimeout(askDescription, 350);
+    }
+
+    document.getElementById('dcNextCity').addEventListener('click', commitCity);
+    inp.addEventListener('keydown', function(e){ if (e.key === 'Enter') commitCity(); });
+  }
+
+  // Etapa: Detalhe Livre (Opcional ou Complementar)
+  function askDescription() {
+    var pExemplo = caso.slug === 'golpe-pix' 
+      ? 'Ex.: Transferi via Pix após ligação da falsa central telefônica que dizia ser do banco...' 
+      : 'Conte com suas palavras o que a empresa fez ou deixou de fazer e quais prejuízos você teve:';
+
+    addBotMsg('<p><b>Deseja acrescentar mais algum detalhe com suas próprias palavras?</b></p>');
+
+    var box = document.createElement('div');
+    box.className = 'dc-input-box';
+    box.innerHTML = 
+      '<textarea id="dcDesc" rows="3" placeholder="' + pExemplo + '"></textarea>' +
+      '<div class="dc-box-actions">' +
+        '<button type="button" id="dcSkipDesc" class="btn btn-outline dc-sub-btn">Pular</button>' +
+        '<button type="button" id="dcNextDesc" class="btn btn-primary dc-sub-btn">Continuar</button>' +
+      '</div>';
+    msgs.appendChild(box);
     scrollBottom();
 
     document.getElementById('dcNextDesc').addEventListener('click', function(){
       var val = document.getElementById('dcDesc').value.trim();
-      if (val.length < 15) {
-        alert('Por favor, detalhe um pouco mais o ocorrido com pelo menos 15 caracteres.');
-        return;
-      }
-      caso.descricao = val;
-      formBox.remove();
-      addUserMsg(val);
+      caso.descricao = val || 'Relato estruturado via perguntas indutivas do chat.';
+      box.remove();
+      if (val) addUserMsg(val);
+      setTimeout(askContact, 350);
+    });
 
-      setTimeout(function(){
-        addBotMsg('<p>Perfeito. <b>Em qual cidade do Estado de São Paulo você mora?</b> Isso define o Juizado Especial Cível competente para o caso:</p>');
-        renderCityInput();
-      }, 400);
+    document.getElementById('dcSkipDesc').addEventListener('click', function(){
+      caso.descricao = 'Relato estruturado via perguntas indutivas do chat.';
+      box.remove();
+      setTimeout(askContact, 350);
     });
   }
 
-  // Etapa 3: Cidade
-  function renderCityInput() {
-    var formBox = document.createElement('div');
-    formBox.className = 'dc-input-box';
-    formBox.innerHTML = 
-      '<input type="text" id="dcCity" placeholder="Ex.: Barueri, Osasco, São Paulo" />' +
-      '<button type="button" id="dcNextCity" class="btn btn-primary dc-sub-btn">Continuar</button>';
-    msgs.appendChild(formBox);
-    scrollBottom();
+  // Etapa Final: Contato
+  function askContact() {
+    addBotMsg('<p>Excelente. Para onde devemos enviar o diagnóstico de viabilidade jurídica do TJSP e a minuta inicial? Informe seus dados para retorno:</p>');
 
-    document.getElementById('dcNextCity').addEventListener('click', function(){
-      var val = document.getElementById('dcCity').value.trim();
-      if (!val) {
-        alert('Por favor, informe o nome da sua cidade.');
-        return;
-      }
-      caso.cidade = val;
-      formBox.remove();
-      addUserMsg(val + ' / SP');
-
-      setTimeout(function(){
-        addBotMsg('<p>Ótimo. Para onde devemos enviar o diagnóstico de viabilidade jurídica do TJSP e o checklist de documentos necessários? Informe seus dados de contato:</p>');
-        renderContactForm();
-      }, 400);
-    });
-  }
-
-  // Etapa 4: Contato e Envio
-  function renderContactForm() {
     var formBox = document.createElement('div');
     formBox.className = 'dc-input-box dc-contact-box';
     formBox.innerHTML = 
       '<label class="dc-field"><span>Seu nome completo <i>*</i></span><input type="text" id="dcNome" placeholder="Seu nome" required /></label>' +
       '<label class="dc-field"><span>WhatsApp com DDD <i>*</i></span><input type="tel" id="dcWhats" placeholder="DDD + número" required /></label>' +
       '<label class="dc-field"><span>E-mail opcional</span><input type="email" id="dcEmail" placeholder="seu@email.com" /></label>' +
-      '<label class="dc-ok"><input type="checkbox" id="dcLgpd" checked /><span>Concordo com a análise e com a Política de Privacidade.</span></label>' +
+      '<label class="dc-ok"><input type="checkbox" id="dcLgpd" checked /><span>Concordo com a análise deste caso e com a Política de Privacidade.</span></label>' +
       '<button type="button" id="dcSubmit" class="btn btn-primary dc-send-btn">Enviar para Avaliação Gratuita</button>';
     msgs.appendChild(formBox);
     scrollBottom();
@@ -273,16 +414,12 @@ const endpoint = SITE.formEndpoint;
 
       addBotMsg('<p>⏳ <i>Enviando relato para triagem e análise da jurimetria...</i></p>');
 
-      var btnSubmit = this;
-      btnSubmit.disabled = true;
-
-      // Disparo para o Webhook do Google Apps Script
-      var payload = JSON.stringify(caso);
+      this.disabled = true;
 
       fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: payload
+        body: JSON.stringify(caso)
       })
       .then(function(){ finalizarSucesso(proto); })
       .catch(function(){ finalizarSucesso(proto); });
@@ -309,7 +446,6 @@ const endpoint = SITE.formEndpoint;
         '</div>' +
       '</div>';
 
-    // Remove mensagem temporaria de carregamento
     var lastMsg = msgs.querySelector('.dc-msg-bot:last-child');
     if (lastMsg && lastMsg.textContent.indexOf('Enviando relato') !== -1) {
       lastMsg.remove();
@@ -329,15 +465,15 @@ const endpoint = SITE.formEndpoint;
     font-family: inherit;
   }
 
-  /* Launcher Flutuante */
+  /* Launcher Flutuante: Padrão DefendaMe quadrado com quina quebrada (6px) */
   .dc-launcher {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     background: var(--navy);
     border: 1px solid var(--border);
-    padding: 6px 16px 6px 6px;
-    border-radius: 999px;
+    padding: 6px 14px 6px 6px;
+    border-radius: 6px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
     cursor: pointer;
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
@@ -349,34 +485,34 @@ const endpoint = SITE.formEndpoint;
     border-color: var(--teal);
   }
   .dc-launcher.active {
-    opacity: 0.85;
-    transform: scale(0.96);
+    opacity: 0.88;
+    transform: scale(0.98);
   }
 
   .dc-launcher-avatar {
     position: relative;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
     overflow: visible;
   }
   .dc-launcher-avatar img {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
     object-fit: cover;
     display: block;
-    border: 2px solid var(--teal);
+    border: 1.5px solid var(--teal);
   }
 
   .dc-status-dot {
     position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 12px;
-    height: 12px;
+    bottom: -2px;
+    right: -2px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
-    border: 2px solid var(--navy);
+    border: 1.5px solid var(--navy);
   }
   .dc-status-dot.online {
     background: #10B981;
@@ -404,33 +540,33 @@ const endpoint = SITE.formEndpoint;
     line-height: 1.2;
   }
 
-  /* Janela do Chat */
+  /* Janela do Chat: quina de 8px */
   .dc-window {
     position: absolute;
-    bottom: 68px;
+    bottom: 64px;
     right: 0;
-    width: 380px;
+    width: 390px;
     max-width: calc(100vw - 32px);
-    height: 520px;
-    max-height: calc(100vh - 100px);
+    height: 540px;
+    max-height: calc(100vh - 90px);
     background: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: 16px;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+    border-radius: 8px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
     display: flex;
     flex-direction: column;
     overflow: hidden;
     animation: dcFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
   @keyframes dcFadeIn {
-    from { opacity: 0; transform: translateY(12px) scale(0.97); }
+    from { opacity: 0; transform: translateY(10px) scale(0.98); }
     to { opacity: 1; transform: translateY(0) scale(1); }
   }
 
   /* Header do Chat */
   .dc-header {
     background: var(--navy);
-    padding: 14px 16px;
+    padding: 12px 14px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -443,22 +579,22 @@ const endpoint = SITE.formEndpoint;
   }
   .dc-header-avatar {
     position: relative;
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
   }
   .dc-header-avatar img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    border-radius: 4px;
     object-fit: cover;
     border: 1.5px solid var(--teal);
   }
   .dc-status-dot-sm {
     position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 10px;
-    height: 10px;
+    bottom: -1px;
+    right: -1px;
+    width: 9px;
+    height: 9px;
     border-radius: 50%;
     border: 1.5px solid var(--navy);
   }
@@ -466,14 +602,14 @@ const endpoint = SITE.formEndpoint;
   .dc-status-dot-sm.plantao { background: #F59E0B; }
 
   .dc-name {
-    font-size: 15px;
+    font-size: 14.5px;
     font-weight: 600;
     color: #FFFFFF;
     margin: 0;
     line-height: 1.2;
   }
   .dc-role {
-    font-size: 11.5px;
+    font-size: 11px;
     color: var(--teal);
     margin: 0;
     line-height: 1.2;
@@ -483,11 +619,11 @@ const endpoint = SITE.formEndpoint;
     border: none;
     color: var(--fg-muted);
     cursor: pointer;
-    padding: 4px;
+    padding: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 6px;
+    border-radius: 4px;
     transition: all 0.15s ease;
   }
   .dc-close-btn:hover {
@@ -516,16 +652,16 @@ const endpoint = SITE.formEndpoint;
   .dc-messages {
     flex: 1;
     overflow-y: auto;
-    padding: 16px;
+    padding: 14px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
   }
 
   .dc-msg {
-    max-width: 85%;
-    padding: 10px 14px;
-    border-radius: 14px;
+    max-width: 88%;
+    padding: 9px 12px;
+    border-radius: 6px;
     font-size: 13.5px;
     line-height: 1.45;
   }
@@ -539,18 +675,16 @@ const endpoint = SITE.formEndpoint;
   .dc-msg-bot {
     background: var(--bg-hover);
     color: var(--fg);
-    border-bottom-left-radius: 4px;
     align-self: flex-start;
     border: 1px solid var(--border);
   }
   .dc-msg-user {
     background: var(--teal);
     color: #FFFFFF;
-    border-bottom-right-radius: 4px;
     align-self: flex-end;
   }
 
-  /* Opções Iniciais (Pills) */
+  /* Opções e Chips: padrão quina quebrada (6px) */
   .dc-chips {
     display: flex;
     flex-wrap: wrap;
@@ -561,8 +695,8 @@ const endpoint = SITE.formEndpoint;
     background: var(--bg-card);
     border: 1px solid var(--border);
     color: var(--fg);
-    border-radius: 999px;
-    padding: 6px 12px;
+    border-radius: 6px;
+    padding: 6px 11px;
     font-size: 12px;
     display: inline-flex;
     align-items: center;
@@ -574,7 +708,11 @@ const endpoint = SITE.formEndpoint;
     border-color: var(--teal);
     color: var(--teal);
     background: var(--bg-hover);
-    transform: translateY(-1px);
+  }
+  .dc-chip-write {
+    border-style: dashed;
+    border-color: var(--teal);
+    color: var(--teal);
   }
 
   /* Inputs dentro da conversa */
@@ -583,19 +721,21 @@ const endpoint = SITE.formEndpoint;
     flex-direction: column;
     gap: 8px;
     background: var(--bg-hover);
-    padding: 12px;
-    border-radius: 12px;
+    padding: 10px;
+    border-radius: 6px;
     border: 1px solid var(--border);
     margin-top: 4px;
   }
   .dc-input-box textarea,
   .dc-input-box input[type="text"],
   .dc-input-box input[type="tel"],
+  .dc-input-box input[type="date"],
+  .dc-input-box input[type="month"],
   .dc-input-box input[type="email"] {
     width: 100%;
     background: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 6px;
     padding: 8px 10px;
     font-size: 13px;
     color: var(--fg);
@@ -608,10 +748,15 @@ const endpoint = SITE.formEndpoint;
     outline: none;
     border-color: var(--teal);
   }
+
+  .dc-box-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
   .dc-sub-btn {
-    align-self: flex-end;
-    padding: 6px 16px;
-    font-size: 13px;
+    padding: 6px 14px;
+    font-size: 12.5px;
     border-radius: 6px;
   }
 
@@ -644,9 +789,10 @@ const endpoint = SITE.formEndpoint;
   }
   .dc-send-btn {
     width: 100%;
-    padding: 10px;
+    padding: 9px;
     font-size: 13.5px;
     font-weight: 600;
+    border-radius: 6px;
   }
 
   /* Sucesso */
@@ -655,8 +801,8 @@ const endpoint = SITE.formEndpoint;
   }
   .dc-proto-badge {
     background: var(--bg-card);
-    padding: 6px 10px;
-    border-radius: 6px;
+    padding: 5px 8px;
+    border-radius: 4px;
     border: 1px solid var(--border);
     font-size: 12px;
     display: inline-block;
@@ -675,8 +821,8 @@ const endpoint = SITE.formEndpoint;
     gap: 6px;
     font-weight: 600;
     font-size: 13px;
-    padding: 10px 14px;
-    border-radius: 8px;
+    padding: 9px 12px;
+    border-radius: 6px;
     box-shadow: 0 4px 12px rgba(37, 211, 102, 0.25);
   }
   .dc-wbtn:hover {
@@ -685,7 +831,7 @@ const endpoint = SITE.formEndpoint;
 
   /* Rodapé */
   .dc-footer {
-    padding: 8px 12px;
+    padding: 6px 12px;
     background: var(--bg-card);
     border-top: 1px solid var(--border);
     text-align: center;
@@ -704,7 +850,7 @@ const endpoint = SITE.formEndpoint;
     .dc-window {
       width: calc(100vw - 32px);
       right: 0;
-      bottom: 64px;
+      bottom: 60px;
       height: 480px;
     }
     .dc-lbl-top {
@@ -712,7 +858,7 @@ const endpoint = SITE.formEndpoint;
     }
     .dc-launcher {
       padding: 4px;
-      border-radius: 50%;
+      border-radius: 6px;
     }
     .dc-launcher-label {
       display: none;
