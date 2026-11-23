@@ -6,7 +6,11 @@ export const SITE = {
   locale: 'pt_BR',
   email: 'contato@defendame.online',          // confirmar
   privacyEmail: 'privacidade@defendame.online', // confirmar
-  substack: 'https://substack.com/@andreluisilv',
+  youtube: 'https://www.youtube.com/@defendame',
+  instagram: 'https://www.instagram.com/defendame.online',
+  whatsapp: 'https://wa.me/5511999999999',
+  linkedin: 'https://www.linkedin.com/company/defendame',
+  twitter: 'https://x.com/defendame',
   ogDefault: '/og-default.jpg',
   // Endpoint que recebe o formulário "Verificar meu caso" (Formspree, Cloudflare Worker, etc.)
   formEndpoint: import.meta.env.PUBLIC_FORM_ENDPOINT ?? '',

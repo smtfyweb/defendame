@@ -820,6 +820,7 @@ body.cz-lock { overflow: hidden; }
 .pa svg { width: 17px; height: 17px; }
 .pa:hover { color: var(--teal); border-color: var(--teal); }
 .pa.wa:hover { color: #1fa855; border-color: #1fa855; }
+.pa.yt:hover { color: #ff0000; border-color: #ff0000; }
 .pa-font { display: inline-flex; align-items: center; height: 38px; border: 1px solid var(--border); border-radius: var(--r-btn); background: var(--surface); overflow: hidden; margin-left: 6px; }
 .pa-font button { height: 100%; padding: 0 12px; background: none; border: 0; font: 600 14px var(--ff); color: var(--fg-mid); cursor: pointer; }
 .pa-font button:hover { color: var(--teal); background: var(--teal-pale); }
@@ -1047,10 +1048,16 @@ body.cz-lock { overflow: hidden; }
 /* ═ COMUM v2 ═ */
 .fmap { grid-template-columns: 1.3fr repeat(5, minmax(0,1fr)) !important; gap: 24px !important; }
 @media (max-width: 1000px) { .fmap { grid-template-columns: 1fr 1fr !important; } .fmap > :first-child { grid-column: 1 / -1; } }
-.fsocial { display: flex; gap: 8px; margin-top: 14px; }
-.fsocial a { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 12px; border: 1px solid var(--border); border-radius: var(--r-btn); color: var(--fg-mid); text-decoration: none; font-size: 13.5px; font-weight: 500; }
-.fsocial a:hover { color: #ff6719; border-color: #ff6719; }
-.fsocial svg { width: 15px; height: 15px; }
+.fsocial { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 16px; }
+.fsocial a { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border: 1px solid var(--border); border-radius: var(--r-btn); background: var(--surface); color: var(--fg-mid); text-decoration: none; transition: color .15s, border-color .15s, transform .15s; }
+.fsocial a:hover { color: var(--teal); border-color: var(--teal); transform: translateY(-1px); }
+.fsocial a.fs-yt:hover { color: #ff0000; border-color: #ff0000; }
+.fsocial a.fs-in:hover { color: #e1306c; border-color: #e1306c; }
+.fsocial a.fs-wa:hover { color: #1fa855; border-color: #1fa855; }
+.fsocial a.fs-li:hover { color: #0a66c2; border-color: #0a66c2; }
+.fsocial a.fs-x:hover { color: var(--navy); border-color: var(--navy); }
+.fsocial svg { width: 17px; height: 17px; }
+.fdesc { font-size: 13px; line-height: 1.6; color: var(--fg-muted); margin: 0; }
 .flink { background: none; border: 0; padding: 4px 0; font: 400 13.5px var(--ff); color: var(--fg-muted); cursor: pointer; text-align: left; }
 .flink:hover { color: var(--teal); }
 .fbottom a { color: inherit; text-decoration: none; } .fbottom a:hover { color: var(--teal); }
