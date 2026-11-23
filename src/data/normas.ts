@@ -134,6 +134,24 @@ export const BANCO_NORMAS: Record<string, NormaItem> = {
     textoLiteral: 'O consumidor terá acesso às informações existentes em cadastros, fichas, registros e dados pessoais e de consumo arquivados sobre ele, bem como sobre as suas respectivas fontes...\n\n§ 2° A abertura de cadastro, ficha, registro e dados pessoais e de consumo deverá ser comunicada por escrito ao consumidor, quando não solicitada por ele.',
     linkOficial: 'https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm'
   },
+  'cdc-geral': {
+    id: 'cdc-geral',
+    badge: 'LEGISLAÇÃO ESTRUTURANTE · CDC',
+    titulo: 'Código de Defesa do Consumidor',
+    diploma: 'Lei Federal nº 8.078/1990',
+    textoLiteral: 'Art. 1º O presente código estabelece normas de proteção e defesa do consumidor, de ordem pública e interesse social, nos termos dos arts. 5º, inciso XXXII, 170, inciso V, da Constituição Federal e art. 48 de suas Disposições Transitórias.',
+    explicacao: 'Estatuto de ordem pública e interesse social: garante a responsabilidade civil objetiva dos fornecedores e a reparação integral dos danos causados ao passageiro e ao consumidor.',
+    linkOficial: 'https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm'
+  },
+  'decreto-5910-montreal': {
+    id: 'decreto-5910-montreal',
+    badge: 'TRATADO INTERNACIONAL · DECRETO',
+    titulo: 'Decreto Federal nº 5.910/2006',
+    diploma: 'Convenção de Montreal (Transporte Aéreo Internacional)',
+    textoLiteral: 'Promulga a Convenção para a Unificação de Certas Regras Relativas ao Transporte Aéreo Internacional, celebrada em Montreal, em 28 de maio de 1999.',
+    explicacao: 'Tratado internacional que rege o transporte aéreo exterior. O STF pacificou que suas limitações tarifárias aplicam-se unicamente ao extravio de bagagem e danos materiais, nunca ao dano moral.',
+    linkOficial: 'https://www.planalto.gov.br/ccivil_03/_ato2004-2006/2006/decreto/d5910.htm'
+  },
 
   // ── LEI DOS JUIZADOS ESPECIAIS (LEI 9.099/1995) ──
   'lei-9099': {
@@ -380,8 +398,9 @@ export function buscarNorma(props: {
   tema?: string;
   enunciado?: string | number;
   orgao?: string;
+  texto?: string;
 }): NormaItem | null {
-  const { art, lei, sumula, tribunal, resp, tema, enunciado, orgao } = props;
+  const { art, lei, sumula, tribunal, resp, tema, enunciado, orgao, texto } = props;
 
   // 1. Busca direta por Precedente STJ
   if (resp) {
@@ -424,34 +443,49 @@ export function buscarNorma(props: {
   // 5. Busca por Artigo e Diploma
   const a = (art ?? '').toLowerCase();
   const l = (lei ?? '').toLowerCase();
+  const tx = (props as any).texto ? String((props as any).texto).toLowerCase() : '';
+
+  // Tratado de Montreal / Decreto 5.910
+  if (l.includes('5.910') || a.includes('5.910') || tx.includes('5.910') || l.includes('montreal')) {
+    return BANCO_NORMAS['decreto-5910-montreal'];
+  }
+
+  // Precedentes do STF por texto (ARE / RE)
+  if (tx.includes('1.373.406') || a.includes('1.373.406')) {
+    return BANCO_NORMAS['tema-1240-stf'];
+  }
+  if (tx.includes('636.331') || a.includes('636.331')) {
+    return BANCO_NORMAS['tema-210-stf'];
+  }
 
   // ANAC 400
-  if (a.includes('resolução') || l.includes('anac') || a.includes('400')) {
+  if (a.includes('resolução') || l.includes('anac') || a.includes('400') || tx.includes('anac') || tx.includes('resolução 400')) {
     return BANCO_NORMAS['resolucao-400-anac'];
   }
 
   // CF/88
-  if (l.includes('cf') || l.includes('constituição')) {
+  if (l.includes('cf') || l.includes('constituição') || tx.includes('cf/88')) {
     return BANCO_NORMAS['art-5-cf'];
   }
 
   // LEI 9.099/95
-  if (a.includes('9.099') || l.includes('9.099') || l.includes('juizados especiais')) {
-    if (a.includes('54')) return BANCO_NORMAS['art-54-lei-9099'];
-    if (a.includes('3')) return BANCO_NORMAS['art-3-lei-9099'];
-    if (a.includes('9')) return BANCO_NORMAS['art-9-lei-9099'];
-    if (a.includes('41')) return BANCO_NORMAS['art-41-lei-9099'];
+  if (a.includes('9.099') || l.includes('9.099') || l.includes('juizados especiais') || tx.includes('9.099')) {
+    if (a.includes('54') || tx.includes('54')) return BANCO_NORMAS['art-54-lei-9099'];
+    if (a.includes('3') || tx.includes('art. 3')) return BANCO_NORMAS['art-3-lei-9099'];
+    if (a.includes('9') || tx.includes('artigo 9') || tx.includes('art. 9')) return BANCO_NORMAS['art-9-lei-9099'];
+    if (a.includes('41') || tx.includes('41')) return BANCO_NORMAS['art-41-lei-9099'];
     return BANCO_NORMAS['lei-9099'];
   }
 
   // CDC
-  if (l.includes('cdc') || l.includes('consumidor')) {
-    if (a.includes('14')) return BANCO_NORMAS['art-14-cdc'];
-    if (a.includes('27')) return BANCO_NORMAS['art-27-cdc'];
-    if (a.includes('43')) return BANCO_NORMAS['art-43-cdc'];
-    if (a.includes('42')) return BANCO_NORMAS['art-42-cdc'];
-    if (a.includes('20')) return BANCO_NORMAS['art-20-cdc'];
-    if (a.includes('6')) return BANCO_NORMAS['art-6-cdc'];
+  if (l.includes('cdc') || l.includes('consumidor') || tx.includes('cdc') || tx.includes('consumidor')) {
+    if (a.includes('14') || tx.includes('art. 14')) return BANCO_NORMAS['art-14-cdc'];
+    if (a.includes('27') || tx.includes('art. 27')) return BANCO_NORMAS['art-27-cdc'];
+    if (a.includes('43') || tx.includes('art. 43')) return BANCO_NORMAS['art-43-cdc'];
+    if (a.includes('42') || tx.includes('art. 42')) return BANCO_NORMAS['art-42-cdc'];
+    if (a.includes('20') || tx.includes('art. 20')) return BANCO_NORMAS['art-20-cdc'];
+    if (a.includes('6') || tx.includes('art. 6')) return BANCO_NORMAS['art-6-cdc'];
+    return BANCO_NORMAS['cdc-geral'];
   }
 
   // CÓDIGO CIVIL

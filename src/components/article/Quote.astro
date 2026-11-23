@@ -26,7 +26,7 @@ while ((m = re.exec(html))) {
   {!rotulo && <cite>— {cite}</cite>}
 </blockquote>
 <script>
-  document.querySelectorAll<HTMLElement>('.eq').forEach((q) => {
+  document.querySelectorAll<HTMLElement>('.eq:not(.eq-pull)').forEach((q) => {
     const body = q.querySelector<HTMLElement>('.eq-body')!, btn = q.querySelector<HTMLButtonElement>('.eq-more')!;
     q.classList.add('clamp');
     if (body.scrollHeight <= body.clientHeight + 8) { q.classList.remove('clamp'); return; }

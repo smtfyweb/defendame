@@ -93,7 +93,7 @@ if (!label) {
 }
 
 // 2. Busca os dados no Banco Central de Normas
-const norma = buscarNorma({ art, lei, sumula, tribunal, resp, tema, enunciado, orgao });
+const norma = buscarNorma({ art, lei, sumula, tribunal, resp, tema, enunciado, orgao, texto: texto || label });
 
 // 3. Resolução de campos
 const itemBadge = badge ?? norma?.badge ?? 'LEGISLAÇÃO APLICÁVEL';
