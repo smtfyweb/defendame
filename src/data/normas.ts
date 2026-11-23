@@ -146,11 +146,12 @@ export const BANCO_NORMAS: Record<string, NormaItem> = {
   },
   'decreto-5910-montreal': {
     id: 'decreto-5910-montreal',
-    badge: 'TRATADO INTERNACIONAL · DECRETO',
+    badge: 'CONVENÇÃO DE MONTREAL',
     titulo: 'Decreto Federal nº 5.910/2006',
-    diploma: 'Convenção de Montreal (Transporte Aéreo Internacional)',
-    textoLiteral: 'Promulga a Convenção para a Unificação de Certas Regras Relativas ao Transporte Aéreo Internacional, celebrada em Montreal, em 28 de maio de 1999.',
-    explicacao: 'Tratado internacional que rege o transporte aéreo exterior. O STF pacificou que suas limitações tarifárias aplicam-se unicamente ao extravio de bagagem e danos materiais, nunca ao dano moral.',
+    diploma: 'Convenção para a Unificação de Certas Regras Relativas ao Transporte Aéreo Internacional',
+    rotuloTexto: 'Dispositivos Literais (Artigos 19 e 22):',
+    textoLiteral: 'Artigo 19 — Atraso: O transportador é responsável pelo dano decorrente do atraso no transporte aéreo de passageiros, bagagem ou carga.\n\nArtigo 22 — Limites de Responsabilidade: No transporte de pessoas, em caso de dano causado por atraso, a responsabilidade do transportador limita-se a 4.150 Direitos Especiais de Saque por passageiro.',
+    explicacao: 'Tratado internacional que disciplina o transporte exterior. O STF pacificou que suas limitações tarifárias de indenização em DES aplicam-se unicamente aos danos materiais (bagagem), jamais ao dano moral.',
     linkOficial: 'https://www.planalto.gov.br/ccivil_03/_ato2004-2006/2006/decreto/d5910.htm'
   },
 
@@ -303,21 +304,21 @@ export const BANCO_NORMAS: Record<string, NormaItem> = {
   'tema-210-stf': {
     id: 'tema-210-stf',
     badge: 'REPERCUSSÃO GERAL · STF',
-    titulo: 'Tema 210 (RE 636.331)',
+    titulo: 'Tema 210 STF (RE 636.331)',
     diploma: 'Supremo Tribunal Federal — Plenário (Rel. Min. Gilmar Mendes)',
-    rotuloTexto: 'Tese de Repercussão Geral fixada pelo STF:',
-    textoLiteral: 'Nos termos do art. 178 da Constituição da República, as normas e os tratados internacionais limitadores da responsabilidade das transportadoras aéreas de passageiros, especialmente as Convenções de Varsóvia e Montreal, têm prevalência em relação ao Código de Defesa do Consumidor exclusivamente quanto à tarifação dos danos materiais e ao prazo prescricional bienal.',
-    explicacao: 'O STF fixou que a Convenção de Montreal limita apenas o dano material (bagagem tarifada em DES). Não se aplica aos danos morais.',
+    rotuloTexto: 'Tese Vinculante do STF (Tema 210):',
+    textoLiteral: 'Nos termos do art. 178 da Constituição da República, as normas e os tratados internacionais limitadores da responsabilidade das transportadoras aéreas de passageiros, especialmente as Convenções de Varsóvia e Montreal, têm prevalência em relação ao Código de Defesa do Consumidor. O presente entendimento não se aplica às hipóteses de danos extrapatrimoniais.',
+    explicacao: 'A limitação tarifária em Direitos Especiais de Saque (DES) e o prazo bienal previstos na Convenção de Montreal aplicam-se exclusivamente às perdas patrimoniais (como extravio de bagagem). O dano moral e a dor do passageiro submetem-se à reparação integral do CDC.',
     linkOficial: 'https://portal.stf.jus.br/jurisprudenciaRepercussao/tema.asp?num=210'
   },
   'tema-1240-stf': {
     id: 'tema-1240-stf',
     badge: 'REPERCUSSÃO GERAL · STF',
-    titulo: 'Tema 1.240 (ARE 1.373.406/SP)',
+    titulo: 'Tema 1.240 STF (ARE 1.373.406)',
     diploma: 'Supremo Tribunal Federal — Plenário (Rel. Min. Rosa Weber)',
-    rotuloTexto: 'Tese de Repercussão Geral fixada pelo STF:',
-    textoLiteral: 'Não se aplicam as convenções internacionais às ações de reparação de dano moral decorrente de má prestação de serviços no transporte aéreo internacional, aplicando-se integralmente a legislação consumerista e a Constituição Federal.',
-    explicacao: 'Pacifica em definitivo que a indenização por dano moral em voos internacionais é regida pelo Código de Defesa do Consumidor, sem qualquer teto tarifado internacional.',
+    rotuloTexto: 'Tese Vinculante do STF (Tema 1.240):',
+    textoLiteral: 'Não se aplicam as Convenções de Varsóvia e Montreal às hipóteses de danos extrapatrimoniais decorrentes de contrato de transporte aéreo internacional.',
+    explicacao: 'Consolida em definitivo que ações indenizatórias por dano moral decorrentes de atraso, cancelamento ou desamparo em voo internacional são regidas integralmente pela legislação protetiva brasileira (CDC e CF/88), sem qualquer tarifação internacional.',
     linkOficial: 'https://portal.stf.jus.br/jurisprudenciaRepercussao/tema.asp?num=1240'
   },
 
