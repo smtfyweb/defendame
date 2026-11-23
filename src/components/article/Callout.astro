@@ -1,7 +1,17 @@
 ---
-/** Caixa de ressalva/alerta (âmbar). Use para ressalvas metodológicas e avisos da OAB. */
+/** Caixa de ressalva/orientação técnica (variantes: info, warning, legal). */
 import Icon from '../Icon.astro';
-interface Props { titulo: string }
-const { titulo } = Astro.props;
+interface Props {
+  titulo: string;
+  tipo?: 'warning' | 'info' | 'legal';
+}
+const { titulo, tipo = 'info' } = Astro.props;
+const isWarning = tipo === 'warning';
 ---
-<div class="alert-box-warning"><div class="alert-header"><Icon name="alert" size={18} stroke={2} /><strong>{titulo}</strong></div><slot /></div>
+<div class={isWarning ? 'alert-box-warning' : 'alert-box-info'}>
+  <div class="alert-header">
+    <Icon name={isWarning ? 'alert' : 'shield'} size={18} stroke={2} />
+    <strong>{titulo}</strong>
+  </div>
+  <slot />
+</div>
