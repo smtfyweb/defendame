@@ -256,12 +256,28 @@ h1, h2, h3 { font-family: var(--ff); }
 }
 
 .cite-legal-cue {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-size: 0.72em;
   font-weight: 700;
   color: var(--teal);
-  vertical-align: super;
-  margin-left: 1.5px;
-  opacity: 0.85;
+  background: var(--teal-pale, rgba(43, 179, 168, 0.12));
+  border: 1px solid var(--line-teal, rgba(43, 179, 168, 0.25));
+  border-radius: 4px;
+  padding: 0 4px;
+  margin-left: 3px;
+  vertical-align: 1px;
+  line-height: 1.35;
+  transition: all 0.15s ease;
+}
+
+.cite-legal-trigger:hover .cite-legal-cue,
+.cite-legal-trigger:focus-visible .cite-legal-cue,
+.cite-legal-wrap[data-open="true"] .cite-legal-cue {
+  background: var(--teal);
+  color: #ffffff;
+  border-color: var(--teal);
 }
 
 /* ── POPOVER DO TEOR DA LEI SECA E PRECEDENTES ── */
@@ -408,12 +424,26 @@ h1, h2, h3 { font-family: var(--ff); }
   overflow-y: auto;
 }
 
+.popover-body-tag {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--teal);
+  margin-bottom: 4px;
+}
+
 .popover-quote-mark {
   font-weight: 700;
   color: var(--teal);
 }
 
 .popover-text {
+  font-style: normal;
+}
+
+.popover-text.is-literal {
   font-style: italic;
 }
 
