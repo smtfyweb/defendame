@@ -1,12 +1,8 @@
 ---
 /**
- * Componente de citação jurídica visual inline (Artigo de Lei, Súmula ou Precedente STJ/STF).
- * Substitui parênteses apagados por uma insígnia sutil e prestigiosa.
- * Uso:
- *   <Legis art="Art. 944" lei="Código Civil" />
- *   <Legis art="Art. 14" lei="CDC" />
- *   <Legis resp="REsp 1.584.465/MG" tribunal="STJ" />
- *   <Legis sumula="548" tribunal="STJ" />
+ * Citação jurídica inline limpa (Artigo de Lei, Súmula ou Precedente STJ/STF).
+ * Renderiza em destaque tipográfico natural (stronger), limpo e perfeitamente integrado à prosa,
+ * SEM caixas, SEM badges e SEM ícones decorativos.
  */
 interface Props {
   art?: string;
@@ -18,13 +14,43 @@ interface Props {
   texto?: string;
 }
 const { art, lei, sumula, tribunal, resp, tema, texto } = Astro.props;
+
+let label = texto ?? '';
+if (!label) {
+  const parts: string[] = [];
+  
+  if (art) parts.push(art);
+  
+  if (lei) {
+    if (art && !lei.startsWith('do ') && !lei.startsWith('da ') && !lei.startsWith('de ')) {
+      const feminina = /^(anac|cf|constituição|lei|resolução)/i.test(lei.trim());
+      parts.push(`${feminina ? 'da ' : 'do '}${lei}`);
+    } else {
+      parts.push(lei);
+    }
+  }
+  
+  if (sumula) {
+    const s = String(sumula).trim();
+    parts.push(s.toLowerCase().startsWith('súmula') ? s : `Súmula ${s}`);
+  }
+  
+  if (tema) {
+    const t = String(tema).trim();
+    parts.push(t.toLowerCase().startsWith('tema') ? t : `Tema ${t}`);
+  }
+  
+  if (resp) parts.push(resp);
+  
+  if (tribunal) {
+    if (sumula || resp || tema) {
+      parts.push(`do ${tribunal}`);
+    } else {
+      parts.push(tribunal);
+    }
+  }
+  
+  label = parts.join(' ');
+}
 ---
-<span class="cite-legal" title={texto ?? `${art ?? ''} ${lei ?? ''} ${resp ?? ''} ${tribunal ?? ''}`}>
-  <span class="cite-legal-sym">{sumula || resp || tribunal ? '⚖' : '§'}</span>
-  {art && <strong class="cite-legal-art">{art}</strong>}
-  {lei && <span class="cite-legal-lei">{lei}</span>}
-  {sumula && <strong class="cite-legal-art">Súmula {sumula}</strong>}
-  {resp && <strong class="cite-legal-art">{resp}</strong>}
-  {tema && <span class="cite-legal-lei">Tema {tema}</span>}
-  {tribunal && <span class="cite-legal-trib">{tribunal}</span>}
-</span>
+<strong class="cite-legal">{label}</strong>
