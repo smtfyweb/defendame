@@ -14,9 +14,8 @@ export const SITE = {
 
 export const AUTHOR = {
   name: 'André L. Silva',
-  role: 'Especialista em Legal Analytics',
-  city: 'Barueri/SP',
-  jobTitle: 'Especialista em Legal Analytics e Juizados Especiais Cíveis',
+  role: 'Especialista em Jurimetria e Análise de Dados',
+  jobTitle: 'Especialista em Jurimetria e Legal Analytics no JEC',
   photo: '/images/andre-l-silva.jpg',
   url: '/autor/andre-l-silva/',
   alumniOf: ['Universidade Paulista (UNIP)', 'Pontifícia Universidade Católica do Paraná (PUC-PR)', 'Escola Paulista de Negócios (EPN)', 'Universidade de Mogi das Cruzes (UMC)'],

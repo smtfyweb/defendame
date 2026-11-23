@@ -48,10 +48,11 @@ if (d.faq.length) jsonLd.push({ '@context': 'https://schema.org', '@type': 'FAQP
     <p class="post-sub" set:html={md(d.linhaFina)} />
     <div class="post-meta">
       {analise ? (
-        <><img class="post-meta-av" src={AUTHOR.photo} alt="" width="30" height="30" />
-        <span>Por <a href={AUTHOR.url}>{AUTHOR.name}</a></span></>
+        <><img class="post-meta-av mark" src="/favicon.svg" alt="" width="26" height="26" />
+        <span>Redação {SITE.name}</span><span class="dot">·</span>
+        <span class="post-meta-rev"><img src={AUTHOR.photo} alt="" width="22" height="22" />Análise técnica: <a href={AUTHOR.url}>{AUTHOR.name}</a></span></>
       ) : (
-        <><img class="post-meta-av mark" src="/favicon.svg" alt="" width="30" height="30" />
+        <><img class="post-meta-av mark" src="/favicon.svg" alt="" width="26" height="26" />
         <span>Redação {SITE.name}</span><span class="dot">·</span>
         <span class="post-meta-rev"><img src={AUTHOR.photo} alt="" width="22" height="22" />Revisão técnica: <a href={AUTHOR.url}>{AUTHOR.name}</a></span></>
       )}
@@ -64,7 +65,6 @@ if (d.faq.length) jsonLd.push({ '@context': 'https://schema.org', '@type': 'FAQP
       <a class="pa" href={`https://twitter.com/intent/tweet?text=${enc(d.titulo)}&url=${enc(url)}`} target="_blank" rel="noopener" title="Compartilhar no X" aria-label="Compartilhar no X"><Icon name="x-brand" /></a>
       <a class="pa" href={`https://www.facebook.com/sharer/sharer.php?u=${enc(url)}`} target="_blank" rel="noopener" title="Compartilhar no Facebook" aria-label="Compartilhar no Facebook"><Icon name="facebook" /></a>
       <a class="pa" href={`https://www.linkedin.com/sharing/share-offsite/?url=${enc(url)}`} target="_blank" rel="noopener" title="Compartilhar no LinkedIn" aria-label="Compartilhar no LinkedIn"><Icon name="linkedin" /></a>
-      <a class="pa sub" href={SITE.substack} target="_blank" rel="noopener" title="Seguir no Substack" aria-label="Seguir no Substack"><Icon name="substack" /></a>
       <button class="pa" id="copyLink" type="button" data-url={url} title="Copiar link" aria-label="Copiar link"><Icon name="link" stroke={2} /></button>
       <div class="pa-font" role="group" aria-label="Tamanho do texto"><button type="button" id="fMinus" aria-label="Diminuir fonte">A−</button><span></span><button type="button" id="fPlus" aria-label="Aumentar fonte">A+</button></div>
       <button class="pa-audio" id="listen" type="button" aria-pressed="false"><Icon name="volume" /><span>Ouvir</span></button>
@@ -150,10 +150,9 @@ if (d.faq.length) jsonLd.push({ '@context': 'https://schema.org', '@type': 'FAQP
     </div>
 
     <aside class="post-side">
-      <div class="aut" id="autor"><span class="aut-k">{analise ? 'Autor' : 'Revisão técnica'}</span>
-        <div class="aut-top"><img src={AUTHOR.photo} alt={AUTHOR.name} width="64" height="64" /><div><a class="aut-n" href={AUTHOR.url}>{AUTHOR.name}</a><span class="aut-c">{AUTHOR.role} · {AUTHOR.city}</span></div></div>
-        <div class="aut-links"><a class="aut-sub" href={AUTHOR.url}><Icon name="user" size={15} stroke={2} />Perfil e análises</a>
-        <a class="aut-sub" href={SITE.substack} target="_blank" rel="noopener"><Icon name="substack" size={15} />Substack</a></div></div>
+      <div class="aut" id="autor"><span class="aut-k">{analise ? 'Pesquisa e Análise Técnica' : 'Revisão Técnica de Dados'}</span>
+        <div class="aut-top"><img src={AUTHOR.photo} alt={AUTHOR.name} width="64" height="64" /><div><a class="aut-n" href={AUTHOR.url}>{AUTHOR.name}</a><span class="aut-c">{AUTHOR.role}</span></div></div>
+        <div class="aut-links"><a class="aut-sub" href={AUTHOR.url}><Icon name="user" size={15} stroke={2} />Perfil e metodologia</a></div></div>
       {d.dadosComarca && (
         <div class="scard"><div class="scard-head">{d.dadosComarca.titulo}<small>{d.dadosComarca.subtitulo}</small></div>
           <div class="scard-body">{d.dadosComarca.linhas.map((l) => <div class="juri-row"><span class="juri-label">{l.rotulo}</span><span class={`juri-val${l.tom === 'bom' ? ' good' : l.tom === 'alerta' ? ' warn' : ''}`}>{l.valor}</span></div>)}</div></div>

@@ -10,7 +10,6 @@ const grupos = Object.keys(GRUPOS) as Grupo[];
     <div>
       <Logo />
       <p>Conteúdo informativo sobre as demandas do Juizado Especial Cível, em conformidade com o Provimento CFOAB nº 205/2021. Sem promessa de resultado.</p>
-      <div class="fsocial"><a href={SITE.substack} target="_blank" rel="noopener" title="Substack" aria-label="DefendaMe no Substack"><Icon name="substack" size={15} /><span>Substack</span></a></div>
     </div>
     {grupos.map((g) => (
       <div class="fcol"><div class="fcol-h">{GRUPOS[g]}</div>{temasDoGrupo(g).map((t) => <a href={`/${t.slug}/`}>{t.nome}</a>)}</div>
