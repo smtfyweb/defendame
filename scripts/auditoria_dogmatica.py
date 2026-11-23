@@ -99,6 +99,103 @@ REGRAS_PRECENTES = [
     }
 ]
 
+# 3. WHITELIST FORENSE DE PRECEDENTES JUDICIAIS HOMOLOGADOS (Zero Alucinação)
+# Nenhum número de processo (REsp, AREsp, RE, ARE) pode ser publicado sem validação formal prévia
+# Chaves normalizadas em apenas dígitos para busca determinística
+WHITELIST_PRECEDENTES_HOMOLOGADOS: Dict[str, Dict[str, str]] = {
+    "1584465": {
+        "tribunal": "STJ",
+        "tipo": "REsp",
+        "processo": "REsp 1.584.465/MG",
+        "relator": "Min. Nancy Andrighi",
+        "orgao": "3ª Turma",
+        "tema_materia": "transporte-aereo",
+        "descricao": "Paradigma STJ sobre inexistência de dano moral presumido por atraso de voo."
+    },
+    "1520449": {
+        "tribunal": "STJ",
+        "tipo": "AREsp",
+        "processo": "AgInt no AREsp 1.520.449/SP",
+        "relator": "Min. Raul Araújo",
+        "orgao": "4ª Turma",
+        "tema_materia": "transporte-aereo",
+        "descricao": "Confirmação da 4ª Turma: ausência de in re ipsa em atraso/cancelamento de voo."
+    },
+    "2150150": {
+        "tribunal": "STJ",
+        "tipo": "AREsp",
+        "processo": "AgInt no AREsp 2.150.150/SP",
+        "relator": "Min. Raul Araújo",
+        "orgao": "4ª Turma",
+        "tema_materia": "transporte-aereo",
+        "descricao": "Reafirmação contemporânea (2024) da 4ª Turma sobre necessidade de dano concreto."
+    },
+    "1704002": {
+        "tribunal": "STJ",
+        "tipo": "REsp",
+        "processo": "REsp 1.704.002/SP",
+        "relator": "Min. Nancy Andrighi",
+        "orgao": "3ª Turma",
+        "tema_materia": "negativacao-indevida",
+        "descricao": "Distinguishing da Súmula 385 quando a anotação preexistente está sub judice."
+    },
+    "1284920": {
+        "tribunal": "STJ",
+        "tipo": "REsp",
+        "processo": "REsp 1.284.920/RJ",
+        "relator": "Min. Marco Buzzi",
+        "orgao": "4ª Turma",
+        "tema_materia": "geral",
+        "descricao": "Teoria do desvio produtivo do consumidor."
+    },
+    "1737412": {
+        "tribunal": "STJ",
+        "tipo": "REsp",
+        "processo": "REsp 1.737.412/SE",
+        "relator": "Min. Nancy Andrighi",
+        "orgao": "3ª Turma",
+        "tema_materia": "geral",
+        "descricao": "Reconhecimento do tempo perdido do consumidor como dano moral indenizável."
+    },
+    "636331": {
+        "tribunal": "STF",
+        "tipo": "RE",
+        "processo": "RE 636.331",
+        "relator": "Min. Gilmar Mendes",
+        "orgao": "Plenário",
+        "tema_materia": "transporte-aereo",
+        "descricao": "Tema 210 STF: Limitação de indenização por danos materiais segundo Varsóvia/Montreal."
+    },
+    "1373406": {
+        "tribunal": "STF",
+        "tipo": "ARE",
+        "processo": "ARE 1.373.406/SP",
+        "relator": "Min. Dias Toffoli",
+        "orgao": "Plenário",
+        "tema_materia": "transporte-aereo",
+        "descricao": "Tema 1.240 STF: Inaplicabilidade de Convenções internacionais a danos morais."
+    }
+}
+
+# 4. BLACKLIST DE JULGADOS ALUCINADOS OU DESLOCADOS DE MATÉRIA
+BLACKLIST_PROCESSOS_INVALIDOS = {
+    "1705889": (
+        "AREsp 1.705.889/SP trata de matéria processual de admissibilidade (Súmula 182/STJ) "
+        "e NÃO de transporte aéreo. Foi substituído canonicamente por AgInt no AREsp 1.520.449/SP."
+    )
+}
+
+PADRAO_CITACAO_JUDICIAL = re.compile(
+    r'\b(?:REsp|AREsp|RE|ARE|Recurso\s+Especial|Agravo\s+em\s+Recurso\s+Especial|Recurso\s+Extraordin[áa]rio|Agravo\s+em\s+Recurso\s+Extraordin[áa]rio|AgInt\s+no\s+AREsp)\s*(?:n[ºo]?\s*)?([0-9][0-9\.\/]+(?:/[A-Z]{2})?)',
+    re.IGNORECASE
+)
+
+
+def normalizar_numero_processo(num_str: str) -> str:
+    """Extrai estritamente os dígitos do número do processo judicial."""
+    limpo = re.sub(r'/[A-Z]{2}$|/$', '', num_str.strip())
+    return re.sub(r'\D', '', limpo)
+
 
 def extrair_metadados_mdx(conteudo: str) -> Tuple[Dict[str, str], str]:
     """Extrai frontmatter YAML simples e corpo do documento MDX."""
@@ -175,6 +272,36 @@ def auditar_artigo(arquivo: Path) -> List[str]:
     if re.search(r"40\s+sal[áa]rios\s+m[íi]nimos", corpo, re.IGNORECASE):
         if not re.search(r"(FONAJE|FOJESP|Enunciado)", corpo, re.IGNORECASE):
             erros.append("[CRIVO JEC / SQUAD] Menção ao teto de 40 salários mínimos sem fundamentação em Enunciados do FONAJE ou FOJESP sobre alçada e cumulação.")
+
+    # 6. Auditoria Forense Rigorosa de Processos e Precedentes (Zero Alucinação)
+    # Extrai todas as referências a REsp, AREsp, RE, ARE tanto em tags <Legis> quanto no texto corrido
+    for match in PADRAO_CITACAO_JUDICIAL.finditer(conteudo):
+        ref_completa = match.group(0).strip()
+        num_bruto = match.group(1).strip()
+        num_digitos = normalizar_numero_processo(num_bruto)
+
+        # Checagem 6.1: Blacklist de Julgados Conhecidamente Inválidos ou Deslocados
+        if num_digitos in BLACKLIST_PROCESSOS_INVALIDOS:
+            erros.append(
+                f"[FORENSE - PRECEDENTE INVÁLIDO] Processo desvirtuado ou incorreto citado: '{ref_completa}'. "
+                f"Motivo: {BLACKLIST_PROCESSOS_INVALIDOS[num_digitos]}"
+            )
+            continue
+
+        # Checagem 6.2: Whitelist Forense de Precedentes Homologados
+        if num_digitos not in WHITELIST_PRECEDENTES_HOMOLOGADOS:
+            erros.append(
+                f"[FORENSE - ALUCINAÇÃO JURISPRUDENCIAL] Citação judicial '{ref_completa}' (número {num_digitos}) NÃO consta na Whitelist Forense. "
+                f"É terminantemente proibido citar processos não auditados e não homologados na base canônica."
+            )
+        else:
+            dados = WHITELIST_PRECEDENTES_HOMOLOGADOS[num_digitos]
+            # Checagem 6.3: Aderência Temática do Precedente
+            if dados["tema_materia"] != "geral" and tema and dados["tema_materia"] != tema:
+                erros.append(
+                    f"[FORENSE - MATÉRIA DESLOCADA] O julgado '{ref_completa}' ({dados['processo']}) foi homologado para a vertical '{dados['tema_materia']}', "
+                    f"mas está sendo citado em um artigo da vertical '{tema}'."
+                )
 
     return erros
 
