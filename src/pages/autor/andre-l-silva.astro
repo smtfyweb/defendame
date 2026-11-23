@@ -12,12 +12,9 @@ const data = (dt: Date) => dt.toLocaleDateString('pt-BR', { timeZone: 'UTC', day
 const url = new URL(AUTHOR.url, SITE.url).href;
 
 const toc: [string, string][] = [
-  ['trajetoria', 'Trajetória e Propósito'],
-  ['pesquisa-empirica', 'Paridade de Armas e Análise Probatória'],
-  ['apreco-tjsp-jec', 'Apreço ao TJSP e Função Social do JEC'],
-  ['metodologia', 'Metodologia de Análise em 5 Etapas'],
+  ['atuacao', 'Atuação Técnica e Legal Analytics'],
   ['formacao', 'Formação Acadêmica e Multidisciplinar'],
-  ['compromisso-etico', 'Compromisso Ético e CFOAB nº 205/2021'],
+  ['etica', 'Compromisso Ético e CFOAB nº 205/2021'],
   ...(analises.length ? [['analises', 'Análises Técnicas Assinadas'] as [string, string]] : []),
   ...(guias.length ? [['guias', 'Guias Técnicos Revisados'] as [string, string]] : []),
 ];
@@ -61,7 +58,7 @@ const jsonLd = [
 
 <PageLayout
   title={`${AUTHOR.name} — ${AUTHOR.role} | ${SITE.name}`}
-  description={`${AUTHOR.name}, ${AUTHOR.jobTitle}. Pesquisador forense e analista de Legal Analytics: estruturação de 39.727 decisões do TJSP em métricas objetivas de probabilidade, lastro probatório e precedentes do Juizado Especial Cível.`}
+  description={`${AUTHOR.name}, ${AUTHOR.jobTitle}. Pesquisador forense e analista de dados: estruturação estatística de decisões judiciais do TJSP para subsidiar o contencioso de consumo no Juizado Especial Cível.`}
   h1={AUTHOR.name}
   lead={`${AUTHOR.jobTitle}. Estrutura decisões judiciais em escala para explicar, com métricas empíricas e fundamentação técnica, os padrões decisórios do Juizado Especial Cível no Estado de São Paulo.`}
   toc={toc}
@@ -74,12 +71,12 @@ const jsonLd = [
     <b>{AUTHOR.name}</b>
     <span class="ah-r">{AUTHOR.role}</span>
     <p style="margin: 6px 0 16px; font-size: 14.5px; color: var(--fg-mid); line-height: 1.55;">
-      Pesquisador forense e especialista em Legal Analytics aplicado ao contencioso de consumo. Atua na estruturação de bases públicas do Tribunal de Justiça do Estado de São Paulo para mapear padrões de julgamento, requisitos probatórios e parâmetros indenizatórios no Juizado Especial Cível.
+      Pesquisador forense e especialista em jurimetria aplicada ao contencioso de consumo. Responsável pela modelagem estatística, auditoria de decisões colegiadas do Tribunal de Justiça de São Paulo e tradução analítica dos requisitos probatórios perante os Juizados Especiais Cíveis.
     </p>
     <div class="aut-links">
-      <a class="aut-sub" href="#metodologia"><Icon name="chart" size={15} stroke={2} />Metodologia Forense</a>
-      <a class="aut-sub" href="#pesquisa-empirica"><Icon name="shield" size={15} stroke={2} />Análise Probatória</a>
+      <a class="aut-sub" href="#atuacao"><Icon name="chart" size={15} stroke={2} />Atuação Técnica</a>
       <a class="aut-sub" href="#formacao"><Icon name="doc" size={15} stroke={2} />Formação Acadêmica</a>
+      <a class="aut-sub" href="#etica"><Icon name="shield" size={15} stroke={2} />Diretrizes Éticas</a>
     </div>
   </div>
 </div>
@@ -99,87 +96,23 @@ const jsonLd = [
   </div>
 </div>
 
-<h2 id="trajetoria">Trajetória e Propósito</h2>
+<h2 id="atuacao">Atuação Técnica e Legal Analytics</h2>
 <p>
-  A pesquisa jurimétrica do DefendaMe foi estruturada para mitigar a assimetria informacional nas relações de consumo submetidas ao Judiciário paulista. Enquanto grandes fornecedores operam com inteligência analítica de dados e contencioso massificado, o consumidor frequentemente litiga sem parâmetros objetivos sobre ritos processuais, admissibilidade documental e jurisprudência consolidada.
+  A atuação de André L. Silva no DefendaMe é centrada na redução da assimetria informacional entre consumidores e grandes corporações no âmbito dos Juizados Especiais Cíveis paulistas.
 </p>
 <p>
-  O propósito deste projeto é transformar registros judiciais públicos em diagnósticos técnicos acessíveis. As decisões colegiadas do Tribunal de Justiça do Estado de São Paulo seguem padrões identificáveis de fundamentação jurídica e valoração de provas. A análise sistemática dessas decisões afasta expectativas infundadas e orienta o cidadão com dados concretos sobre o funcionamento prático do Juizado Especial Cível.
-</p>
-
-<h2 id="pesquisa-empirica">Paridade de Armas e Análise Probatória</h2>
-<p>
-  O modelo analítico do DefendaMe fundamenta-se no princípio da paridade de armas. Fornecemos subsídios técnicos baseados no histórico das decisões colegiadas, permitindo compreender os fatores determinantes para a resolução de cada modalidade de conflito:
+  Mediante mineração e análise jurimétrica de acórdãos e sentenças públicas, a pesquisa extrai parâmetros técnicos concretos sobre o comportamento do Judiciário:
 </p>
 <ul style="margin: 16px 0 20px; line-height: 1.7;">
-  <li><strong>Percentuais históricos de desfecho:</strong> mensuração da proporção de ações julgadas procedentes, parcialmente procedentes e improcedentes por tema de consumo;</li>
-  <li><strong>Consistência do acervo probatório:</strong> identificamos nos acórdãos do Tribunal quais documentos integraram com maior frequência o conjunto probatório das demandas acolhidas e, em contrapartida, em quais hipóteses a documentação apresentada se mostrou insuficiente, frágil ou desprovida de lastro fático para demonstrar a falha de serviço ou o prejuízo alegado;</li>
-  <li><strong>Dosimetria indenizatória:</strong> levantamento das faixas interquartis e dos valores medianos fixados pelas Turmas Recursais a título de danos materiais e morais, sem distorções de estimativas atípicas;</li>
-  <li><strong>Tempo médio de tramitação:</strong> aferição do intervalo decorrido entre a distribuição da petição inicial e a prolação da sentença em primeiro grau.</li>
+  <li><strong>Percentuais históricos de desfecho:</strong> mensuração da taxa real de procedência, procedência parcial e improcedência por espécie de falha na prestação do serviço;</li>
+  <li><strong>Consistência do acervo probatório:</strong> identificamos nos acórdãos quais peças documentais compõem com frequência o conjunto probatório das demandas acolhidas e, em contrapartida, em quais cenários a documentação se revelou insuficiente ou frágil para sustentar o pedido;</li>
+  <li><strong>Dosimetria de indenizações:</strong> quantificação de valores medianos e faixas interquartis fixados pelas Turmas Recursais a título de danos materiais e compensações morais;</li>
+  <li><strong>Duração do processo:</strong> tempo médio verificado desde a petição inicial até a prolação da sentença em primeiro grau.</li>
 </ul>
-<p>
-  Essa abordagem confere previsibilidade técnica ao cidadão, permitindo avaliar a viabilidade de sua pretensão antes de qualquer iniciativa judicial ou extrajudicial.
-</p>
-
-<h2 id="apreco-tjsp-jec">Apreço ao TJSP e Função Social do JEC</h2>
-<p>
-  O trabalho desenvolvido no DefendaMe apoia-se no rigoroso respeito institucional ao Tribunal de Justiça do Estado de São Paulo e no reconhecimento da relevante função social desempenhada pelos Juizados Especiais Cíveis, regidos pela Lei Federal nº 9.099 de 1995.
-</p>
-<p>
-  Instituídos para efetivar a garantia constitucional de acesso à Justiça, os Juizados operam sob as diretrizes de oralidade, simplicidade, informalidade, economia processual e celeridade. Destacam-se pela gratuidade de custas no primeiro grau de jurisdição e pela prioridade conferida à conciliação célere e pacífica dos conflitos cotidianos.
-</p>
-<div class="about-card" style="margin: 20px 0; border-left: 3px solid var(--teal);">
-  <div style="display: flex; gap: 14px; align-items: flex-start;">
-    <span style="color: var(--teal); margin-top: 2px;"><Icon name="gavel" size={24} stroke={2} /></span>
-    <div>
-      <h3 style="margin: 0 0 6px; font-size: 16.5px; color: var(--navy);">Transparência e Conformidade com Dados Abertos</h3>
-      <p style="margin: 0; font-size: 14px; color: var(--fg-mid); line-height: 1.6;">
-        A coleta e o processamento de decisões atendem à publicidade dos atos processuais prevista no artigo 93, inciso IX, da Constituição Federal, às normas da Lei nº 12.527 de 2011 — Lei de Acesso à Informação — e à Resolução nº 331 de 2020 do Conselho Nacional de Justiça, relativa à base DataJud. A análise jurimétrica tem propósito estritamente descritivo e estatístico, sem emitir juízo de valor sobre o mérito de julgadores ou serventuários da Justiça.
-      </p>
-    </div>
-  </div>
-</div>
-
-<h2 id="metodologia">Metodologia de Análise em 5 Etapas</h2>
-<p>
-  Os dados publicados pelo DefendaMe resultam de um processo metódico de coleta, higienização, categorização e auditoria dividido em cinco etapas:
-</p>
-
-<div class="about-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px;">
-  <div class="about-card">
-    <span class="med-icon"><Icon name="search" size={22} stroke={2} /></span>
-    <h3>1. Coleta Pública e Amostragem</h3>
-    <p>Extração automatizada de decisões judiciais públicas nos repositórios oficiais do TJSP — portal e-SAJ — e na base DataJud do CNJ, com amostragem representativa das 10 Regiões Administrativas Judiciárias paulistas.</p>
-  </div>
-
-  <div class="about-card">
-    <span class="med-icon"><Icon name="lock" size={22} stroke={2} /></span>
-    <h3>2. Anonimização e Proteção de Dados</h3>
-    <p>Tratamento ético e aderente à Lei Geral de Proteção de Dados Pessoais — Lei nº 13.709 de 2018. Descaracterização de identificadores pessoais, números de contas, documentos e dados sensíveis das partes.</p>
-  </div>
-
-  <div class="about-card">
-    <span class="med-icon"><Icon name="shield" size={22} stroke={2} /></span>
-    <h3>3. Confronto com Precedentes Vinculantes</h3>
-    <p>Convalidação amostral frente às teses fixadas pelos Tribunais Superiores: Temas 210 e 1.240 do STF, REsp 1.584.465/MG do STJ, Súmulas 385, 479 e 548 do STJ, além dos Enunciados do FONAJE e do FOJESP.</p>
-  </div>
-
-  <div class="about-card">
-    <span class="med-icon"><Icon name="chart" size={22} stroke={2} /></span>
-    <h3>4. Modelagem Quantitativa e Jurimétrica</h3>
-    <p>Cálculo estatístico das frequências de procedência, distinção entre pedidos de natureza moral e material, cálculo da duração média até a sentença e distribuição das faixas de condenação.</p>
-  </div>
-</div>
-
-<div class="about-card" style="margin-top: 16px;">
-  <span class="med-icon"><Icon name="doc" size={22} stroke={2} /></span>
-  <h3>5. Redação e Divulgação Cidadã</h3>
-  <p>Sistematização dos resultados em artigos explicativos de linguagem direta e técnica, estruturados em conformidade com as diretrizes do Provimento CFOAB nº 205 de 2021.</p>
-</div>
 
 <h2 id="formacao">Formação Acadêmica e Multidisciplinar</h2>
 <p>
-  A condução de estudos jurimétricos aplicados demanda competências integradas em Direito Processual Civil, Ciência de Dados e Gestão Estratégica:
+  O trabalho jurimétrico alia fundamentação jurídica em Direito Processual Civil a ferramentas quantitativas de ciência de dados e inteligência analítica:
 </p>
 
 <div class="about-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px;">
@@ -187,28 +120,28 @@ const jsonLd = [
     <span class="med-icon"><Icon name="doc" size={22} stroke={2} /></span>
     <span class="post-fmt fmt-analise" style="margin-bottom: 8px; display: inline-block;">Graduação · Concluído</span>
     <h3>Bacharelado em Direito</h3>
-    <p><strong>UNIP — Universidade Paulista</strong><br>Formação jurídica com foco em Direito Processual Civil, Teoria Geral da Responsabilidade Civil, Direito do Consumidor e o microssistema dos Juizados Especiais Cíveis sob a Lei nº 9.099 de 1995.</p>
+    <p><strong>UNIP — Universidade Paulista</strong><br>Formação com ênfase em Direito Processual Civil, Teoria Geral da Responsabilidade Civil, Direito do Consumidor e microssistema dos Juizados Especiais sob a Lei nº 9.099 de 1995.</p>
   </div>
 
   <div class="about-card">
     <span class="med-icon"><Icon name="bank" size={22} stroke={2} /></span>
     <span class="post-fmt fmt-analise" style="margin-bottom: 8px; display: inline-block;">Graduação · Concluído</span>
     <h3>Graduação em Marketing</h3>
-    <p><strong>UMC — Universidade de Mogi das Cruzes</strong><br>Estudo de comportamento de consumo, dinâmicas de mercado, relações de fornecimento e comunicação institucional.</p>
+    <p><strong>UMC — Universidade de Mogi das Cruzes</strong><br>Estudo de comportamento de consumo, dinâmica de mercados, relações de fornecimento e comunicação institucional.</p>
   </div>
 
   <div class="about-card">
     <span class="med-icon"><Icon name="shield" size={22} stroke={2} /></span>
     <span class="post-fmt fmt-analise" style="margin-bottom: 8px; display: inline-block;">Pós-Graduação · Concluído</span>
     <h3>MBA em Gestão Estratégica Mercadológica</h3>
-    <p><strong>EPN — Escola Paulista de Negócios</strong><br>Capacitação voltada a planejamento estratégico, gestão de processos corporativos, conformidade informacional e governança de dados.</p>
+    <p><strong>EPN — Escola Paulista de Negócios</strong><br>Capacitação voltada a planejamento estratégico corporativo, governança da informação e integridade de dados.</p>
   </div>
 
   <div class="about-card">
     <span class="med-icon"><Icon name="gavel" size={22} stroke={2} /></span>
     <span class="post-fmt fmt-guia" style="margin-bottom: 8px; display: inline-block;">Pós-Graduação · Em curso</span>
     <h3>MBA Executivo em Direito do Consumidor, Mercados Digitais e Defesa Concorrencial</h3>
-    <p><strong>Pós-graduando</strong><br>Especialização nos desafios contemporâneos da tutela do consumidor no comércio eletrônico, concorrência em plataformas tecnológicas e regulação de mercados digitais.</p>
+    <p><strong>Pós-graduando</strong><br>Especialização nos desafios da tutela do consumidor no comércio eletrônico, concorrência em plataformas tecnológicas e regulação de mercados digitais.</p>
   </div>
 </div>
 
@@ -216,30 +149,30 @@ const jsonLd = [
   <span class="med-icon"><Icon name="chart" size={22} stroke={2} /></span>
   <span class="post-fmt fmt-guia" style="margin-bottom: 8px; display: inline-block;">Pós-Graduação · Em curso</span>
   <h3>Data Science, Inteligência Artificial e Analytics Aplicado</h3>
-  <p><strong>PUC-PR — Pontifícia Universidade Católica do Paraná · Pós-graduando</strong><br>Formação técnica em mineração de dados judiciais, processamento de linguagem natural aplicado a acórdãos, modelagem probabilística e algoritmos para jurimetria.</p>
+  <p><strong>PUC-PR — Pontifícia Universidade Católica do Paraná · Pós-graduando</strong><br>Formação técnica em mineração de dados judiciais, processamento de linguagem natural aplicado a jurisprudência, modelagem probabilística e algoritmos para jurimetria.</p>
 </div>
 
-<h2 id="compromisso-etico">Compromisso Ético e CFOAB nº 205/2021</h2>
+<h2 id="etica">Compromisso Ético e CFOAB nº 205/2021</h2>
 <div class="alert-box-info" style="margin: 20px 0;">
   <div class="alert-header">
     <Icon name="shield" size={20} stroke={2} />
     <strong>Alinhamento Ético e Normativo</strong>
   </div>
   <p style="margin-bottom: 10px;">
-    Todas as publicações assinadas ou revisadas por André L. Silva no DefendaMe possuem caráter estritamente informativo e educacional, em conformidade com o Provimento CFOAB nº 205 de 2021 e o Código de Ética e Disciplina da OAB.
+    Todas as análises e guias técnicos assinados ou revisados por André L. Silva no DefendaMe têm caráter estritamente informativo e educativo, em estrita obediência ao Provimento CFOAB nº 205 de 2021 e ao Código de Ética e Disciplina da OAB.
   </p>
   <p style="margin-bottom: 10px;">
-    <strong>Ausência de promessa de resultado:</strong> A jurimetria aponta frequências e tendências estatísticas de julgados passados do TJSP. Os dados não configuram garantia de desfecho para demandas individuais, cuja decisão compete exclusivamente ao juiz da causa com esteio nas provas produzidas nos autos.
+    <strong>Sem promessa de resultado:</strong> A jurimetria aponta tendências estatísticas de decisões passadas do Tribunal de Justiça de São Paulo; ela não garante o desfecho de nenhuma ação individual, cuja procedência dependerá exclusivamente da análise do magistrado e das provas carreadas aos autos no caso concreto.
   </p>
   <p style="margin: 0;">
-    <strong>Representação técnica:</strong> Embora a Lei nº 9.099 de 1995 autorize a postulação direta até vinte salários mínimos, a assistência de profissional da advocacia ou da Defensoria Pública é recomendada para o acompanhamento técnico da demanda, eventual fase recursal e sustentação em audiências.
+    <strong>Representação técnica:</strong> Embora a Lei nº 9.099 de 1995 autorize o ingresso desacompanhado até vinte salários mínimos, o patrocínio técnico de profissional da advocacia ou da Defensoria Pública é indispensável para causas de maior complexidade e para a atuação perante as Turmas Recursais.
   </p>
 </div>
 
 {analises.length > 0 && <>
 <h2 id="analises">Análises Técnicas Assinadas</h2>
 <p style="color: var(--fg-muted); margin-bottom: 16px;">
-  Estudos jurimétricos com avaliação descritiva dos indicadores processuais e jurisprudenciais do TJSP.
+  Estudos jurimétricos assinados com leitura analítica e empírica dos dados judiciais.
 </p>
 <ul class="autor-list">{analises.map((a) => <li><a href={`/${a.data.tema}/${a.data.slug}/`}><span class="al-k"><span class="post-fmt fmt-analise">{FORMATOS.analise.rotulo}</span>{temaPorSlug(a.data.tema)?.nome} · {data(a.data.publicado)}</span><span class="al-t">{a.data.titulo}</span><span class="al-d">{a.data.descricao}</span></a></li>)}</ul>
 </>}
@@ -247,7 +180,7 @@ const jsonLd = [
 {guias.length > 0 && <>
 <h2 id="guias">Guias Técnicos Revisados</h2>
 <p style="color: var(--fg-muted); margin-bottom: 16px;">
-  Orientações de serviço elaboradas pela Redação DefendaMe com validação técnica de precedentes.
+  Textos de orientação prática produzidos pela Redação DefendaMe com validação metodológica de precedentes.
 </p>
 <ul class="autor-list">{guias.map((a) => <li><a href={`/${a.data.tema}/${a.data.slug}/`}><span class="al-k"><span class="post-fmt fmt-guia">{FORMATOS.guia.rotulo}</span>{temaPorSlug(a.data.tema)?.nome} · {data(a.data.publicado)}</span><span class="al-t">{a.data.titulo}</span><span class="al-d">{a.data.descricao}</span></a></li>)}</ul>
 </>}

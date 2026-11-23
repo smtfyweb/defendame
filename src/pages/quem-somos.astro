@@ -1,37 +1,169 @@
 ---
 import PageLayout from '../layouts/PageLayout.astro';
 import Icon from '../components/Icon.astro';
+import { SITE, AUTHOR, DATASET } from '../data/site';
+
 const toc: [string, string][] = [
-  ['proposito', 'Nosso propósito'],
-  ['dados', 'Conteúdo baseado em dados'],
-  ['como', 'Como trabalhamos'],
-  ['responsavel', 'Responsável técnico'],
-  ['atendimento', 'Quando o conteúdo não basta'],
-  ['contato', 'Contato']
+  ['proposito', 'Propósito e Função Social do JEC'],
+  ['transparencia-dados', 'Transparência e Dados Públicos'],
+  ['metodologia', 'Metodologia Forense em 5 Etapas'],
+  ['responsavel', 'Responsabilidade Técnica'],
+  ['atendimento', 'Quando o Conteúdo Informativo Não Basta'],
+  ['contato', 'Governança e Contato']
+];
+
+const url = new URL('/quem-somos/', SITE.url).href;
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'AboutPage',
+    url,
+    name: 'Quem somos — DefendaMe',
+    description: 'Plataforma independente de jurimetria e inteligência jurídica aplicada às relações de consumo no Juizado Especial Cível paulista.',
+    publisher: {
+      '@type': 'Organization',
+      name: SITE.name,
+      url: SITE.url
+    }
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Início', item: SITE.url },
+      { '@type': 'ListItem', position: 2, name: 'Quem somos', item: url }
+    ]
+  }
 ];
 ---
-<PageLayout title="Quem somos — DefendaMe" description="Conheça o DefendaMe: portal de conteúdo informativo sobre as demandas do Juizado Especial Cível, construído com dados reais do TJSP." h1="Quem somos" lead="Informação jurídica clara, baseada em dados reais, sobre os seus direitos no Juizado Especial Cível." toc={toc}>
 
-<h2 id="proposito">Nosso propósito</h2>
-<p>O <strong>DefendaMe</strong> é um portal de conteúdo informativo sobre as demandas mais comuns do <strong>Juizado Especial Cível (JEC)</strong>. Nosso objetivo é traduzir, em linguagem clara, como a Justiça tem decidido conflitos de consumo do dia a dia — golpes bancários, negativação indevida, voos cancelados, cobranças abusivas — para que o cidadão conheça seus direitos antes de tomar qualquer decisão.</p>
-<p>Partimos de uma premissa simples: informação de qualidade, baseada em dados reais e em fontes oficiais, reduz a desigualdade entre o consumidor e as grandes empresas.</p>
-<h2 id="dados">Conteúdo baseado em dados</h2>
-<p>Cada artigo é construído a partir de jurimetria: a análise estatística de decisões judiciais. Os dados são extraídos diretamente do Tribunal de Justiça de São Paulo e organizados por tema, comarca e resultado.</p>
-<div class="big-stats"><div><b>39.727</b><span>decisões do TJSP analisadas</span></div><div><b>14</b><span>temas do JEC mapeados</span></div><div><b>Estado de SP</b><span>Capital, Litoral e Interior</span></div></div>
-<p>Os percentuais e valores apresentados refletem tendências de decisões já proferidas. Eles ajudam a entender o cenário, mas <strong>não garantem o resultado de nenhum caso individual</strong>, que depende sempre das provas e das circunstâncias concretas.</p>
-<h2 id="como">Como trabalhamos</h2>
-<div class="about-grid">
-  <div class="about-card"><span class="med-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 16v-4M12 16V8M17 16v-7"/></svg></span><h3>Dados verificáveis</h3><p>Decisões reais do TJSP, com recorte e período informados em cada análise.</p></div>
-  <div class="about-card"><span class="med-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg></span><h3>Fontes oficiais</h3><p>Legislação, súmulas e normas citadas com link para os repositórios oficiais.</p></div>
-  <div class="about-card"><span class="med-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span><h3>Ética profissional</h3><p>Conteúdo informativo, sem promessa de resultado, nos termos do Provimento CFOAB nº 205/2021.</p></div>
+<PageLayout
+  title={`Quem somos | ${SITE.name}`}
+  description="Conheça o DefendaMe: inteligência jurídica e jurimetria aplicada às demandas do Juizado Especial Cível a partir de decisões públicas do TJSP."
+  h1="Quem somos"
+  lead="Inteligência jurídica independente e análise empírica de decisões judiciais para esclarecer os direitos do consumidor perante o Juizado Especial Cível."
+  toc={toc}
+  jsonLd={jsonLd}
+>
+
+<h2 id="proposito">Propósito e Função Social do JEC</h2>
+<p>
+  O <strong>DefendaMe</strong> é uma plataforma independente de jurimetria e conteúdo analítico voltada às controvérsias de consumo tuteladas pelos <strong>Juizados Especiais Cíveis</strong> no Estado de São Paulo. Nosso compromisso é mitigar a assimetria informacional entre cidadãos e grandes fornecedores, oferecendo diagnósticos objetivos baseados no comportamento real da jurisprudência.
+</p>
+<p>
+  A concepção do projeto fundamenta-se no rigoroso apreço institucional pelo <strong>Tribunal de Justiça do Estado de São Paulo</strong> e na valorização da função social estabelecida pela <strong>Lei Federal nº 9.099 de 1995</strong>.
+</p>
+<p>
+  Os Juizados Especiais foram concebidos sob a inspiração do artigo 98, inciso I, da Constituição Federal, inaugurando um microssistema processual orientado pelos princípios da <em>oralidade, simplicidade, informalidade, economia processual e celeridade</em>. Essa estrutura garante o acesso democrático ao Poder Judiciário, assegura a gratuidade de custas no primeiro grau e prioriza a solução consensual dos litígios.
+</p>
+
+<div class="big-stats">
+  <div>
+    <b>{DATASET.totalFmt}</b>
+    <span>Decisões públicas do TJSP catalogadas</span>
+  </div>
+  <div>
+    <b>10 RAJs</b>
+    <span>Cobertura empírica: Capital, Grande SP, Litoral e Interior</span>
+  </div>
+  <div>
+    <b>14 Silos</b>
+    <span>Temas críticos de consumo estruturados</span>
+  </div>
 </div>
-<h2 id="responsavel">Responsável técnico</h2>
-<div class="person"><img src="/images/andre-l-silva.jpg" alt="André L. Silva" width="84" height="84"><div><b>André L. Silva</b><span>Especialista em Jurimetria e Legal Analytics</span><br><a href="/autor/andre-l-silva/">Ver perfil, análises e metodologia →</a></div></div>
-<p>André assina as <strong>Análises</strong> do DefendaMe, em primeira pessoa, e faz a revisão técnica dos <strong>Guias</strong> produzidos pela Redação.</p>
-<h2 id="atendimento">Quando o conteúdo não basta</h2>
-<p>Se você passou por uma situação semelhante às descritas nos artigos, pode relatar o seu caso pelo formulário <strong>Verificar meu caso</strong>. O envio não gera compromisso de contratação; as condições de eventual atuação são apresentadas individualmente, após a análise inicial.</p>
-<p><a class="btn btn-primary" href="/#verificar" data-open-case>Verificar meu caso <Icon name="arrow-right" size={16} stroke={2.2} /></a></p>
-<h2 id="contato">Contato</h2>
-<p>E-mail: <span class="fill">contato@defendame.online</span><br>Atendimento à LGPD (encarregado de dados): <span class="fill">privacidade@defendame.online</span></p>
+
+<h2 id="transparencia-dados">Transparência e Dados Públicos</h2>
+<p>
+  A confiabilidade das informações publicadas decorre do uso exclusivo de fontes oficiais e abertas do Poder Judiciário, em plena conformidade com as balizas legais e constitucionais de transparência:
+</p>
+
+<div class="about-card" style="margin: 20px 0; border-left: 3px solid var(--teal);">
+  <div style="display: flex; gap: 14px; align-items: flex-start;">
+    <span style="color: var(--teal); margin-top: 2px;"><Icon name="gavel" size={24} stroke={2} /></span>
+    <div>
+      <h3 style="margin: 0 0 6px; font-size: 16.5px; color: var(--navy);">Conformidade Normativa e Governança da Informação</h3>
+      <p style="margin: 0; font-size: 14px; color: var(--fg-mid); line-height: 1.6;">
+        Nossa esteira analítica observa o princípio constitucional da publicidade dos atos processuais insculpido no artigo 93, inciso IX, da Constituição Federal, as determinações da Lei nº 12.527 de 2011 — Lei de Acesso à Informação — e a Resolução nº 331 de 2020 do Conselho Nacional de Justiça, que instituiu a base DataJud. A atividade tem caráter estritamente descritivo e estatístico, sem emitir juízo de valor sobre o mérito funcional de magistrados ou serventuários.
+      </p>
+    </div>
+  </div>
+</div>
+
+<p>
+  Em paralelo, a governança de dados do portal cumpre integralmente os ditames da Lei Geral de Proteção de Dados Pessoais — Lei nº 13.709 de 2018. Todas as decisões passam por protocolos estritos de descaracterização para suprimir nomes de pessoas físicas, documentos de identificação, domicílios e contas correntes, preservando a intimidade das partes e mantendo o foco analítico exclusivo na matéria fática e na aplicação do direito.
+</p>
+
+<h2 id="metodologia">Metodologia Forense em 5 Etapas</h2>
+<p>
+  Cada artigo, indicador e faixa indenizatória exposta no portal resulta de uma esteira metodológica de legal analytics dividida em cinco fases sucessivas:
+</p>
+
+<div class="about-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px;">
+  <div class="about-card">
+    <span class="med-icon"><Icon name="search" size={22} stroke={2} /></span>
+    <h3>1. Coleta Pública e Amostragem</h3>
+    <p>Extração automatizada e sistemática de decisões dos repositórios oficiais públicos do TJSP — portal e-SAJ — e da base DataJud do CNJ, abrangendo as 10 Regiões Administrativas Judiciárias paulistas, com recorte temporal e temático detalhado.</p>
+  </div>
+
+  <div class="about-card">
+    <span class="med-icon"><Icon name="lock" size={22} stroke={2} /></span>
+    <h3>2. Anonimização Ética e LGPD</h3>
+    <p>Higienização automatizada de dados pessoais sensíveis das partes. O processo blinda a privacidade individual e isola unicamente as variáveis técnicas de julgamento.</p>
+  </div>
+
+  <div class="about-card">
+    <span class="med-icon"><Icon name="shield" size={22} stroke={2} /></span>
+    <h3>3. Auditoria Precedencial Superior</h3>
+    <p>Confronto de cada conjunto amostral com as teses vinculantes e repetitivas dos Tribunais Superiores: Temas 210 e 1.240 do STF, REsp 1.584.465/MG do STJ, Súmulas 385, 479 e 548 do STJ, e Enunciados Cíveis do FONAJE e do FOJESP.</p>
+  </div>
+
+  <div class="about-card">
+    <span class="med-icon"><Icon name="chart" size={22} stroke={2} /></span>
+    <h3>4. Modelagem Quantitativa e Jurimétrica</h3>
+    <p>Cálculo estatístico de frequências de êxito, desmembramento entre pedidos de dano moral e material, cálculo do tempo médio de tramitação até a sentença e aferição das faixas interquartis de condenação.</p>
+  </div>
+</div>
+
+<div class="about-card" style="margin-top: 16px;">
+  <span class="med-icon"><Icon name="doc" size={22} stroke={2} /></span>
+  <h3>5. Redação e Divulgação Cidadã</h3>
+  <p>Elaboração de artigos técnicos e guias de orientação em linguagem clara, expurgando o formalismo desnecessário sem perder o rigor dogmático, em estrita consonância com o Provimento CFOAB nº 205 de 2021.</p>
+</div>
+
+<h2 id="responsavel">Responsabilidade Técnica</h2>
+<div class="person" style="margin: 20px 0;">
+  <img src={AUTHOR.photo} alt={AUTHOR.name} width="84" height="84" />
+  <div>
+    <b>{AUTHOR.name}</b>
+    <span>{AUTHOR.jobTitle}</span>
+    <p style="margin: 6px 0 10px; font-size: 14px; color: var(--fg-mid); line-height: 1.5;">
+      Pesquisador forense com formação jurídica pela UNIP — Universidade Paulista e especialização técnica em Ciência de Dados pela PUC-PR — Pontifícia Universidade Católica do Paraná. Coordena a mineração de dados judiciais e a auditoria de precedentes do portal.
+    </p>
+    <a href={AUTHOR.url} style="font-weight: 600; color: var(--navy); text-decoration: underline;">Conhecer trajetória, formação acadêmica e artigos assinados →</a>
+  </div>
+</div>
+<p>
+  André L. Silva assina as análises em primeira pessoa e realiza a revisão técnica dos guias elaborados pela Redação DefendaMe, assegurando a fidelidade aos precedentes colegiados do TJSP.
+</p>
+
+<h2 id="atendimento">Quando o Conteúdo Informativo Não Basta</h2>
+<p>
+  Se o leitor vivenciou situação análoga às retratadas nas análises, disponibilizamos a ferramenta <strong>Verificar meu caso</strong> para recepção e triagem das circunstâncias fáticas apresentadas.
+</p>
+<p>
+  O preenchimento do formulário tem finalidade diagnóstica e não estabelece contratação automática de serviços. Reiteramos que a atuação jurídica perante o Poder Judiciário, especialmente na fase recursal perante as Turmas Recursais, exige a assistência de profissional da advocacia regularmente inscrito na OAB ou membro da Defensoria Pública.
+</p>
+<p style="margin: 24px 0;">
+  <a class="btn btn-primary" href="/#verificar" data-open-case>Verificar meu caso no Juizado <Icon name="arrow-right" size={16} stroke={2.2} /></a>
+</p>
+
+<h2 id="contato">Governança e Contato</h2>
+<p>
+  Para sugestões editoriais, esclarecimentos sobre bases de dados ou solicitações institucionais:
+</p>
+<ul style="margin: 12px 0 20px; line-height: 1.7;">
+  <li><strong>Contato institucional:</strong> <span class="fill">{SITE.email}</span></li>
+  <li><strong>Privacidade e encarregado pelo tratamento de dados pessoais:</strong> <span class="fill">{SITE.privacyEmail}</span></li>
+</ul>
 
 </PageLayout>
