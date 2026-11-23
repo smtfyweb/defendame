@@ -220,6 +220,52 @@ export const TEMAS_DETALHAMENTO: Record<string, TemaDetalhamento> = {
       jusPostulandi: 'Até 20 salários mínimos sem advogado; acima de 20 SM ou em fase recursal, advogado obrigatório.'
     },
     guiasPrevistos: []
+  },
+  'negativacao-indevida': {
+    slug: 'negativacao-indevida',
+    tituloSecaoGuias: 'Nome sujo indevidamente: decisões do TJSP, prazos de exclusão e dano moral',
+    subtituloSecaoGuias: 'Série jurídica completa sobre como retirar o CPF dos cadastros restritivos em até 5 dias úteis e quantificar indenizações contra bancos e securitizadoras:',
+    jurimetria: {
+      total: 5966,
+      procedenteTotalPct: 41.2,
+      parcialPct: 23.6,
+      improcedentePct: 35.2,
+      acordosPct: 21.0,
+      faixaDanoMoral: 'R$ 5.000 a R$ 10.000',
+      comentario: 'Em 23,6% dos casos com parcial procedência, a inscrição é cancelada liminarmente, mas o dano moral é afastado por força da Súmula 385 do STJ (anotação preexistente). As indenizações integrais (64,8% somadas) ocorrem quando comprovada a ausência de dívidas legítimas anteriores ou quando a dívida já fora quitada.'
+    },
+    provasIndispensaveis: [
+      {
+        icone: 'doc',
+        titulo: 'Extrato analítico oficial do Serasa/SPC',
+        descricao: 'Relatório completo baixado diretamente no portal oficial contendo data da inclusão, valor, número do contrato e CNPJ do credor.',
+        tag: 'Prova Material'
+      },
+      {
+        icone: 'receipt',
+        titulo: 'Comprovante de pagamento ou acordo',
+        descricao: 'Comprovante de quitação do boleto ou termo de acordo demonstrando que o débito já havia sido adimplido (Súmula 548 STJ).',
+        tag: 'Quitação Prévia'
+      },
+      {
+        icone: 'shield',
+        titulo: 'Boletim de Ocorrência por fraude documental',
+        descricao: 'Registro formal em caso de conta ou cartão aberto por golpistas sem consentimento do titular do CPF.',
+        tag: 'Fraude / Terceiro'
+      },
+      {
+        icone: 'file-x',
+        titulo: 'Certidão de distribuição cível (afastamento Súmula 385)',
+        descricao: 'Certidão que comprova que as demais anotações preexistentes também estão sendo discutidas judicialmente.',
+        tag: 'Blindagem STJ'
+      }
+    ],
+    regrasJec: {
+      foro: 'Fórum da sua própria comarca (domicílio do consumidor, Art. 101, I do CDC)',
+      orgaoPrevio: 'Procon estadual e plataforma Consumidor.gov.br',
+      jusPostulandi: 'Até 20 salários mínimos sem advogado; acima de 20 SM ou em fase recursal, advogado obrigatório.'
+    },
+    guiasPrevistos: []
   }
 };
 

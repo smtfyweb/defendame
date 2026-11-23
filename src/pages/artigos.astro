@@ -3,21 +3,59 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
 import AdSlot from '../components/article/AdSlot.astro';
-import { temaPorSlug } from '../data/temas';
+import { temaPorSlug, getIconeArtigo } from '../data/temas';
 import { SITE } from '../data/site';
+
 const artigos = (await getCollection('artigos', ({ data }) => import.meta.env.DEV || !data.rascunho)).sort((a, b) => +b.data.publicado - +a.data.publicado);
 const data = (d: Date) => d.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
 ---
-<BaseLayout title={`Artigos — ${SITE.name}`} description="Todos os artigos do DefendaMe sobre as demandas do Juizado Especial Cível.">
+<BaseLayout 
+  title={`Artigos e Guias do JEC: Decisões do TJSP, Prazos e Indenizações — ${SITE.name}`} 
+  description="Guias práticos, análises jurimétricas e precedentes do TJSP sobre as 14 demandas mais comuns do Juizado Especial Cível. Entenda seus direitos, prazos e cálculos.">
 <main class="inst">
   <div class="inst-head">
     <nav class="crumb"><a href="/">Início</a><span>›</span><span class="crumb-cur">Artigos</span></nav>
-    <h1>Artigos e Guias do JEC</h1>
-    <p>Análises jurimétricas e guias práticos sobre as 14 demandas mais comuns do Juizado Especial Cível, construídos a partir de 39.727 decisões reais do TJSP.</p>
+    <span class="post-vinheta">Acervo Editorial Especializado · Juizado Especial Cível</span>
+    <h1>Artigos e Guias do JEC: Decisões do TJSP, Prazos e Indenizações</h1>
+    <p>Acervo analítico e investigativo fundamentado na análise empírica de 39.727 decisões reais do Tribunal de Justiça de São Paulo (TJSP). Roteiros de emergência, jurisprudência das Turmas Recursais, súmulas do STJ e cálculos de danos morais nas 14 principais demandas do consumidor.</p>
   </div>
-  <div class="slots" style="max-width:820px">{artigos.map((a) => { const t = temaPorSlug(a.data.tema)!; return (
-    <a class="nx" href={`/${t.slug}/${a.data.slug}/`}><span class="tcard-ic"><Icon name={t.icone} /></span><span class="nx-b"><span class="nx-t">{a.data.titulo}</span><span class="nx-m"><span class={`post-fmt fmt-${a.data.formato}`}>{a.data.formato === 'guia' ? 'Guia' : 'Análise'}</span>{t.nome} · {data(a.data.publicado)} · {a.data.leitura} min</span></span><span class="nx-go"><Icon name="arrow-right" size={16} stroke={2.2} /></span></a>
-  ); })}</div>
+
+  <div class="artigos-silos-nav" style="display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 28px;max-width:820px;">
+    <a href="/#temas" style="font-size:12px;font-weight:700;color:var(--navy);background:var(--muted-bg);padding:6px 14px;border-radius:var(--r-btn);border:1px solid var(--border);text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
+      <Icon name="layers" size={14} /> Todos os Silos
+    </a>
+    <a href="/transporte-aereo/" style="font-size:12px;font-weight:600;color:var(--fg-mid);background:var(--surface);padding:6px 14px;border-radius:var(--r-btn);border:1px solid var(--border);text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
+      <Icon name="plane" size={14} /> Voo e Viagens
+    </a>
+    <a href="/negativacao-indevida/" style="font-size:12px;font-weight:600;color:var(--fg-mid);background:var(--surface);padding:6px 14px;border-radius:var(--r-btn);border:1px solid var(--border);text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
+      <Icon name="user-x" size={14} /> Nome Negativado
+    </a>
+    <a href="/golpe-pix/" style="font-size:12px;font-weight:600;color:var(--fg-mid);background:var(--surface);padding:6px 14px;border-radius:var(--r-btn);border:1px solid var(--border);text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
+      <Icon name="pix" size={14} /> Golpe do Pix
+    </a>
+    <a href="/energia-eletrica/" style="font-size:12px;font-weight:600;color:var(--fg-mid);background:var(--surface);padding:6px 14px;border-radius:var(--r-btn);border:1px solid var(--border);text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
+      <Icon name="zap" size={14} /> Serviços Essenciais
+    </a>
+  </div>
+
+  <div class="slots" style="max-width:820px">{artigos.map((a) => { 
+    const t = temaPorSlug(a.data.tema)!; 
+    const icone = getIconeArtigo(a.data.slug, t.icone, a.data.icone);
+    return (
+      <a class="nx" href={`/${t.slug}/${a.data.slug}/`}>
+        <span class="tcard-ic"><Icon name={icone} /></span>
+        <span class="nx-b">
+          <span class="nx-t">{a.data.titulo}</span>
+          <span class="nx-m">
+            {a.data.trilha && <span style="font-size:10px;font-weight:700;color:var(--teal);background:var(--teal-pale);padding:1px 5px;border-radius:3px;margin-right:6px;border:1px solid var(--line-teal);">Ep. {a.data.trilha.episodio}</span>}
+            <span class={`post-fmt fmt-${a.data.formato}`}>{a.data.formato === 'guia' ? 'Guia' : 'Análise'}</span>
+            {t.curto} · {data(a.data.publicado)} · {a.data.leitura} min de leitura
+          </span>
+        </span>
+        <span class="nx-go"><Icon name="arrow-right" size={16} stroke={2.2} /></span>
+      </a>
+    ); 
+  })}</div>
 
   <div style="margin:40px 0 20px;max-width:820px;">
     <AdSlot variant="wide" />

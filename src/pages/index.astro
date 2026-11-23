@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
 import AdSlot from '../components/article/AdSlot.astro';
-import { TEMAS, GRUPOS, fmt, temaPorSlug, type Grupo } from '../data/temas';
+import { TEMAS, GRUPOS, fmt, temaPorSlug, getIconeArtigo, type Grupo } from '../data/temas';
 import { SITE, DATASET } from '../data/site';
 
 const artigos = (await getCollection('artigos', ({ data }) => import.meta.env.DEV || !data.rascunho)).sort((a, b) => +b.data.publicado - +a.data.publicado);
@@ -87,7 +87,7 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SI
     <div class="slots">
       <div class="slots-h">{outrosArtigos.length ? 'Mais artigos' : 'Próximos temas em produção'}</div>
       {outrosArtigos.map((a) => { const t = temaPorSlug(a.data.tema)!; return (
-        <a class="nx" href={`/${t.slug}/${a.data.slug}/`}><span class="tcard-ic"><Icon name={t.icone} /></span><span class="nx-b"><span class="nx-t">{a.data.titulo}</span><span class="nx-m"><span class={`post-fmt fmt-${a.data.formato}`}>{a.data.formato === 'guia' ? 'Guia' : 'Análise'}</span>{t.nome} · {a.data.leitura} min</span></span><span class="nx-go"><Icon name="arrow-right" size={16} stroke={2.2} /></span></a>); })}
+        <a class="nx" href={`/${t.slug}/${a.data.slug}/`}><span class="tcard-ic"><Icon name={getIconeArtigo(a.data.slug, t.icone, a.data.icone)} /></span><span class="nx-b"><span class="nx-t">{a.data.titulo}</span><span class="nx-m"><span class={`post-fmt fmt-${a.data.formato}`}>{a.data.formato === 'guia' ? 'Guia' : 'Análise'}</span>{t.nome} · {a.data.leitura} min</span></span><span class="nx-go"><Icon name="arrow-right" size={16} stroke={2.2} /></span></a>); })}
       {proximos.map((t) => (
         <a class="nx" href={`/${t.slug}/`}><span class="tcard-ic"><Icon name={t.icone} /></span><span class="nx-b"><span class="nx-t">{t.nome}</span><span class="nx-m">{fmt(t.decisoes)} decisões analisadas · artigo em breve</span></span><span class="nx-go"><Icon name="arrow-right" size={16} stroke={2.2} /></span></a>))}
       <a class="nx-all" href="/artigos/">Ver todos os artigos <Icon name="arrow-right" size={16} stroke={2.2} /></a>

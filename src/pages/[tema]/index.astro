@@ -4,7 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Icon from '../../components/Icon.astro';
 import AdSlot from '../../components/article/AdSlot.astro';
 import ImageSlot from '../../components/article/ImageSlot.astro';
-import { TEMAS, GRUPOS, fmt, getSecaoCorrelatos, type Tema } from '../../data/temas';
+import { TEMAS, GRUPOS, fmt, getSecaoCorrelatos, getIconeArtigo, type Tema } from '../../data/temas';
 import { getTemaDetalhamento } from '../../data/temasDetalhamento';
 import { SITE, DATASET } from '../../data/site';
 
@@ -28,16 +28,16 @@ const subtituloSecao = secao.subtitulo;
 const slotsH = secao.slotsH;
 
 const data = (d: Date) => d.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
-const jsonLd = [{ '@context': 'https://schema.org', '@type': 'CollectionPage', name: `${tema.nome} no Juizado Especial Cível`, url: new URL(`/${tema.slug}/`, SITE.url).href,
+const jsonLd = [{ '@context': 'https://schema.org', '@type': 'CollectionPage', name: `${tema.seoH1 || tema.nome} no Juizado Especial Cível`, url: new URL(`/${tema.slug}/`, SITE.url).href,
   breadcrumb: { '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Início', item: SITE.url }, { '@type': 'ListItem', position: 2, name: tema.nome }] } }];
 ---
-<BaseLayout title={`${tema.nome} no JEC: direitos, decisões e guias — ${SITE.name}`} description={`${tema.linha}. Artigos e dados de ${fmt(tema.decisoes)} decisões do TJSP sobre ${tema.nome.toLowerCase()} no Juizado Especial Cível.`} jsonLd={jsonLd}>
+<BaseLayout title={`${tema.seoH1 || tema.nome} — ${SITE.name}`} description={`${tema.linha}. Artigos e dados de ${fmt(tema.decisoes)} decisões do TJSP sobre ${tema.nome.toLowerCase()} no Juizado Especial Cível.`} jsonLd={jsonLd}>
 <main class="inst">
   <div class="inst-head">
     <nav class="crumb" aria-label="Navegação"><a href="/">Início</a><span>›</span><a href="/#temas">Temas</a><span>›</span><span class="crumb-cur">{tema.nome}</span></nav>
-    <span class="post-vinheta">{GRUPOS[tema.grupo]}</span>
-    <h1>{tema.nome}</h1>
-    <p>{tema.linha}. Entenda seus direitos, descubra o que separa quem ganha de quem perde e veja como o TJSP tem decidido.</p>
+    <span class="post-vinheta">{GRUPOS[tema.grupo]} · {tema.nome}</span>
+    <h1>{tema.seoH1 || tema.nome}</h1>
+    <p>{tema.linha}. Análise técnica de {fmt(tema.decisoes)} decisões judiciais do TJSP: entenda seus direitos, descubra o que separa quem ganha de quem perde e veja os precedentes consolidados.</p>
   </div>
   {detalhe ? (
     <div class="jurimetria-dash">
@@ -175,18 +175,18 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'CollectionPage', n
       />
 
       <div style="margin-top:36px;margin-bottom:20px;">
-        <span class="post-vinheta" style="font-size:12px;margin-bottom:6px;">Jurisprudência & Guias Práticos no JEC</span>
+        <span class="post-vinheta" style="font-size:12px;margin-bottom:6px;">Trilha Editorial & Jurisprudência TJSP</span>
         <h2 id="artigos" style="font-size:clamp(22px, 2.6vw, 28px);font-weight:700;color:var(--navy);margin:4px 0 10px;line-height:1.25;">
-          {detalhe?.tituloSecaoGuias || `Artigos e guias especializados sobre ${tema.nome.toLowerCase()}`}
+          {tema.secaoGuiasH2 || detalhe?.tituloSecaoGuias || `Artigos e guias especializados sobre ${tema.nome.toLowerCase()} no JEC`}
         </h2>
         <p style="font-size:15px;color:var(--fg-mid);line-height:1.65;margin:0;">
-          {detalhe?.subtituloSecaoGuias || `Análises técnicas e orientações fundamentadas em decisões reais do Tribunal de Justiça de São Paulo:`}
+          {tema.secaoGuiasSub || detalhe?.subtituloSecaoGuias || `Análises técnicas, roteiros práticos e orientações fundamentadas em decisões reais do Tribunal de Justiça de São Paulo:`}
         </p>
       </div>
 
       {artigos.length ? (
         <div class="slots">{artigos.map((a) => (
-          <a class="nx" href={`/${tema.slug}/${a.data.slug}/`}><span class="tcard-ic"><Icon name={tema.icone} /></span><span class="nx-b"><span class="nx-t">{a.data.titulo}</span><span class="nx-m">{a.data.trilha && <span style="font-size:10.5px;font-weight:700;color:var(--teal);background:var(--teal-pale);padding:1px 6px;border-radius:4px;margin-right:6px;border:1px solid var(--line-teal);">Ep. {a.data.trilha.episodio}</span>}<span class={`post-fmt fmt-${a.data.formato}`}>{a.data.formato === 'guia' ? 'Guia' : 'Análise'}</span>{data(a.data.publicado)} · {a.data.leitura} min de leitura</span></span><span class="nx-go"><Icon name="arrow-right" size={16} stroke={2.2} /></span></a>
+          <a class="nx" href={`/${tema.slug}/${a.data.slug}/`}><span class="tcard-ic"><Icon name={getIconeArtigo(a.data.slug, tema.icone, a.data.icone)} /></span><span class="nx-b"><span class="nx-t">{a.data.titulo}</span><span class="nx-m">{a.data.trilha && <span style="font-size:10.5px;font-weight:700;color:var(--teal);background:var(--teal-pale);padding:1px 6px;border-radius:4px;margin-right:6px;border:1px solid var(--line-teal);">Ep. {a.data.trilha.episodio}</span>}<span class={`post-fmt fmt-${a.data.formato}`}>{a.data.formato === 'guia' ? 'Guia' : 'Análise'}</span>{data(a.data.publicado)} · {a.data.leitura} min de leitura</span></span><span class="nx-go"><Icon name="arrow-right" size={16} stroke={2.2} /></span></a>
         ))}</div>
       ) : detalhe && detalhe.guiasPrevistos.length > 0 ? (
         <div class="slots">
