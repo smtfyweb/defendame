@@ -1,9 +1,15 @@
 ---
 /**
- * Citação jurídica inline limpa (Artigo de Lei, Súmula ou Precedente STJ/STF).
- * Renderiza em destaque tipográfico natural (stronger), limpo e perfeitamente integrado à prosa,
- * SEM caixas, SEM badges e SEM ícones decorativos.
+ * Legis.astro
+ * Citação jurídica inline interativa com Popover / Tooltip da Lei Seca e Precedentes.
+ * 
+ * - Desktop: Abre ao passar o mouse (hover) ou focar (focus).
+ * - Mobile / Touch: Abre ao tocar/clicar, fecha ao tocar fora ou no botão fechar (✕).
+ * - Inteligência: Busca automaticamente o inteiro teor no BANCO_NORMAS (normas.ts)
+ *   ou aceita props customizadas.
  */
+import { buscarNorma } from '../../data/normas';
+
 interface Props {
   art?: string;
   lei?: string;
@@ -11,10 +17,36 @@ interface Props {
   tribunal?: string;
   resp?: string;
   tema?: string;
+  enunciado?: string | number;
+  orgao?: string;
   texto?: string;
+  teor?: string;
+  titulo?: string;
+  badge?: string;
+  diploma?: string;
+  explicacao?: string;
+  linkOficial?: string;
 }
-const { art, lei, sumula, tribunal, resp, tema, texto } = Astro.props;
 
+const {
+  art,
+  lei,
+  sumula,
+  tribunal,
+  resp,
+  tema,
+  enunciado,
+  orgao,
+  texto,
+  teor,
+  titulo,
+  badge,
+  diploma,
+  explicacao,
+  linkOficial
+} = Astro.props;
+
+// 1. Gera o rótulo visível padrão (se não fornecido)
 let label = texto ?? '';
 if (!label) {
   const parts: string[] = [];
@@ -40,9 +72,16 @@ if (!label) {
     parts.push(t.toLowerCase().startsWith('tema') ? t : `Tema ${t}`);
   }
   
+  if (enunciado) {
+    const e = String(enunciado).trim();
+    parts.push(e.toLowerCase().startsWith('enunciado') ? e : `Enunciado ${e}`);
+  }
+  
   if (resp) parts.push(resp);
   
-  if (tribunal) {
+  if (orgao) {
+    parts.push(`do ${orgao}`);
+  } else if (tribunal) {
     if (sumula || resp || tema) {
       parts.push(`do ${tribunal}`);
     } else {
@@ -52,5 +91,166 @@ if (!label) {
   
   label = parts.join(' ');
 }
+
+// 2. Busca os dados no Banco Central de Normas
+const norma = buscarNorma({ art, lei, sumula, tribunal, resp, tema, enunciado, orgao });
+
+// 3. Resolução de campos
+const itemBadge = badge ?? norma?.badge ?? 'LEGISLAÇÃO APLICÁVEL';
+const itemTitulo = titulo ?? norma?.titulo ?? label;
+const itemDiploma = diploma ?? norma?.diploma ?? (lei || tribunal || orgao || 'Repositório Oficial');
+const itemTextoLiteral = teor ?? norma?.textoLiteral ?? '';
+const itemExplicacao = explicacao ?? norma?.explicacao ?? '';
+const itemLink = linkOficial ?? norma?.linkOficial ?? '';
 ---
-<strong class="cite-legal">{label}</strong>
+
+<span class="cite-legal-wrap" data-legis-wrap>
+  <button
+    type="button"
+    class="cite-legal-trigger"
+    aria-haspopup="dialog"
+    aria-expanded="false"
+    aria-label={`Consultar íntegra de ${label}`}
+  >
+    <strong class="cite-legal-label">{label}</strong>
+    <span class="cite-legal-cue" aria-hidden="true">§</span>
+  </button>
+
+  <span class="cite-legal-popover" role="dialog" aria-modal="false" aria-label={itemTitulo} data-legis-popover>
+    <span class="popover-head">
+      <span class="popover-badge">{itemBadge}</span>
+      <button type="button" class="popover-close-btn" aria-label="Fechar" data-legis-close>&times;</button>
+    </span>
+
+    <span class="popover-meta">
+      <strong class="popover-title">{itemTitulo}</strong>
+      {itemDiploma && <span class="popover-diploma">{itemDiploma}</span>}
+    </span>
+
+    {itemTextoLiteral && (
+      <span class="popover-body">
+        <span class="popover-quote-mark">&ldquo;</span>
+        <span class="popover-text">{itemTextoLiteral}</span>
+        <span class="popover-quote-mark">&rdquo;</span>
+      </span>
+    )}
+
+    {itemExplicacao && (
+      <span class="popover-expl">
+        <strong class="popover-expl-tag">Aplicação prática no JEC:</strong> {itemExplicacao}
+      </span>
+    )}
+
+    {itemLink && (
+      <a href={itemLink} target="_blank" rel="noopener noreferrer" class="popover-link">
+        Consultar fonte oficial
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="7" y1="17" x2="17" y2="7"></line>
+          <polyline points="7 7 17 7 17 17"></polyline>
+        </svg>
+      </a>
+    )}
+  </span>
+</span>
+
+<script>
+  function setupLegisPopovers() {
+    const wraps = document.querySelectorAll<HTMLElement>('[data-legis-wrap]');
+
+    function closeAllPopovers(except?: HTMLElement) {
+      wraps.forEach((wrap) => {
+        if (wrap !== except) {
+          wrap.removeAttribute('data-open');
+          const trigger = wrap.querySelector<HTMLButtonElement>('.cite-legal-trigger');
+          if (trigger) trigger.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+
+    function adjustPosition(wrap: HTMLElement) {
+      const popover = wrap.querySelector<HTMLElement>('[data-legis-popover]');
+      if (!popover) return;
+
+      popover.classList.remove('align-left', 'align-right', 'align-bottom');
+
+      const trigger = wrap.querySelector<HTMLElement>('.cite-legal-trigger');
+      if (!trigger) return;
+
+      const triggerRect = trigger.getBoundingClientRect();
+      const popoverRect = popover.getBoundingClientRect();
+      const vw = window.innerWidth;
+
+      if (triggerRect.top - popoverRect.height < 12) {
+        popover.classList.add('align-bottom');
+      }
+
+      const centerX = triggerRect.left + triggerRect.width / 2;
+      const halfPopover = popoverRect.width / 2;
+
+      if (centerX - halfPopover < 12) {
+        popover.classList.add('align-left');
+      } else if (centerX + halfPopover > vw - 12) {
+        popover.classList.add('align-right');
+      }
+    }
+
+    wraps.forEach((wrap) => {
+      const trigger = wrap.querySelector<HTMLButtonElement>('.cite-legal-trigger');
+      const closeBtn = wrap.querySelector<HTMLButtonElement>('[data-legis-close]');
+      if (!trigger) return;
+
+      trigger.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const isOpen = wrap.hasAttribute('data-open');
+        if (isOpen) {
+          wrap.removeAttribute('data-open');
+          trigger.setAttribute('aria-expanded', 'false');
+        } else {
+          closeAllPopovers(wrap);
+          wrap.setAttribute('data-open', 'true');
+          trigger.setAttribute('aria-expanded', 'true');
+          adjustPosition(wrap);
+        }
+      });
+
+      wrap.addEventListener('mouseenter', () => {
+        adjustPosition(wrap);
+      });
+
+      if (closeBtn) {
+        closeBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          wrap.removeAttribute('data-open');
+          trigger.setAttribute('aria-expanded', 'false');
+        });
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement | null;
+      if (target && !target.closest('[data-legis-wrap]')) {
+        closeAllPopovers();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeAllPopovers();
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      const openWrap = document.querySelector<HTMLElement>('[data-legis-wrap][data-open]');
+      if (openWrap) adjustPosition(openWrap);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupLegisPopovers);
+  } else {
+    setupLegisPopovers();
+  }
+  document.addEventListener('astro:page-load', setupLegisPopovers);
+</script>
