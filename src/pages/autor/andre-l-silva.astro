@@ -121,7 +121,7 @@ const jsonLd = [
   <li><strong>Percentuais históricos de desfecho:</strong> mensuração da taxa real de procedência, procedência parcial e improcedência por espécie de falha na prestação do serviço;</li>
   <li><strong>Composição do conjunto probatório:</strong> identificamos nos acórdãos do Tribunal quais documentos integraram com maior frequência o conjunto probatório das demandas acolhidas e, em contrapartida, em quais hipóteses a documentação apresentada se mostrou insuficiente, frágil ou desprovida de lastro fático para demonstrar a falha de serviço ou o prejuízo alegado;</li>
   <li><strong>Dosimetria indenizatória:</strong> quantificação de valores medianos e faixas interquartis arbitrados pelas Turmas Recursais a título de danos materiais e morais;</li>
-  <li><strong>Tempo médio processual:</strong> intervalo médio verificado entre a distribuição da petição inicial e a prolação da sentença em primeiro grau.</li>
+  <li><strong>Tempo médio processual:</strong> intervalo médio verificado entre a distribuição da petição inicial até a prolação da sentença em primeiro grau.</li>
 </ul>
 
 <h2 id="formacao">Formação Acadêmica e Multidisciplinar</h2>
@@ -131,10 +131,7 @@ const jsonLd = [
 
 <div class="bio-timeline">
   <div class="bio-entry">
-    <div class="bio-header">
-      <h3 class="bio-title">Bacharelado em Direito</h3>
-      <span class="bio-status concluido">Graduação · Concluído</span>
-    </div>
+    <h3 class="bio-title">Bacharelado em Direito</h3>
     <div class="bio-inst">UNIP — Universidade Paulista</div>
     <p class="bio-desc">
       Formação jurídica alicerçada na dogmática do Direito Privado, na Teoria Geral da Responsabilidade Civil e no Direito Processual Civil. Dedicação aos institutos fundamentais do microssistema do Código de Defesa do Consumidor, com ênfase no fato e no vício do serviço, na inversão do ônus da prova e na teoria do desvio produtivo. Pesquisa direcionada à dinâmica forense da Lei Federal nº 9.099 de 1995, examinando critérios de admissibilidade probatória, dosimetria de danos materiais e extrapatrimoniais, e a jurisprudência das Turmas Recursais do Tribunal de Justiça de São Paulo.
@@ -142,10 +139,7 @@ const jsonLd = [
   </div>
 
   <div class="bio-entry">
-    <div class="bio-header">
-      <h3 class="bio-title">Graduação em Marketing</h3>
-      <span class="bio-status concluido">Graduação · Concluído</span>
-    </div>
+    <h3 class="bio-title">Graduação em Marketing</h3>
     <div class="bio-inst">UMC — Universidade de Mogi das Cruzes</div>
     <p class="bio-desc">
       Formação voltada à compreensão analítica das relações mercadológicas, canais de distribuição, comportamento do consumidor e práticas concorrenciais. Estudo das dinâmicas comerciais e contratuais que regem as relações entre fornecedores de grande porte e o consumidor final, conectando a análise de mercado às vulnerabilidades contratuais contemporâneas.
@@ -153,10 +147,7 @@ const jsonLd = [
   </div>
 
   <div class="bio-entry">
-    <div class="bio-header">
-      <h3 class="bio-title">MBA em Gestão Estratégica Mercadológica</h3>
-      <span class="bio-status concluido">Pós-Graduação · Concluído</span>
-    </div>
+    <h3 class="bio-title">MBA em Gestão Estratégica Mercadológica</h3>
     <div class="bio-inst">EPN — Escola Paulista de Negócios</div>
     <p class="bio-desc">
       Especialização executiva focada em planejamento estratégico, governança corporativa, gestão de operações em larga escala e integridade da informação. Desenvolvimento de visão sistêmica sobre estruturação de processos corporativos e mitigação de riscos em ambientes de alta concorrência.
@@ -164,22 +155,16 @@ const jsonLd = [
   </div>
 
   <div class="bio-entry">
-    <div class="bio-header">
-      <h3 class="bio-title">MBA Executivo em Direito do Consumidor, Mercados Digitais e Defesa Concorrencial</h3>
-      <span class="bio-status em-curso">Pós-Graduação · Em curso</span>
-    </div>
-    <div class="bio-inst">Pós-graduando</div>
+    <h3 class="bio-title">MBA Executivo em Direito do Consumidor, Mercados Digitais e Defesa Concorrencial</h3>
+    <div class="bio-inst">EPN — Escola Paulista de Negócios</div>
     <p class="bio-desc">
       Aprofundamento na tutela do consumidor no comércio eletrônico, economia das plataformas digitais, regulação concorrencial e práticas comerciais abusivas em ambientes virtuais. Estudo dos reflexos da Lei Geral de Proteção de Dados Pessoais nas relações de consumo e das novas assimetrias decorrentes da contratação digital massificada.
     </p>
   </div>
 
   <div class="bio-entry">
-    <div class="bio-header">
-      <h3 class="bio-title">Data Science, Inteligência Artificial e Analytics Aplicado</h3>
-      <span class="bio-status em-curso">Pós-Graduação · Em curso</span>
-    </div>
-    <div class="bio-inst">PUC-PR — Pontifícia Universidade Católica do Paraná · Pós-graduando</div>
+    <h3 class="bio-title">Data Science, Inteligência Artificial e Analytics Aplicado</h3>
+    <div class="bio-inst">PUC-PR — Pontifícia Universidade Católica do Paraná</div>
     <p class="bio-desc">
       Formação quantitativa avançada voltada à jurimetria e inteligência analítica judiciária. Mineração de dados textuais em repositórios jurisprudenciais públicos, processamento de linguagem natural aplicado a sentenças e acórdãos, modelagem probabilística de desfechos processuais e análise estatística da dispersão de indenizações nos tribunais estaduais.
     </p>
@@ -234,37 +219,17 @@ const jsonLd = [
     padding: 20px 0 22px;
     border-bottom: 1px solid var(--border);
   }
-  .bio-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 4px;
-  }
   .bio-title {
-    margin: 0;
+    margin: 0 0 4px;
     font-size: 17.5px;
     font-weight: 600;
     color: var(--navy);
-  }
-  .bio-status {
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.02em;
-  }
-  .bio-status.concluido {
-    color: var(--fg-muted);
-  }
-  .bio-status.em-curso {
-    color: var(--teal);
-    font-weight: 600;
   }
   .bio-inst {
     font-size: 14.5px;
     font-weight: 600;
     color: var(--teal);
-    margin-bottom: 8px;
+    margin-bottom: 10px;
   }
   .bio-desc {
     margin: 0;
