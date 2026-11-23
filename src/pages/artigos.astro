@@ -1,0 +1,26 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import AdSlot from '../components/article/AdSlot.astro';
+import { temaPorSlug } from '../data/temas';
+import { SITE } from '../data/site';
+const artigos = (await getCollection('artigos', ({ data }) => import.meta.env.DEV || !data.rascunho)).sort((a, b) => +b.data.publicado - +a.data.publicado);
+const data = (d: Date) => d.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+---
+<BaseLayout title={`Artigos — ${SITE.name}`} description="Todos os artigos do DefendaMe sobre as demandas do Juizado Especial Cível.">
+<main class="inst">
+  <div class="inst-head">
+    <nav class="crumb"><a href="/">Início</a><span>›</span><span class="crumb-cur">Artigos</span></nav>
+    <h1>Artigos e Guias do JEC</h1>
+    <p>Análises jurimétricas e guias práticos sobre as 14 demandas mais comuns do Juizado Especial Cível, construídos a partir de 39.727 decisões reais do TJSP.</p>
+  </div>
+  <div class="slots" style="max-width:820px">{artigos.map((a) => { const t = temaPorSlug(a.data.tema)!; return (
+    <a class="nx" href={`/${t.slug}/${a.data.slug}/`}><span class="tcard-ic"><Icon name={t.icone} /></span><span class="nx-b"><span class="nx-t">{a.data.titulo}</span><span class="nx-m"><span class={`post-fmt fmt-${a.data.formato}`}>{a.data.formato === 'guia' ? 'Guia' : 'Análise'}</span>{t.nome} · {data(a.data.publicado)} · {a.data.leitura} min</span></span><span class="nx-go"><Icon name="arrow-right" size={16} stroke={2.2} /></span></a>
+  ); })}</div>
+
+  <div style="margin:40px 0 20px;max-width:820px;">
+    <AdSlot variant="wide" />
+  </div>
+</main>
+</BaseLayout>

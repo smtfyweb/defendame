@@ -1,0 +1,52 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import Icon from '../components/Icon.astro';
+const toc: [string, string][] = [
+  ['controlador', 'Controlador'],
+  ['dados', 'Dados coletados'],
+  ['finalidades', 'Finalidades e bases legais'],
+  ['compartilhamento', 'Compartilhamento'],
+  ['sigilo', 'Sigilo profissional'],
+  ['retencao', 'Retenção'],
+  ['direitos', 'Seus direitos'],
+  ['seguranca', 'Segurança'],
+  ['encarregado', 'Encarregado (DPO)'],
+  ['alteracoes', 'Alterações']
+];
+---
+<PageLayout title="Política de Privacidade — DefendaMe" description="Saiba como o DefendaMe coleta, usa e protege seus dados pessoais, nos termos da LGPD." h1="Política de Privacidade" lead="Como coletamos, usamos e protegemos os seus dados pessoais, nos termos da Lei Geral de Proteção de Dados." atualizado="19 de novembro de 2026" toc={toc}>
+
+<h2 id="controlador">1. Quem é o controlador dos dados</h2>
+<p>Esta Política explica como o <strong>DefendaMe</strong> (defendame.online) coleta, usa e protege dados pessoais, em conformidade com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018 — LGPD).</p>
+<p>Controlador: <span class="fill">[razão social ou nome do advogado responsável]</span>, inscrito no <span class="fill">[CNPJ / OAB nº]</span>, com endereço em <span class="fill">[endereço completo]</span>.</p>
+<h2 id="dados">2. Quais dados coletamos</h2>
+<h3>2.1 Dados que você fornece</h3>
+<ul><li><strong>Formulário "Verificar meu caso":</strong> nome, WhatsApp, e-mail (opcional), cidade e estado, categoria do problema, informações sobre o caso (empresa envolvida, datas, valores, protocolos) e o relato do ocorrido.</li>
+<li><strong>Contato:</strong> dados que você nos envia por e-mail ou mensagem.</li></ul>
+<h3>2.2 Dados coletados automaticamente</h3>
+<ul><li>Preferências de navegação (tema claro/escuro, tamanho da fonte e escolhas de cookies), armazenadas no seu próprio navegador.</li>
+<li>Dados de navegação e estatísticas de acesso, somente se você autorizar os cookies de desempenho e de publicidade (veja a <a href="/cookies/" >Política de Cookies</a>).</li></ul>
+<h2 id="finalidades">3. Para que usamos os dados e com qual base legal</h2>
+<div class="tbl-scroll"><table class="doc-table"><thead><tr><th>Finalidade</th><th>Dados</th><th>Base legal (LGPD)</th></tr></thead><tbody>
+<tr><td>Analisar o caso relatado e responder ao seu contato</td><td>Dados do formulário</td><td>Consentimento (art. 7º, I) e procedimentos preliminares a contrato, a pedido do titular (art. 7º, V)</td></tr>
+<tr><td>Prestar serviços advocatícios, se houver contratação</td><td>Dados do caso e documentos</td><td>Execução de contrato (art. 7º, V) e exercício regular de direitos (art. 7º, VI)</td></tr>
+<tr><td>Manter o site funcionando e lembrar suas preferências</td><td>Cookies necessários</td><td>Legítimo interesse (art. 7º, IX)</td></tr>
+<tr><td>Medir audiência e exibir anúncios</td><td>Cookies de desempenho e publicidade</td><td>Consentimento (art. 7º, I)</td></tr>
+</tbody></table></div>
+<p>Não usamos seus dados para enviar ofertas não solicitadas nem os vendemos a terceiros.</p>
+<h2 id="compartilhamento">4. Com quem compartilhamos</h2>
+<p>Os dados podem ser tratados por fornecedores que nos ajudam a operar o site (hospedagem, envio de formulários, e-mail e mensageria) e, se você autorizar, por ferramentas de medição de audiência e de publicidade (como o Google). Esses fornecedores atuam como operadores e só podem tratar os dados conforme nossas instruções. Também podemos compartilhar dados quando exigido por lei ou por ordem judicial.</p>
+<h2 id="sigilo">5. Sigilo profissional</h2>
+<p>As informações sobre o seu caso são tratadas com sigilo, observados o Estatuto da Advocacia (Lei nº 8.906/1994) e o Código de Ética e Disciplina da OAB.</p>
+<h2 id="retencao">6. Por quanto tempo guardamos</h2>
+<p>Os dados de casos que não resultarem em contratação são mantidos por até <span class="fill">[12 meses]</span> e depois eliminados. Havendo contratação, os dados são guardados pelo tempo necessário à prestação do serviço e ao cumprimento de obrigações legais.</p>
+<h2 id="direitos">7. Seus direitos</h2>
+<p>Nos termos do art. 18 da LGPD, você pode, a qualquer momento, solicitar: confirmação e acesso aos seus dados; correção de dados incompletos ou desatualizados; anonimização, bloqueio ou eliminação; portabilidade; informação sobre compartilhamento; e revogação do consentimento. Basta escrever para <span class="fill">privacidade@defendame.online</span>.</p>
+<h2 id="seguranca">8. Segurança</h2>
+<p>Adotamos medidas técnicas e administrativas para proteger os dados contra acessos não autorizados, perda ou alteração, como conexão criptografada (HTTPS) e acesso restrito às informações dos casos.</p>
+<h2 id="encarregado">9. Encarregado de dados (DPO)</h2>
+<p>Encarregado: <span class="fill">[nome]</span> · <span class="fill">privacidade@defendame.online</span>. Você também pode apresentar reclamação à Autoridade Nacional de Proteção de Dados (ANPD).</p>
+<h2 id="alteracoes">10. Alterações desta Política</h2>
+<p>Esta Política pode ser atualizada. A data da última revisão aparece no topo da página.</p>
+
+</PageLayout>

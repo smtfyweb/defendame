@@ -1,0 +1,70 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import Icon from '../../components/Icon.astro';
+import { getCollection } from 'astro:content';
+import { SITE, AUTHOR, DATASET, FORMATOS } from '../../data/site';
+import { temaPorSlug } from '../../data/temas';
+
+const todos = (await getCollection('artigos', (a) => !a.data.rascunho)).sort((a, b) => +b.data.publicado - +a.data.publicado);
+const analises = todos.filter((a) => a.data.formato === 'analise');
+const guias = todos.filter((a) => a.data.formato === 'guia');
+const data = (dt: Date) => dt.toLocaleDateString('pt-BR', { timeZone: 'UTC', day: '2-digit', month: 'short', year: 'numeric' });
+const url = new URL(AUTHOR.url, SITE.url).href;
+
+const toc: [string, string][] = [
+  ['sobre', 'Sobre'],
+  ['metodo', 'Como analiso os dados'],
+  ['papel', 'Papel no DefendaMe'],
+  ...(analises.length ? [['analises', 'Análises assinadas'] as [string, string]] : []),
+  ...(guias.length ? [['guias', 'Guias revisados'] as [string, string]] : []),
+  ['formacao', 'Formação'],
+];
+const jsonLd = [
+  { '@context': 'https://schema.org', '@type': 'ProfilePage', url, mainEntity: {
+      '@type': 'Person', '@id': `${url}#person`, name: AUTHOR.name, jobTitle: AUTHOR.jobTitle, image: new URL(AUTHOR.photo, SITE.url).href,
+      url, sameAs: [SITE.substack], alumniOf: AUTHOR.alumniOf.map((n) => ({ '@type': 'CollegeOrUniversity', name: n })),
+      worksFor: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+      knowsAbout: ['Jurimetria', 'Legal Analytics', 'Juizado Especial Cível', 'Direito do Consumidor', 'Golpes bancários e Pix'] } },
+  { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Início', item: SITE.url },
+      { '@type': 'ListItem', position: 2, name: AUTHOR.name, item: url } ] },
+];
+---
+<PageLayout title={`${AUTHOR.name} — ${AUTHOR.role} | ${SITE.name}`} description={`${AUTHOR.name}, ${AUTHOR.jobTitle}. Análises assinadas e guias revisados sobre o Juizado Especial Cível, a partir de ${DATASET.totalFmt} decisões do TJSP.`}
+  h1={AUTHOR.name} lead={`${AUTHOR.jobTitle}. Lê decisões judiciais em escala para explicar, com dados, como o Juizado decide.`} toc={toc} jsonLd={jsonLd}>
+
+<div class="autor-hero">
+  <img src={AUTHOR.photo} alt={AUTHOR.name} width="112" height="112" />
+  <div><b>{AUTHOR.name}</b><span class="ah-r">{AUTHOR.role} · {AUTHOR.city}</span>
+    <div class="aut-links"><a class="aut-sub" href={SITE.substack} target="_blank" rel="noopener"><Icon name="substack" size={15} />Seguir no Substack</a></div></div>
+</div>
+
+<h2 id="sobre">Sobre</h2>
+<p>Trabalho com <strong>Legal Analytics</strong>: a leitura de decisões judiciais em grande volume para encontrar padrões que um caso isolado não mostra. Quanto tempo um processo leva, em que situações o consumidor costuma ter o pedido acolhido, quais provas aparecem nas sentenças favoráveis e quais faltam nas desfavoráveis.</p>
+<p>No DefendaMe, essa leitura se apoia em uma base de <strong>{DATASET.totalFmt} decisões</strong> extraídas diretamente do Tribunal de Justiça de São Paulo, abrangendo a Capital, o Litoral e o Interior (10 Regiões Administrativas Judiciárias), organizadas nas principais demandas do Juizado Especial Cível.</p>
+
+<h2 id="metodo">Como analiso os dados</h2>
+<div class="about-grid">
+  <div class="about-card"><span class="med-icon"><Icon name="chart" size={22} stroke={2} /></span><h3>Recorte declarado</h3><p>Cada análise informa de onde vêm os números: tema, comarca e quantidade de decisões.</p></div>
+  <div class="about-card"><span class="med-icon"><Icon name="lock" size={22} stroke={2} /></span><h3>Casos anonimizados</h3><p>Os casos citados vêm de decisões públicas, com nomes e detalhes alterados. Nunca são clientes.</p></div>
+  <div class="about-card"><span class="med-icon"><Icon name="doc" size={22} stroke={2} /></span><h3>Fonte primária</h3><p>Lei, súmula ou norma citada vem com link para o repositório oficial.</p></div>
+</div>
+<p>Estatística descreve tendência, não destino. Por isso, nenhum percentual publicado aqui é promessa de resultado: cada caso depende das suas provas e circunstâncias.</p>
+
+<h2 id="papel">Papel no DefendaMe</h2>
+<p>O DefendaMe publica dois formatos. Nas <strong>Análises</strong>, assino o texto e escrevo em primeira pessoa: é a minha leitura sobre o que os dados mostram. Nos <strong>Guias</strong>, a Redação explica o passo a passo de uma situação prática e eu faço a revisão técnica do conteúdo.</p>
+
+{analises.length > 0 && <>
+<h2 id="analises">Análises assinadas</h2>
+<ul class="autor-list">{analises.map((a) => <li><a href={`/${a.data.tema}/${a.data.slug}/`}><span class="al-k"><span class="post-fmt fmt-analise">{FORMATOS.analise.rotulo}</span>{temaPorSlug(a.data.tema)?.nome} · {data(a.data.publicado)}</span><span class="al-t">{a.data.titulo}</span><span class="al-d">{a.data.descricao}</span></a></li>)}</ul>
+</>}
+{guias.length > 0 && <>
+<h2 id="guias">Guias revisados</h2>
+<ul class="autor-list">{guias.map((a) => <li><a href={`/${a.data.tema}/${a.data.slug}/`}><span class="al-k"><span class="post-fmt fmt-guia">{FORMATOS.guia.rotulo}</span>{temaPorSlug(a.data.tema)?.nome} · {data(a.data.publicado)}</span><span class="al-t">{a.data.titulo}</span><span class="al-d">{a.data.descricao}</span></a></li>)}</ul>
+</>}
+
+<h2 id="formacao">Formação</h2>
+<ul>{AUTHOR.alumniOf.map((n) => <li>{n}</li>)}</ul>
+
+<p><a class="btn btn-primary" href="/#verificar" data-open-case>Verificar meu caso <Icon name="arrow-right" size={16} stroke={2.2} /></a></p>
+</PageLayout>

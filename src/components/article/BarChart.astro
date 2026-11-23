@@ -1,0 +1,34 @@
+---
+/** Gráfico de barras verticais em SVG puro (sem bibliotecas), no padrão do site.
+ *  Cores: tom "base" = --line-teal (referência), "normal" = --teal-logo 55%, "destaque" = --teal (o dado principal).
+ *  barras: [{ rotulo, sub?, valor (número), extra? (texto abaixo, ex.: "R$ 5.058"), tom? }] · max = topo do eixo (%) */
+interface Barra { rotulo: string; sub?: string; valor: number; extra?: string; tom?: 'base' | 'normal' | 'destaque' }
+interface Props { titulo: string; subtitulo?: string; barras: Barra[]; max?: number; sufixo?: string; nota?: string }
+const { titulo, subtitulo, barras, max = 60, sufixo = '%', nota } = Astro.props;
+const n = barras.length, W = Math.max(500, 110 * n + 90), top = 20, base = 140, H = barras.some((b) => b.extra) ? 200 : 185;
+const step = (W - 90) / n;
+const ticks = [max, max * 0.75, max * 0.5, max * 0.25];
+const fmt = (v: number) => (Number.isInteger(v) ? String(v) : v.toFixed(1).replace('.', ',')) + sufixo;
+const fill = (t?: string) => (t === 'destaque' ? 'var(--teal)' : t === 'base' ? 'var(--line-teal)' : 'var(--teal-logo)');
+---
+<div class="chart-card">
+  <div class="chart-head"><div class="chart-title">{titulo}</div>{subtitulo && <div class="chart-sub">{subtitulo}</div>}</div>
+  <svg class="proc-chart" viewBox={`0 0 ${W} ${H}`} fill="none" role="img" aria-label={titulo}>
+    {ticks.map((t, i) => (<>
+      {i < 3 && <line x1="70" y1={top + i * 40} x2={W - 20} y2={top + i * 40} stroke="var(--border)" />}
+      <text x="62" y={top + 3 + i * 40} font-size="10" fill="var(--fg-light)" text-anchor="end">{fmt(t)}</text>
+    </>))}
+    {barras.map((b, i) => {
+      const cx = 70 + step * (i + 0.5), h = (b.valor / max) * (base - top), y = base - h, hl = b.tom === 'destaque';
+      return (<>
+        <rect x={cx - 32} y={y} width="64" height={h} rx="4" fill={fill(b.tom)} opacity={b.tom === 'normal' || !b.tom ? 0.55 : undefined} />
+        <text x={cx} y={y - 7} font-size={hl ? 13 : 12} font-weight={hl ? 700 : 600} fill={hl ? 'var(--teal)' : 'var(--fg-muted)'} text-anchor="middle">{fmt(b.valor)}</text>
+        <text x={cx} y="160" font-size="11" font-weight={hl ? 600 : 500} fill={hl ? 'var(--navy)' : 'var(--fg-mid)'} text-anchor="middle">{b.rotulo}</text>
+        {b.sub && <text x={cx} y="174" font-size="10" fill="var(--fg-light)" text-anchor="middle">{b.sub}</text>}
+        {b.extra && <text x={cx} y="190" font-size="10.5" font-weight="600" fill="var(--fg-mid)" text-anchor="middle">{b.extra}</text>}
+      </>);
+    })}
+    <line x1="70" y1={base} x2={W - 20} y2={base} stroke="var(--fg-light)" />
+  </svg>
+  {nota && <p class="chart-note">{nota}</p>}
+</div>

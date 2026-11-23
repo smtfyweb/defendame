@@ -1,0 +1,10 @@
+---
+/** Tabela de dados jurimétricos. A linha com destaque=true fica em teal (a comarca-foco).
+ *  colunas: ['Recorte', 'Decisões', ...] · linhas: [{ celulas: [...], destaque?: true }] — a 1ª célula sai em negrito. */
+interface Props { colunas: string[]; linhas: { celulas: string[]; destaque?: boolean }[] }
+const { colunas, linhas } = Astro.props;
+---
+<div class="table-container"><table class="juri-table">
+  <thead><tr>{colunas.map((c) => <th>{c}</th>)}</tr></thead>
+  <tbody>{linhas.map((l) => <tr class={l.destaque ? 'highlight-row' : undefined}>{l.celulas.map((c, i) => <td>{i === 0 || l.destaque ? <strong>{c}</strong> : c}</td>)}</tr>)}</tbody>
+</table></div>

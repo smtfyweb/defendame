@@ -1,0 +1,151 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { TEMAS } from '../data/temas';
+import { CASE_FORMS } from '../data/caseForms';
+import { SITE } from '../data/site';
+/** Modal "Verificar meu caso" em 3 etapas (categoria → detalhes da demanda → revisão + contato).
+ *  Abre por qualquer elemento com [data-open-case] ou pela URL terminada em #verificar.
+ *  Envio: POST JSON para PUBLIC_FORM_ENDPOINT (variável de ambiente). */
+const cats = [...TEMAS.map((t) => ({ slug: t.slug, label: t.curto, icone: t.icone })), { slug: 'outro', label: 'Outro', icone: 'help' }];
+const forms = Object.fromEntries(Object.entries(CASE_FORMS).map(([k, v]) => [k, [v.titulo, v.campos.map((c) => ({ id: c.id, label: c.rotulo, type: c.tipo, opt: c.opcoes ?? c.placeholder ?? '', req: c.obrigatorio }))]]));
+const labels = Object.fromEntries(cats.map((c) => [c.slug, c.label]));
+const cfg = JSON.stringify({ forms, labels, endpoint: SITE.formEndpoint });
+const UFS = ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'];
+---
+<div class="cz" id="caseModal" role="dialog" aria-modal="true" aria-labelledby="czTitle" hidden>
+  <div class="cz-bg" data-cz-close></div>
+  <div class="cz-wrap">
+    <div class="cz-top"><Logo /><button type="button" class="cz-x" data-cz-close aria-label="Fechar"><Icon name="x" size={18} stroke={2.2} /></button></div>
+    <div class="cz-head">
+      <h2 id="czTitle">Avaliação de Direitos e Situação</h2>
+      <p>Descreva o ocorrido de forma confidencial. Analisamos os dados do TJSP e indicamos a viabilidade e os caminhos da Lei 9.099/95.</p>
+    </div>
+    <div class="cz-prog" aria-hidden="true">
+      <div class="cz-steps"><span data-s="1">Categoria</span><span data-s="2">Detalhes</span><span data-s="3">Revisão</span></div>
+      <div class="cz-bar"><div class="cz-fill" id="czFill"></div></div>
+    </div>
+    <form class="cz-card" id="czForm" novalidate>
+      <section class="cz-pane" data-pane="1">
+        <h3 class="cz-h">Em qual situação você foi prejudicado?</h3>
+        <div class="cats">
+          {cats.map((c) => <button type="button" class="cat" data-cat={c.slug} aria-pressed="false"><span class="cat-ic"><Icon name={c.icone} /></span><span class="cat-l">{c.label}</span></button>)}
+        </div>
+        <p class="cz-err" id="errCat" hidden>Selecione uma categoria para continuar.</p>
+      </section>
+      <section class="cz-pane" data-pane="2" hidden>
+        <h3 class="cz-h">Detalhes do caso <span class="cz-chip" id="czCatChip"></span></h3>
+        <div class="cz-box"><div class="cz-box-h" id="czBoxH"></div><div class="cz-grid" id="czDyn"></div></div>
+        <div class="cz-grid">
+          <label class="fld"><span>Cidade onde você mora <i>*</i></span><input name="cidade" placeholder="Ex.: Barueri" required /></label>
+          <label class="fld"><span>Estado <i>*</i></span><select name="uf" required><option value="">Selecione…</option>{UFS.map((u) => <option selected={u === 'SP'}>{u}</option>)}</select></label>
+        </div>
+        <label class="fld"><span>Descreva o que aconteceu <i>*</i></span><textarea name="descricao" rows="5" required minlength="20" placeholder="Conte com detalhes: quando foi, o que a empresa fez ou deixou de fazer, quais prejuízos você teve…"></textarea></label>
+      </section>
+      <section class="cz-pane" data-pane="3" hidden>
+        <h3 class="cz-h">Revise seu caso</h3>
+        <dl class="rev" id="czRev"></dl>
+        <div class="cz-box">
+          <div class="cz-box-h">Seus dados para contato</div>
+          <div class="cz-grid">
+            <label class="fld"><span>Nome completo <i>*</i></span><input name="nome" autocomplete="name" placeholder="Seu nome" required /></label>
+            <label class="fld"><span>WhatsApp <i>*</i></span><input name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="(11) 90000-0000" required /></label>
+          </div>
+          <label class="fld"><span>E-mail</span><input name="email" type="email" autocomplete="email" placeholder="seu@email.com" /></label>
+          <label class="cz-ok"><input type="checkbox" name="lgpd" required /><span>Autorizo o uso dos meus dados para a análise deste caso, nos termos da LGPD e da <a href="/privacidade/" target="_blank">Política de Privacidade</a>.</span></label>
+        </div>
+        <p class="cz-err" id="czSendErr" hidden></p>
+      </section>
+      <section class="cz-pane cz-done" data-pane="4" hidden>
+        <div class="cz-done-ic"><Icon name="check" size={34} stroke={2.4} /></div>
+        <h3>Relato recebido para avaliação</h3>
+        <p>Recebemos o seu relato. O diagnóstico preliminar da demanda e a relação de documentos indispensáveis serão enviados para o WhatsApp informado.</p>
+        <p class="cz-proto">Protocolo <b id="czProto"></b></p>
+        <button type="button" class="btn btn-outline" data-cz-close>Voltar ao site</button>
+      </section>
+      <div class="cz-foot" id="czFoot">
+        <button type="button" class="cz-back" id="czBack" hidden><Icon name="arrow-left" size={16} stroke={2.2} /> Voltar</button>
+        <button type="button" class="btn btn-primary cz-next" id="czNext">Próximo <Icon name="arrow-right" size={16} stroke={2.2} /></button>
+        <button type="submit" class="btn btn-primary cz-next" id="czSend" hidden><Icon name="send" size={16} stroke={2.1} /> Solicitar avaliação</button>
+      </div>
+      <p class="cz-note">Suas informações são confidenciais e não serão compartilhadas com terceiros. O envio não gera compromisso de contratação. Conteúdo em conformidade com o Provimento CFOAB nº 205/2021, sem promessa de resultado.</p>
+    </form>
+  </div>
+</div>
+<script type="application/json" id="czData" set:html={cfg} />
+<script is:inline>
+(function(){
+  var CFG=JSON.parse(document.getElementById('czData').textContent), FORMS=CFG.forms, LABELS=CFG.labels, ENDPOINT=CFG.endpoint;
+    var m=document.getElementById('caseModal'), form=document.getElementById('czForm'),
+      panes=[].slice.call(m.querySelectorAll('.cz-pane')), next=document.getElementById('czNext'),
+      sendB=document.getElementById('czSend'), backB=document.getElementById('czBack'), foot=document.getElementById('czFoot'),
+      fill=document.getElementById('czFill'), stepL=[].slice.call(m.querySelectorAll('.cz-steps span')), step=1, cat=null, lastFocus=null;
+  function esc(t){ return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function open(pre){ lastFocus=document.activeElement; m.hidden=false; document.body.classList.add('cz-lock');
+    if(pre && FORMS[pre]){ pick(pre); } go(pre&&FORMS[pre]?2:1); setTimeout(function(){ m.querySelector('.cz-x').focus(); },30); }
+  function close(){ m.hidden=true; document.body.classList.remove('cz-lock');
+    if(step===4){ reset(); } if(location.hash==='#verificar') history.replaceState(null,'',location.pathname+location.search); if(lastFocus) lastFocus.focus(); }
+  function reset(){ form.reset(); cat=null; m.querySelectorAll('.cat').forEach(function(c){c.setAttribute('aria-pressed','false');}); document.getElementById('czDyn').innerHTML=''; step=1; }
+  function go(n){ step=n; panes.forEach(function(p){ p.hidden=+p.dataset.pane!==n; });
+    fill.style.width=(n>=3?100:n*33.33)+'%'; stepL.forEach(function(s){ s.classList.toggle('on',+s.dataset.s<=Math.min(n,3)); });
+    backB.hidden=n===1||n===4; next.hidden=n>=3; sendB.hidden=n!==3; foot.hidden=n===4;
+    m.querySelector('.cz-wrap').scrollTop=0; if(n===3) review(); }
+  function field(f){ var req=f.req?' required':'', star=f.req?' <i>*</i>':'', inp;
+    if(f.type==='select'){ inp='<select name="'+f.id+'"'+req+'><option value="">Selecione…</option>'+f.opt.map(function(o){return '<option>'+esc(o)+'</option>';}).join('')+'</select>'; }
+    else if(f.type==='money'){ inp='<input name="'+f.id+'" inputmode="decimal" placeholder="'+esc(f.opt)+'"'+req+'>'; }
+    else { inp='<input name="'+f.id+'" type="'+(f.type==='text'?'text':f.type)+'" placeholder="'+esc(f.opt||'')+'"'+req+'>'; }
+    return '<label class="fld"><span>'+esc(f.label)+star+'</span>'+inp+'</label>'; }
+  function pick(c){ cat=c; m.querySelectorAll('.cat').forEach(function(b){ b.setAttribute('aria-pressed',b.dataset.cat===c?'true':'false'); });
+    document.getElementById('errCat').hidden=true; var F=FORMS[c];
+    document.getElementById('czBoxH').textContent=F[0]; document.getElementById('czCatChip').textContent=LABELS[c];
+    document.getElementById('czDyn').innerHTML=F[1].map(field).join(''); }
+  function validate(scope){ var ok=true, first=null;
+    scope.querySelectorAll('input,select,textarea').forEach(function(el){
+      var wrap=el.closest('.fld')||el.closest('.cz-ok'); if(!wrap) return; var old=wrap.querySelector('.msg'); if(old) old.remove(); wrap.classList.remove('bad');
+      var v=el.type==='checkbox'?el.checked:el.value.trim(), bad=false, msg='Campo obrigatório';
+      if(el.required && !v) bad=true;
+      else if(el.name==='descricao' && v.length<20){ bad=true; msg='Escreva pelo menos 20 caracteres'; }
+      else if(el.name==='whatsapp' && v && v.replace(/\D/g,'').length<10){ bad=true; msg='Informe DDD + número'; }
+      else if(el.type==='email' && v && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){ bad=true; msg='E-mail inválido'; }
+      if(bad){ ok=false; wrap.classList.add('bad'); if(el.type!=='checkbox'){ var s=document.createElement('span'); s.className='msg'; s.textContent=msg; wrap.appendChild(s); } if(!first) first=el; }
+    }); if(first) first.focus(); return ok; }
+  function money(el){ var d=el.value.replace(/\D/g,''); if(!d){ el.value=''; return; } var n=(parseInt(d,10)/100).toFixed(2).split('.'); el.value=n[0].replace(/\B(?=(\d{3})+(?!\d))/g,'.')+','+n[1]; }
+  function phone(el){ var d=el.value.replace(/\D/g,'').slice(0,11); var o=d;
+    if(d.length>2) o='('+d.slice(0,2)+') '+d.slice(2); if(d.length>7) o='('+d.slice(0,2)+') '+d.slice(2,d.length-4)+'-'+d.slice(-4); el.value=o; }
+  form.addEventListener('input',function(e){ var el=e.target;
+    if(el.inputMode==='decimal') money(el); if(el.name==='whatsapp') phone(el);
+    var w=el.closest('.fld,.cz-ok'); if(w&&w.classList.contains('bad')){ w.classList.remove('bad'); var s=w.querySelector('.msg'); if(s) s.remove(); } });
+  function fmtDate(v,t){ if(!v) return v; var p=v.split('-'); return t==='month'?p[1]+'/'+p[0]:p[2]+'/'+p[1]+'/'+p[0]; }
+  function review(){ var fd=new FormData(form), rows=[['Categoria',LABELS[cat],1]];
+    FORMS[cat][1].forEach(function(f){ var v=fd.get(f.id); if(v) rows.push([f.label,(f.type==='date'||f.type==='month')?fmtDate(v,f.type):(f.type==='money'?'R$ '+v:v),2]); });
+    rows.push(['Cidade',fd.get('cidade')+' / '+fd.get('uf'),2]); rows.push(['Descrição',fd.get('descricao'),2]);
+    var pen='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>';
+    document.getElementById('czRev').innerHTML=rows.map(function(r){ return '<div class="rev-r"><div><dt>'+esc(r[0])+'</dt><dd>'+esc(r[1])+'</dd></div><button type="button" class="rev-e" data-go="'+r[2]+'" aria-label="Editar '+esc(r[0])+'">'+pen+'</button></div>'; }).join(''); }
+  m.addEventListener('click',function(e){
+    var c=e.target.closest('.cat'); if(c){ pick(c.dataset.cat); return; }
+    var ed=e.target.closest('.rev-e'); if(ed){ go(+ed.dataset.go); return; }
+    if(e.target.closest('[data-cz-close]')) close(); });
+  m.querySelector('.cats').addEventListener('dblclick',function(e){ if(e.target.closest('.cat')) next.click(); });
+  next.addEventListener('click',function(){
+    if(step===1){ if(!cat){ document.getElementById('errCat').hidden=false; return; } go(2); }
+    else if(step===2){ if(validate(panes[1])) go(3); } });
+  backB.addEventListener('click',function(){ go(step-1); });
+  form.addEventListener('submit',function(e){ e.preventDefault(); if(!validate(panes[2])) return;
+    var fd=new FormData(form), data={categoria:LABELS[cat]}; fd.forEach(function(v,k){ data[k]=v; });
+    var proto='DM-'+new Date().toISOString().slice(2,10).replace(/-/g,'')+'-'+Math.random().toString(36).slice(2,6).toUpperCase();
+    data.protocolo=proto; data.pagina=location.pathname;
+    var done=function(){ document.getElementById('czProto').textContent=proto; go(4); };
+    if(!ENDPOINT){ console.warn('[DefendaMe] PUBLIC_FORM_ENDPOINT não configurado — caso não enviado', data); done(); return; }
+    sendB.disabled=true;
+    fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)})
+      .then(function(r){ if(!r.ok) throw new Error(r.status); done(); })
+      .catch(function(){ alertBox('Não foi possível enviar agora. Verifique sua conexão e tente novamente.'); })
+      .finally(function(){ sendB.disabled=false; }); });
+  function alertBox(msg){ var e=document.getElementById('czSendErr'); e.textContent=msg; e.hidden=false; }
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&!m.hidden) close(); });
+  document.addEventListener('click',function(e){ var a=e.target.closest('a,button'); if(!a||m.contains(a)) return;
+    if(a.hasAttribute('data-open-case')){ e.preventDefault(); var d=document.getElementById('drawer'); if(d) d.classList.remove('open'); open(a.getAttribute('data-cat')); } });
+  if(location.hash==='#verificar') open();
+  window.addEventListener('hashchange',function(){ if(location.hash==='#verificar') open(); });
+})();
+</script>

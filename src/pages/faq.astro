@@ -1,0 +1,564 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import AdSlot from '../components/article/AdSlot.astro';
+import ImageSlot from '../components/article/ImageSlot.astro';
+import { FAQ_JEC } from '../data/faq';
+import { SITE } from '../data/site';
+
+const totalPerguntas = FAQ_JEC.reduce((acc, cat) => acc + cat.itens.length, 0);
+
+// Extrai todas as perguntas para o Schema.org FAQPage
+const allFaqItems = FAQ_JEC.flatMap((cat) => cat.itens);
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: allFaqItems.map((item) => ({
+      '@type': 'Question',
+      name: item.pergunta,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.resposta.replace(/\*\*/g, '').replace(/•/g, '-'),
+      },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Início', item: SITE.url },
+      { '@type': 'ListItem', position: 2, name: 'Perguntas Frequentes (FAQ)' },
+    ],
+  },
+];
+---
+<BaseLayout
+  title="Perguntas Frequentes sobre o Juizado Especial Cível (JEC) — TJSP | DefendaMe"
+  description="Tire suas dúvidas sobre o JEC: onde entrar com a ação, limite de 40 salários mínimos, necessidade de advogado, audiências e recursos. Base oficial do TJSP."
+  jsonLd={jsonLd}
+>
+  <main class="faq-page">
+    <div class="faq-hero">
+      <div class="faq-hero-inner">
+        <nav class="crumb" aria-label="Navegação"><a href="/">Início</a><span>›</span><span class="crumb-cur">Perguntas Frequentes</span></nav>
+        <div class="post-vinheta">Perguntas e Respostas Oficiais · TJSP e Lei 9.099/1995</div>
+        <h1>Perguntas Frequentes sobre o Juizado Especial Cível (JEC)</h1>
+        <p class="faq-lead">
+          Respostas claras e fundamentadas para as principais dúvidas sobre como acionar a Justiça Especial Cível em São Paulo. Saiba onde entrar com a ação, quando o advogado é indispensável e como funcionam as audiências e recursos.
+        </p>
+
+        <div class="faq-search-wrap">
+          <div class="faq-search-box">
+            <Icon name="search" size={20} stroke={2} />
+            <input
+              type="search"
+              id="faqSearch"
+              placeholder="Pesquisar dúvida... Ex.: Onde entrar com a ação, advogado, audiência, 40 salários, recurso…"
+              autocomplete="off"
+              aria-label="Pesquisar perguntas frequentes"
+            />
+            <button type="button" id="clearSearch" aria-label="Limpar pesquisa" hidden>×</button>
+          </div>
+          <div class="faq-count"><span id="matchCount">{totalPerguntas}</span> perguntas catalogadas com base no TJSP</div>
+        </div>
+
+        <div class="faq-cat-nav" id="catNav" role="navigation" aria-label="Filtrar por categoria">
+          <button type="button" class="cat-btn on" data-cat="all">Todas as dúvidas</button>
+          {FAQ_JEC.map((cat) => (
+            <button type="button" class="cat-btn" data-cat={cat.id}>{cat.titulo.split(' e ')[0]}</button>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-container">
+      <div class="faq-source-note">
+        <div class="fsn-icon"><Icon name="shield" size={22} stroke={2} /></div>
+        <div class="fsn-text">
+          <strong>Base normativa oficial:</strong>
+          As respostas compiladas nesta seção baseiam-se diretamente no repositório de <a href="https://www.tjsp.jus.br/JuizadosEspeciais/JuizadosEspeciais/PerguntasFrequentes" target="_blank" rel="noopener noreferrer">Perguntas Frequentes dos Juizados Especiais do Tribunal de Justiça de São Paulo (TJSP)</a>, na Lei Federal nº 9.099/1995 e no Código de Defesa do Consumidor (CDC). Conteúdo estritamente informativo e educativo (Provimento CFOAB nº 205/2021).
+        </div>
+      </div>
+
+      <ImageSlot
+        variant="wide"
+        tag="Fluxograma Procedimental · Lei 9.099/1995"
+        titulo="Rito Sumaríssimo do JEC: Da Petição Inicial / Atermação até a Sentença e Acordo"
+        legenda="Representação esquemática das fases essenciais do processo no Juizado Especial Cível paulista, com prazos médios e momentos de conciliação."
+        dimensao="900 × 280 px"
+        icone="gavel"
+        numero={1}
+      />
+
+      <div class="faq-content-wrap" id="faqContentWrap">
+        {FAQ_JEC.map((cat, cIdx) => (
+          <>
+            {cIdx === 3 && (
+              <div class="faq-mid-ad" style="margin: 36px 0;">
+                <AdSlot variant="wide" />
+              </div>
+            )}
+            <section class="faq-group-section" data-group-id={cat.id} id={cat.id}>
+            <div class="faq-group-head">
+              <h2>{cat.titulo}</h2>
+              <p>{cat.descricao}</p>
+            </div>
+
+            <div class="faq-items-list">
+              {cat.itens.map((item, iIdx) => {
+                const isOpen = cIdx === 0 && iIdx === 0;
+                return (
+                  <div class={`faq-item-card${isOpen ? ' open' : ''}`}>
+                    <button type="button" class="faq-question-btn" aria-expanded={isOpen ? 'true' : 'false'}>
+                      <span class="faq-q-text">{item.pergunta}</span>
+                      <span class="faq-q-icon"><Icon name="plus" size={14} stroke={2.5} /></span>
+                    </button>
+                    <div class="faq-answer-pane" style={isOpen ? 'max-height: 800px;' : 'max-height: 0px;'}>
+                      <div class="faq-answer-body">
+                        {item.resposta.split('\n\n').map((par) => {
+                          if (par.startsWith('• ')) {
+                            const bulletLines = par.split('\n');
+                            return (
+                              <ul class="faq-bullets">
+                                {bulletLines.map((line) => (
+                                  <li set:html={line.replace(/^•\s*/, '').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')} />
+                                ))}
+                              </ul>
+                            );
+                          }
+                          return <p set:html={par.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')} />;
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+          </>
+        ))}
+      </div>
+
+      <div class="faq-empty" id="emptyFaq" hidden>
+        <div class="faq-empty-icon"><Icon name="search" size={36} stroke={1.8} /></div>
+        <h3>Nenhuma pergunta encontrada</h3>
+        <p>Não encontramos respostas correspondentes ao termo digitado. Tente palavras mais curtas ou explore o FAQ completo pelas categorias acima.</p>
+        <button type="button" class="btn btn-outline" id="btnResetSearch">Ver todas as perguntas</button>
+      </div>
+
+      <div style="margin:44px auto 28px;max-width:900px;padding:0 16px;">
+        <AdSlot variant="wide" />
+      </div>
+
+      <div class="faq-cta-box">
+        <div class="fcta-content">
+          <span class="post-vinheta" style="margin-bottom:8px;">Orientação Preliminar</span>
+          <h3>Quer saber como a Justiça decide a sua situação específica?</h3>
+          <p>
+            Analise seu caso com base em 39.727 decisões reais do TJSP e saiba quais documentos indispensáveis você deve reunir antes de procurar o Juizado ou um Advogado.
+          </p>
+        </div>
+        <div class="fcta-actions">
+          <a href="/#verificar" class="btn btn-primary" data-open-case>Avaliar minha situação <Icon name="arrow-right" size={16} stroke={2.2} /></a>
+          <a href="/glossario/" class="btn btn-outline">Glossário do JEC</a>
+        </div>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .faq-page {
+    min-height: 80vh;
+    padding-bottom: 80px;
+  }
+  .faq-hero {
+    background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg) 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 44px 20px 48px;
+    text-align: center;
+  }
+  .faq-hero-inner {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  .faq-hero h1 {
+    font-size: clamp(26px, 3.8vw, 38px);
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.25;
+    margin: 14px 0 16px;
+  }
+  .faq-lead {
+    font-size: clamp(16px, 1.8vw, 17.5px);
+    line-height: 1.6;
+    color: var(--fg-mid);
+    max-width: 720px;
+    margin: 0 auto 32px;
+  }
+  .faq-search-wrap {
+    max-width: 620px;
+    margin: 0 auto 24px;
+  }
+  .faq-search-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: var(--r-btn);
+    padding: 6px 16px;
+    box-shadow: var(--shadow);
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .faq-search-box:focus-within {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 4px var(--teal-pale);
+  }
+  .faq-search-box input {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 16px;
+    color: var(--navy);
+    width: 100%;
+    padding: 8px 0;
+  }
+  .faq-search-box input::placeholder {
+    color: var(--fg-muted);
+  }
+  .faq-search-box button {
+    background: none;
+    border: none;
+    color: var(--fg-muted);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 4px;
+  }
+  .faq-count {
+    font-size: 13.5px;
+    color: var(--fg-muted);
+    margin-top: 10px;
+    font-weight: 500;
+  }
+  .faq-cat-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+  }
+  .cat-btn {
+    padding: 8px 16px;
+    border-radius: var(--r-btn);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--navy);
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .15s ease;
+  }
+  .cat-btn:hover {
+    border-color: var(--teal);
+    color: var(--teal);
+  }
+  .cat-btn.on {
+    background: var(--teal);
+    border-color: var(--teal);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(11, 143, 130, .3);
+  }
+  .faq-container {
+    max-width: 960px;
+    margin: 40px auto 0;
+    padding: 0 20px;
+  }
+  .faq-source-note {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--teal);
+    border-radius: var(--r);
+    padding: 16px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 40px;
+    box-shadow: var(--shadow-sm);
+  }
+  .fsn-icon {
+    color: var(--teal);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .fsn-text {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--fg-mid);
+  }
+  .fsn-text a {
+    color: var(--teal);
+    text-decoration: underline;
+    font-weight: 600;
+  }
+  .faq-group-section {
+    margin-bottom: 44px;
+  }
+  .faq-group-head {
+    margin-bottom: 18px;
+  }
+  .faq-group-head h2 {
+    font-size: 21px;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 0 0 6px;
+  }
+  .faq-group-head p {
+    font-size: 14.5px;
+    color: var(--fg-muted);
+    margin: 0;
+  }
+  .faq-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .faq-item-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    transition: border-color .2s ease, box-shadow .2s ease;
+  }
+  .faq-item-card:hover {
+    border-color: var(--line-teal);
+  }
+  .faq-item-card.open {
+    border-color: var(--line-teal);
+    box-shadow: var(--shadow);
+  }
+  .faq-question-btn {
+    width: 100%;
+    padding: 18px 22px;
+    background: transparent;
+    border: none;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .faq-q-text {
+    font-size: 16.5px;
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1.4;
+  }
+  .faq-q-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--teal-pale);
+    color: var(--teal);
+    flex-shrink: 0;
+    transition: transform .25s ease, background .25s ease, color .25s ease;
+  }
+  .faq-item-card.open .faq-q-icon {
+    transform: rotate(45deg);
+    background: var(--teal);
+    color: #ffffff;
+  }
+  .faq-answer-pane {
+    overflow: hidden;
+    transition: max-height .35s ease;
+  }
+  .faq-answer-body {
+    padding: 0 22px 22px;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--fg-mid);
+    border-top: 1px solid var(--bg-subtle, #f1f5f9);
+    margin-top: 2px;
+    padding-top: 16px;
+  }
+  .faq-answer-body p {
+    margin: 0 0 12px;
+  }
+  .faq-answer-body p:last-child {
+    margin-bottom: 0;
+  }
+  .faq-bullets {
+    margin: 10px 0 14px;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .faq-empty {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    margin: 20px 0;
+  }
+  .faq-empty-icon {
+    color: var(--fg-muted);
+    margin-bottom: 16px;
+  }
+  .faq-empty h3 {
+    font-size: 20px;
+    color: var(--navy);
+    margin: 0 0 8px;
+  }
+  .faq-empty p {
+    font-size: 15px;
+    color: var(--fg-mid);
+    max-width: 480px;
+    margin: 0 auto 20px;
+  }
+  .faq-cta-box {
+    margin-top: 56px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    padding: 32px 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px;
+    box-shadow: var(--shadow);
+  }
+  @media (max-width: 860px) {
+    .faq-cta-box {
+      flex-direction: column;
+      text-align: center;
+      padding: 28px 20px;
+    }
+  }
+  .fcta-content h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 0 0 8px;
+  }
+  .fcta-content p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--fg-mid);
+    margin: 0;
+    max-width: 620px;
+  }
+  .fcta-actions {
+    display: flex;
+    gap: 12px;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+  }
+</style>
+
+<script>
+  const searchInput = document.getElementById('faqSearch') as HTMLInputElement;
+  const clearBtn = document.getElementById('clearSearch') as HTMLButtonElement;
+  const matchCount = document.getElementById('matchCount') as HTMLElement;
+  const catButtons = document.querySelectorAll<HTMLButtonElement>('.cat-btn');
+  const sections = document.querySelectorAll<HTMLElement>('.faq-group-section');
+  const emptyState = document.getElementById('emptyFaq') as HTMLElement;
+  const btnReset = document.getElementById('btnResetSearch') as HTMLButtonElement;
+
+  let activeCat = 'all';
+
+  const norm = (s: string) =>
+    s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+  function filterFaq() {
+    const q = norm(searchInput.value.trim());
+    clearBtn.hidden = !searchInput.value;
+    let totalVisible = 0;
+
+    sections.forEach((sec) => {
+      const secCat = sec.dataset.groupId || '';
+      const matchCat = activeCat === 'all' || secCat === activeCat;
+      const cards = sec.querySelectorAll<HTMLElement>('.faq-item-card');
+      let visibleInSec = 0;
+
+      cards.forEach((card) => {
+        const question = norm(card.querySelector('.faq-q-text')?.textContent || '');
+        const answer = norm(card.querySelector('.faq-answer-body')?.textContent || '');
+        const matchQuery = !q || question.includes(q) || answer.includes(q);
+
+        if (matchCat && matchQuery) {
+          card.style.display = 'block';
+          visibleInSec++;
+          totalVisible++;
+          // Se tiver busca ativa, abre automaticamente para leitura direta
+          if (q) {
+            card.classList.add('open');
+            const pane = card.querySelector('.faq-answer-pane') as HTMLElement;
+            if (pane) pane.style.maxHeight = '800px';
+          }
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      sec.style.display = visibleInSec > 0 ? 'block' : 'none';
+    });
+
+    matchCount.textContent = String(totalVisible);
+    emptyState.hidden = totalVisible > 0;
+    const midAd = document.querySelector<HTMLElement>('.faq-mid-ad');
+    if (midAd) midAd.style.display = (activeCat === 'all' && !q && totalVisible > 0) ? 'block' : 'none';
+  }
+
+  // Accordion click toggle
+  document.querySelectorAll<HTMLButtonElement>('.faq-question-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const card = btn.closest('.faq-item-card') as HTMLElement;
+      const pane = card.querySelector('.faq-answer-pane') as HTMLElement;
+      const isOpen = card.classList.contains('open');
+
+      if (isOpen) {
+        card.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+        pane.style.maxHeight = '0px';
+      } else {
+        card.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+        pane.style.maxHeight = `${pane.scrollHeight + 30}px`;
+      }
+    });
+  });
+
+  searchInput.addEventListener('input', filterFaq);
+
+  clearBtn.addEventListener('click', () => {
+    searchInput.value = '';
+    filterFaq();
+    searchInput.focus();
+  });
+
+  catButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      catButtons.forEach((b) => b.classList.remove('on'));
+      btn.classList.add('on');
+      activeCat = btn.dataset.cat || 'all';
+      filterFaq();
+    });
+  });
+
+  btnReset?.addEventListener('click', () => {
+    searchInput.value = '';
+    activeCat = 'all';
+    catButtons.forEach((b) => b.classList.toggle('on', b.dataset.cat === 'all'));
+    filterFaq();
+  });
+</script>

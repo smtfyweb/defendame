@@ -1,0 +1,8 @@
+---
+/** "Parecer conclusivo do especialista": bloco de destaque para a conclusão do artigo (1 por artigo). */
+import Icon from '../Icon.astro';
+import { AUTHOR } from '../../data/site';
+interface Props { titulo?: string; cite?: string }
+const { titulo = 'Parecer conclusivo do especialista', cite = `${AUTHOR.name}, ${AUTHOR.jobTitle}` } = Astro.props;
+---
+<blockquote class="verdict-quote"><div class="verdict-quote-header"><Icon name="gavel" size={18} stroke={2} /><span>{titulo}</span></div><slot /><cite>— {cite}</cite></blockquote>

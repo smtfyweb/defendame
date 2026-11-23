@@ -1,0 +1,18 @@
+---
+/** Duas colunas comparativas (ex.: "o que o consumidor prova" × "o que só o banco detém").
+ *  tom "positivo" = marcadores teal com check; "neutro" = marcadores cinza com cadeado. */
+import Icon from '../Icon.astro';
+interface Item { titulo: string; texto: string }
+interface Coluna { titulo: string; icone: string; tom: 'positivo' | 'neutro'; itens: Item[] }
+interface Props { colunas: Coluna[]; rodape?: string }
+const { colunas, rodape } = Astro.props;
+---
+<div class="ev-grid">
+  {colunas.map((c) => (
+    <div class={`ev-col ${c.tom === 'positivo' ? 'ev-c' : 'ev-b'}`}>
+      <div class="ev-head"><span class="med-icon"><Icon name={c.icone} stroke={2} /></span><span>{c.titulo}</span></div>
+      <ul>{c.itens.map((it) => <li><span class="ev-ic"><Icon name={c.tom === 'positivo' ? 'check' : 'lock'} size={15} stroke={2} /></span><span><b>{it.titulo}</b>{it.texto}</span></li>)}</ul>
+    </div>
+  ))}
+</div>
+{rodape && <p class="ev-foot">{rodape}</p>}

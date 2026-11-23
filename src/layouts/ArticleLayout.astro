@@ -1,0 +1,213 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import AdSlot from '../components/article/AdSlot.astro';
+import ImageSlot from '../components/article/ImageSlot.astro';
+import BoxTrilha from '../components/article/BoxTrilha.astro';
+import { SITE, AUTHOR, FORMATOS } from '../data/site';
+import { temaPorSlug, GRUPOS, TEMAS, fmt } from '../data/temas';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props { entry: CollectionEntry<'artigos'>; headings: { depth: number; slug: string; text: string }[] }
+const { entry, headings } = Astro.props;
+const d = entry.data;
+const tema = temaPorSlug(d.tema)!;
+const url = new URL(`/${d.tema}/${d.slug}/`, SITE.url).href;
+const md = (s: string) => s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\*(.+?)\*/g, '<em>$1</em>');
+const data = (dt: Date) => dt.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+const toc = headings.filter((h) => h.depth === 2);
+const enc = encodeURIComponent;
+const analise = d.formato === 'analise';
+const autorUrl = new URL(AUTHOR.url, SITE.url).href;
+const correlatos = (d.relacionados.length ? d.relacionados : TEMAS.filter((t) => t.grupo === tema.grupo && t.slug !== tema.slug).map((t) => t.slug)).slice(0, 4).map(temaPorSlug).filter(Boolean);
+
+const pessoa = { '@type': 'Person', name: AUTHOR.name, jobTitle: AUTHOR.jobTitle, image: new URL(AUTHOR.photo, SITE.url).href, url: autorUrl, sameAs: [SITE.substack] };
+const jsonLd: object[] = [
+  {
+    '@context': 'https://schema.org', '@type': analise ? 'OpinionNewsArticle' : 'Article', headline: d.titulo, description: d.descricao, inLanguage: 'pt-BR',
+    mainEntityOfPage: analise ? url : { '@type': 'WebPage', '@id': url, reviewedBy: pessoa }, datePublished: d.publicado.toISOString().slice(0, 10), dateModified: (d.atualizado ?? d.publicado).toISOString().slice(0, 10),
+    image: new URL(d.ogImage ?? SITE.ogDefault, SITE.url).href, articleSection: tema.nome, keywords: d.palavrasChave,
+    author: analise ? pessoa : { '@type': 'Organization', name: `Redação ${SITE.name}`, url: SITE.url },
+    ...(analise ? {} : { contributor: { ...pessoa, roleName: 'Revisão técnica' } }),
+    publisher: { '@type': 'Organization', name: SITE.name, url: SITE.url, logo: { '@type': 'ImageObject', url: new URL('/favicon.svg', SITE.url).href } },
+  },
+  { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Início', item: SITE.url },
+    { '@type': 'ListItem', position: 2, name: tema.nome, item: new URL(`/${tema.slug}/`, SITE.url).href },
+    { '@type': 'ListItem', position: 3, name: d.titulo, item: url } ] },
+];
+if (d.faq.length) jsonLd.push({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: d.faq.map((f) => ({ '@type': 'Question', name: f.pergunta, acceptedAnswer: { '@type': 'Answer', text: f.resposta } })) });
+---
+<BaseLayout title={d.seoTitle ?? `${d.titulo} — ${SITE.name}`} description={d.descricao} image={d.ogImage} type="article" noindex={d.rascunho}
+  jsonLd={jsonLd} article={{ published: d.publicado, modified: d.atualizado, section: tema.nome, tags: d.tags }}>
+<main class="post">
+  <div class="post-top">
+    <nav class="crumb" aria-label="Navegação"><a href="/">Início</a><span>›</span><a href={`/${tema.slug}/`}>{tema.nome}</a><span>›</span><span class="crumb-cur">Artigo</span></nav>
+    <div class="post-kicker"><span class={`post-fmt fmt-${d.formato}`}>{FORMATOS[d.formato].rotulo}</span><span class="post-vinheta">{d.vinheta}</span></div>
+    <h1 class="post-titulo">{d.titulo}</h1>
+    <p class="post-sub" set:html={md(d.linhaFina)} />
+    <div class="post-meta">
+      {analise ? (
+        <><img class="post-meta-av" src={AUTHOR.photo} alt="" width="30" height="30" />
+        <span>Por <a href={AUTHOR.url}>{AUTHOR.name}</a></span></>
+      ) : (
+        <><img class="post-meta-av mark" src="/favicon.svg" alt="" width="30" height="30" />
+        <span>Redação {SITE.name}</span><span class="dot">·</span>
+        <span class="post-meta-rev"><img src={AUTHOR.photo} alt="" width="22" height="22" />Revisão técnica: <a href={AUTHOR.url}>{AUTHOR.name}</a></span></>
+      )}
+      <span class="dot">·</span>
+      <time datetime={(d.atualizado ?? d.publicado).toISOString()}>{d.atualizado ? `Atualizado em ${data(d.atualizado)}` : data(d.publicado)}</time>
+      <span class="dot">·</span><span>{d.leitura} min de leitura</span>
+    </div>
+    <div class="post-actions">
+      <a class="pa wa" href={`https://api.whatsapp.com/send?text=${enc(d.titulo + ' — ' + url)}`} target="_blank" rel="noopener" title="Compartilhar no WhatsApp" aria-label="Compartilhar no WhatsApp"><Icon name="whatsapp" /></a>
+      <a class="pa" href={`https://twitter.com/intent/tweet?text=${enc(d.titulo)}&url=${enc(url)}`} target="_blank" rel="noopener" title="Compartilhar no X" aria-label="Compartilhar no X"><Icon name="x-brand" /></a>
+      <a class="pa" href={`https://www.facebook.com/sharer/sharer.php?u=${enc(url)}`} target="_blank" rel="noopener" title="Compartilhar no Facebook" aria-label="Compartilhar no Facebook"><Icon name="facebook" /></a>
+      <a class="pa" href={`https://www.linkedin.com/sharing/share-offsite/?url=${enc(url)}`} target="_blank" rel="noopener" title="Compartilhar no LinkedIn" aria-label="Compartilhar no LinkedIn"><Icon name="linkedin" /></a>
+      <a class="pa sub" href={SITE.substack} target="_blank" rel="noopener" title="Seguir no Substack" aria-label="Seguir no Substack"><Icon name="substack" /></a>
+      <button class="pa" id="copyLink" type="button" data-url={url} title="Copiar link" aria-label="Copiar link"><Icon name="link" stroke={2} /></button>
+      <div class="pa-font" role="group" aria-label="Tamanho do texto"><button type="button" id="fMinus" aria-label="Diminuir fonte">A−</button><span></span><button type="button" id="fPlus" aria-label="Aumentar fonte">A+</button></div>
+      <button class="pa-audio" id="listen" type="button" aria-pressed="false"><Icon name="volume" /><span>Ouvir</span></button>
+      <span class="pa-toast" id="toast" role="status"></span>
+      <a class="pa-cta" href="/#verificar" data-open-case data-cat={d.tema}>Avaliar situação <Icon name="arrow-right" size={16} stroke={2.2} /></a>
+    </div>
+  </div>
+
+  <div class="post-wrap">
+    <div class="post-content">
+      {d.kpis.length > 0 && (
+        <div class="seo-kpis"><div class="juri-kpi-grid">{d.kpis.map((k) => <div class={`kpi-card${k.destaque ? ' highlight' : ''}`}><span class="kpi-val">{k.valor}</span><span class="kpi-label">{k.rotulo}</span></div>)}</div>
+        {d.kpiNota && <p class="kpi-disclaimer">{d.kpiNota}</p>}</div>
+      )}
+      {d.trilha && (
+        <BoxTrilha trilha={d.trilha} variant="topo" temaSlug={d.tema} />
+      )}
+      {toc.length > 2 && (
+        <nav class="table-of-contents" aria-label="Índice do artigo">
+          <div class="toc-header"><Icon name="list" size={16} stroke={2} /><span>Neste artigo você vai encontrar:</span></div>
+          <ol class="toc-list">{toc.map((h, i) => <li><a href={`#${h.slug}`}><span class="toc-num">{String(i + 1).padStart(2, '0')}.</span> {h.text.replace(/^\d+\.\s*/, '')}</a></li>)}</ol>
+        </nav>
+      )}
+
+      <div class="post-body" id="postBody"><slot /></div>
+
+      {d.trilha && (
+        <BoxTrilha trilha={d.trilha} variant="rodape" temaSlug={d.tema} />
+      )}
+
+      {d.faq.length > 0 && (
+        <section class="post-body" id="faq">
+          <h2 id="perguntas-frequentes">Perguntas frequentes</h2>
+          <div class="faq-list">{d.faq.map((f, i) => (
+            <div class={`faq-item${i === 0 ? ' open' : ''}`}><h3 class="faq-h"><button class="faq-q" type="button">{f.pergunta}<span class="faq-icon"><Icon name="plus" size={12} stroke={2.5} /></span></button></h3><div class="faq-a" set:html={md(f.resposta)} /></div>
+          ))}</div>
+        </section>
+      )}
+
+      {d.tags.length > 0 && <div class="post-tags"><span>Tags:</span>{d.tags.map((t) => <a href={`/${tema.slug}/`}>{t}</a>)}</div>}
+
+      <a class="post-cta" href="/#verificar" data-open-case data-cat={d.tema}>
+        <span class="post-cta-ic"><Icon name="doc" stroke={1.9} /></span>
+        <span class="post-cta-b">
+          <span class="post-cta-l">Orientação Preliminar</span>
+          <span class="post-cta-t">Passou por uma situação parecida de {tema.nome.toLowerCase()}?</span>
+          <span class="post-cta-s">Faça uma checagem das suas provas e descubra se a demanda reúne os requisitos do Juizado Especial Cível.</span>
+        </span>
+        <span class="post-cta-go">Fazer avaliação <Icon name="arrow-right" size={16} stroke={2.2} /></span>
+      </a>
+
+      {d.fontes.length > 0 && (
+        <div class="post-fontes" id="fontes">
+          <div class="pf-head" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+            <span>{d.fontes.length} fontes normativas consultadas</span>
+            <button type="button" class="btn-copy-abnt" id="copyAbnt" data-citation={`${AUTHOR.name.toUpperCase()}. ${d.titulo}. DefendaMe, ${d.publicado.getFullYear()}. Disponível em: <${url}>.`} style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--teal);background:var(--surface);border:1px solid var(--line-teal);padding:4px 10px;border-radius:var(--r-btn);cursor:pointer;">
+              <Icon name="doc" size={13} stroke={2} />
+              <span>Copiar referência ABNT</span>
+            </button>
+          </div>
+          <ul class="normative-list" style="margin-top:14px">{d.fontes.map((f) => <li><strong>{f.nome}{f.descricao ? ':' : ''}</strong> {f.descricao}{f.url && <> (<a href={f.url} target="_blank" rel="noopener noreferrer">acessar fonte oficial</a>)</>}</li>)}</ul>
+          <details class="pf-nota"><summary>Nota editorial — caráter informativo</summary>
+            <div>Este artigo tem caráter exclusivamente informativo e educativo, nos termos do Provimento CFOAB nº 205/2021 e do Código de Ética e Disciplina da OAB. Não constitui aconselhamento jurídico nem promessa de resultado: os percentuais apresentados refletem tendências estatísticas de decisões já proferidas e não garantem o desfecho de casos individuais, que dependem das provas e das circunstâncias concretas.
+              {analise ? ' As análises assinadas expressam a leitura técnica do autor sobre os dados.' : ` Guia produzido pela Redação ${SITE.name} e revisado tecnicamente por ${AUTHOR.name}.`}
+              {' '}Os casos ilustrativos são extraídos de decisões públicas do TJSP, com nomes e detalhes alterados para proteger as partes; não se referem a clientes.</div>
+          </details>
+        </div>
+      )}
+
+      <div style="margin: 36px 0;">
+        <AdSlot variant="wide" />
+      </div>
+
+      <section class="post-body silo-section" id="demandas-relacionadas">
+        <h2>Demandas correlatas no Juizado Especial Cível</h2>
+        <div class="silo-grid">{correlatos.map((t) => <a href={`/${t!.slug}/`} class="silo-card"><span class="silo-tag">{GRUPOS[t!.grupo]}</span><h4>{t!.nome}</h4><p>{t!.linha} · {fmt(t!.decisoes)} decisões analisadas.</p></a>)}</div>
+      </section>
+    </div>
+
+    <aside class="post-side">
+      <div class="aut" id="autor"><span class="aut-k">{analise ? 'Autor' : 'Revisão técnica'}</span>
+        <div class="aut-top"><img src={AUTHOR.photo} alt={AUTHOR.name} width="64" height="64" /><div><a class="aut-n" href={AUTHOR.url}>{AUTHOR.name}</a><span class="aut-c">{AUTHOR.role} · {AUTHOR.city}</span></div></div>
+        <div class="aut-links"><a class="aut-sub" href={AUTHOR.url}><Icon name="user" size={15} stroke={2} />Perfil e análises</a>
+        <a class="aut-sub" href={SITE.substack} target="_blank" rel="noopener"><Icon name="substack" size={15} />Substack</a></div></div>
+      {d.dadosComarca && (
+        <div class="scard"><div class="scard-head">{d.dadosComarca.titulo}<small>{d.dadosComarca.subtitulo}</small></div>
+          <div class="scard-body">{d.dadosComarca.linhas.map((l) => <div class="juri-row"><span class="juri-label">{l.rotulo}</span><span class={`juri-val${l.tom === 'bom' ? ' good' : l.tom === 'alerta' ? ' warn' : ''}`}>{l.valor}</span></div>)}</div></div>
+      )}
+      <ImageSlot
+        variant="side"
+        tag="Radar Jurimétrico"
+        titulo={`Decisões TJSP · ${tema.nome}`}
+        legenda={`Distribuição amostral de sentenças e jurisprudência consolidada em ${tema.nome.toLowerCase()}.`}
+        dimensao="280 × 200 px"
+        icone={tema.icone || 'chart'}
+      />
+      <AdSlot variant="side" />
+      <a class="side-cta" href="/#verificar" data-open-case data-cat={d.tema}><span class="side-cta-l">Diagnóstico de Provas</span><span class="side-cta-t">Seu caso reúne os documentos indispensáveis para o JEC?</span></a>
+    </aside>
+  </div>
+</main>
+</BaseLayout>
+
+<script>
+  // tamanho da fonte
+  const body = document.getElementById('postBody')!;
+  const S = ['txt-sm', 'txt-md', 'txt-lg', 'txt-xl'];
+  let i = 1;
+  try { i = parseInt(localStorage.getItem('dm-font') || '1', 10); if (!(i >= 0 && i < S.length)) i = 1; } catch {}
+  const bodies = () => document.querySelectorAll('.post-body');
+  const setF = (n: number) => { bodies().forEach((b) => b.classList.remove(S[i])); i = Math.max(0, Math.min(S.length - 1, n)); bodies().forEach((b) => b.classList.add(S[i])); try { localStorage.setItem('dm-font', String(i)); } catch {} };
+  setF(i);
+  document.getElementById('fMinus')?.addEventListener('click', () => setF(i - 1));
+  document.getElementById('fPlus')?.addEventListener('click', () => setF(i + 1));
+  // copiar link
+  const toast = document.getElementById('toast')!; let tt: number;
+  const say = (m: string) => { toast.textContent = m; toast.classList.add('on'); clearTimeout(tt); tt = window.setTimeout(() => toast.classList.remove('on'), 2200); };
+  document.getElementById('copyLink')?.addEventListener('click', (e) => {
+    const u = (e.currentTarget as HTMLElement).dataset.url!;
+    navigator.clipboard?.writeText(u).then(() => say('Link copiado'), () => say(u)) ?? say(u);
+  });
+  // copiar referência ABNT
+  document.getElementById('copyAbnt')?.addEventListener('click', (e) => {
+    const cit = (e.currentTarget as HTMLElement).dataset.citation!;
+    navigator.clipboard?.writeText(cit).then(() => say('Referência ABNT copiada!'), () => say(cit)) ?? say(cit);
+  });
+  // ouvir (voz do navegador)
+  const lb = document.getElementById('listen') as HTMLButtonElement; const synth = window.speechSynthesis;
+  const lbl = lb.querySelector('span')!;
+  if (!synth || !('SpeechSynthesisUtterance' in window)) { lb.disabled = true; lb.title = 'Áudio não disponível neste navegador'; }
+  else lb.addEventListener('click', () => {
+    if (synth.speaking) { synth.cancel(); lb.setAttribute('aria-pressed', 'false'); lbl.textContent = 'Ouvir'; return; }
+    const txt = document.querySelector('.post-titulo')!.textContent + '. ' + [...body.querySelectorAll('h2,h3,p,li,.med-time-label,.med-desc,.proof-title,.proof-desc')].map((n) => n.textContent!.trim()).join('. ');
+    const u = new SpeechSynthesisUtterance(txt); u.lang = 'pt-BR';
+    const v = synth.getVoices().find((v) => /pt-BR|pt_BR/i.test(v.lang)); if (v) u.voice = v;
+    u.onend = u.onerror = () => { lb.setAttribute('aria-pressed', 'false'); lbl.textContent = 'Ouvir'; };
+    synth.speak(u); lb.setAttribute('aria-pressed', 'true'); lbl.textContent = 'Parar';
+  });
+  addEventListener('beforeunload', () => synth?.cancel());
+  // FAQ
+  document.querySelectorAll('.faq-q').forEach((b) => b.addEventListener('click', () => {
+    const it = b.closest('.faq-item')!, was = it.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach((x) => x.classList.remove('open'));
+    if (!was) it.classList.add('open');
+  }));
+</script>

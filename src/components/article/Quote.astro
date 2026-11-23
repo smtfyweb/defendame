@@ -1,0 +1,41 @@
+---
+/** Citação do especialista (padrão compacto): cabeçalho com foto, 1ª frase em destaque,
+ *  recolhida em ~6 linhas com "Ler análise completa". O texto completo fica no HTML (SEO). */
+import { AUTHOR } from '../../data/site';
+interface Props { cite?: string; rotulo?: string }
+// rotulo: transforma em "olho"/pull-quote (ex.: rotulo="Ponto-chave") — uso nas Análises em 1ª pessoa,
+// em que o texto já é do autor e o destaque não precisa de foto nem assinatura.
+const { cite = `${AUTHOR.name}`, rotulo } = Astro.props;
+let html = (await Astro.slots.render('default')).trim();
+html = html.replace(/^<p>/, '').replace(/<\/p>$/, '');
+// destaca a primeira frase (termina em "." ou ":" depois de 50 caracteres, fora de tags)
+const re = /[.:](?=\s)/g; let m: RegExpExecArray | null;
+while ((m = re.exec(html))) {
+  const before = html.slice(0, m.index);
+  if (m.index > 50 && (before.match(/</g) || []).length === (before.match(/>/g) || []).length) {
+    html = `<span class="eq-lead">${html.slice(0, m.index + 1)}</span>${html.slice(m.index + 1)}`; break;
+  }
+}
+---
+<blockquote class={`expert-quote eq${rotulo ? ' eq-pull' : ''}`}>
+  {rotulo
+    ? <div class="eq-head"><span class="eq-k">{rotulo}</span></div>
+    : <div class="eq-head"><span class="eq-av" aria-hidden="true"></span><span>Análise de <b>{AUTHOR.name}</b></span></div>}
+  <div class="eq-body"><p set:html={html} /></div>
+  <button type="button" class="eq-more" aria-expanded="false" hidden>Ler análise completa<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+  {!rotulo && <cite>— {cite}</cite>}
+</blockquote>
+<script>
+  document.querySelectorAll<HTMLElement>('.eq').forEach((q) => {
+    const body = q.querySelector<HTMLElement>('.eq-body')!, btn = q.querySelector<HTMLButtonElement>('.eq-more')!;
+    q.classList.add('clamp');
+    if (body.scrollHeight <= body.clientHeight + 8) { q.classList.remove('clamp'); return; }
+    btn.hidden = false;
+    btn.addEventListener('click', () => {
+      const open = q.classList.toggle('clamp') === false;
+      btn.setAttribute('aria-expanded', String(open));
+      btn.firstChild!.textContent = open ? 'Recolher análise' : 'Ler análise completa';
+      if (!open) q.scrollIntoView({ block: 'nearest' });
+    });
+  });
+</script>

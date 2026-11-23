@@ -1,0 +1,37 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import Icon from '../components/Icon.astro';
+const toc: [string, string][] = [
+  ['proposito', 'Nosso propósito'],
+  ['dados', 'Conteúdo baseado em dados'],
+  ['como', 'Como trabalhamos'],
+  ['responsavel', 'Responsável técnico'],
+  ['atendimento', 'Quando o conteúdo não basta'],
+  ['contato', 'Contato']
+];
+---
+<PageLayout title="Quem somos — DefendaMe" description="Conheça o DefendaMe: portal de conteúdo informativo sobre as demandas do Juizado Especial Cível, construído com dados reais do TJSP." h1="Quem somos" lead="Informação jurídica clara, baseada em dados reais, sobre os seus direitos no Juizado Especial Cível." toc={toc}>
+
+<h2 id="proposito">Nosso propósito</h2>
+<p>O <strong>DefendaMe</strong> é um portal de conteúdo informativo sobre as demandas mais comuns do <strong>Juizado Especial Cível (JEC)</strong>. Nosso objetivo é traduzir, em linguagem clara, como a Justiça tem decidido conflitos de consumo do dia a dia — golpes bancários, negativação indevida, voos cancelados, cobranças abusivas — para que o cidadão conheça seus direitos antes de tomar qualquer decisão.</p>
+<p>Partimos de uma premissa simples: informação de qualidade, baseada em dados reais e em fontes oficiais, reduz a desigualdade entre o consumidor e as grandes empresas.</p>
+<h2 id="dados">Conteúdo baseado em dados</h2>
+<p>Cada artigo é construído a partir de jurimetria: a análise estatística de decisões judiciais. Os dados são extraídos diretamente do Tribunal de Justiça de São Paulo e organizados por tema, comarca e resultado.</p>
+<div class="big-stats"><div><b>39.727</b><span>decisões do TJSP analisadas</span></div><div><b>14</b><span>temas do JEC mapeados</span></div><div><b>Estado de SP</b><span>Capital, Litoral e Interior</span></div></div>
+<p>Os percentuais e valores apresentados refletem tendências de decisões já proferidas. Eles ajudam a entender o cenário, mas <strong>não garantem o resultado de nenhum caso individual</strong>, que depende sempre das provas e das circunstâncias concretas.</p>
+<h2 id="como">Como trabalhamos</h2>
+<div class="about-grid">
+  <div class="about-card"><span class="med-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 16v-4M12 16V8M17 16v-7"/></svg></span><h3>Dados verificáveis</h3><p>Decisões reais do TJSP, com recorte e período informados em cada análise.</p></div>
+  <div class="about-card"><span class="med-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg></span><h3>Fontes oficiais</h3><p>Legislação, súmulas e normas citadas com link para os repositórios oficiais.</p></div>
+  <div class="about-card"><span class="med-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span><h3>Ética profissional</h3><p>Conteúdo informativo, sem promessa de resultado, nos termos do Provimento CFOAB nº 205/2021.</p></div>
+</div>
+<h2 id="responsavel">Responsável técnico</h2>
+<div class="person"><img src="/images/andre-l-silva.jpg" alt="André L. Silva" width="84" height="84"><div><b>André L. Silva</b><span>Especialista em Legal Analytics · Barueri/SP</span><br><a href="/autor/andre-l-silva/">Ver perfil, análises e guias revisados →</a></div></div>
+<p>André assina as <strong>Análises</strong> do DefendaMe, em primeira pessoa, e faz a revisão técnica dos <strong>Guias</strong> produzidos pela Redação.</p>
+<h2 id="atendimento">Quando o conteúdo não basta</h2>
+<p>Se você passou por uma situação semelhante às descritas nos artigos, pode relatar o seu caso pelo formulário <strong>Verificar meu caso</strong>. O envio não gera compromisso de contratação; as condições de eventual atuação são apresentadas individualmente, após a análise inicial.</p>
+<p><a class="btn btn-primary" href="/#verificar" data-open-case>Verificar meu caso <Icon name="arrow-right" size={16} stroke={2.2} /></a></p>
+<h2 id="contato">Contato</h2>
+<p>E-mail: <span class="fill">contato@defendame.online</span><br>Atendimento à LGPD (encarregado de dados): <span class="fill">privacidade@defendame.online</span></p>
+
+</PageLayout>

@@ -1,0 +1,257 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import AdSlot from '../components/article/AdSlot.astro';
+import { TEMAS, GRUPOS, fmt, temaPorSlug, type Grupo } from '../data/temas';
+import { SITE, DATASET } from '../data/site';
+
+const artigos = (await getCollection('artigos', ({ data }) => import.meta.env.DEV || !data.rascunho)).sort((a, b) => +b.data.publicado - +a.data.publicado);
+const destaque = artigos.find((a) => a.data.destaque) ?? artigos[0];
+const dT = destaque && temaPorSlug(destaque.data.tema)!;
+const comArtigo = new Set(artigos.map((a) => a.data.tema));
+const outrosArtigos = artigos.filter((a) => a !== destaque).slice(0, 3);
+const proximos = TEMAS.filter((t) => !comArtigo.has(t.slug)).sort((a, b) => b.decisoes - a.decisoes).slice(0, Math.max(0, 3 - outrosArtigos.length));
+const grupos = Object.keys(GRUPOS) as Grupo[];
+const max = Math.max(...TEMAS.map((t) => t.decisoes));
+const chips = ['Golpe do Pix', 'Nome negativado', 'Voo cancelado', 'Conta de luz', 'Plano de saúde', 'Compra não entregue'];
+const data = (d: Date) => d.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+const etapas = [
+  { n: 1, ic: 'chat', t: 'Tentativa Prévia', d: 'Notifique a empresa pelo SAC ou registre no Consumidor.gov.br. O protocolo de atendimento é a primeira prova que o juiz verifica.', tag: '1. Passo Administrativo', lead: true },
+  { n: 2, ic: 'folder', t: 'Reunião de Provas', d: 'Reúna prints, extratos, faturas e o Boletim de Ocorrência. As decisões mostram que a qualidade das provas define o acolhimento do pedido.', tag: '2. Provas Essenciais', lead: true },
+  { n: 3, ic: 'doc', t: 'Atermação no JEC', d: 'Em causas até 20 salários mínimos, você mesmo pode dar entrada diretamente no balcão do fórum ou pelo peticionamento eletrônico sem custas.', tag: '3. Jus Postulandi (Você)' },
+  { n: 4, ic: 'swap', t: 'Audiência de Conciliação', d: 'O fórum designa audiência para tentativa de acordo. Se a empresa não fizer proposta justa, o processo segue para a sentença do juiz.', tag: '4. Conciliação' },
+  { n: 5, ic: 'gavel', t: 'Sentença e Cumprimento', d: 'O magistrado profere a sentença julgando a restituição dos valores e eventual dano moral, determinando o pagamento em prazo legal.', tag: '5. Decisão Judicial' },
+  { n: 6, ic: 'shield', t: 'Causas Complexas ou Recurso', d: 'Para causas acima de 20 salários mínimos ou se a empresa recorrer para a Turma Recursal, a assistência de um advogado inscrito na OAB é obrigatória.', tag: '6. Advocacia na OAB' },
+];
+const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SITE.name, url: SITE.url, inLanguage: 'pt-BR', description: SITE.description }];
+---
+<BaseLayout title={`${SITE.name} — ${SITE.tagline}`} description={SITE.description} jsonLd={jsonLd}>
+<section class="hero">
+  <div class="hero-inner">
+    <a href="#jurimetria" class="hero-pill"><span class="hero-pill-badge">Jurimetria TJSP</span><span class="hero-pill-text">{DATASET.totalFmt} decisões analisadas <Icon name="chevron-right" size={14} stroke={2.4} /></span></a>
+    <h1>Seus direitos no Juizado Especial Cível, <em>explicados com dados</em></h1>
+    <p class="hero-lead">Analisamos 39.727 decisões reais do TJSP para você entender suas chances, reunir as provas certas e fazer valer seus direitos — com ou sem advogado.</p>
+    <form class="search" id="searchForm" role="search">
+      <Icon name="search" size={20} stroke={2} />
+      <input id="q" type="search" placeholder="O que aconteceu com você? Ex.: golpe do Pix, nome negativado, voo atrasado…" autocomplete="off" aria-label="Buscar tema" />
+      <button class="btn btn-primary" type="submit">Buscar</button>
+    </form>
+    <div class="chips">{chips.map((c) => <button class="chip" type="button" data-q={c}>{c}</button>)}</div>
+  </div>
+</section>
+
+<div class="stats-wrap"><div class="stats-panel"><div class="stats">
+  <div class="stat-card"><div class="stat-eyebrow">Decisões do TJSP · Todo o Estado de SP</div><div class="stat-num">{DATASET.totalFmt}</div><div class="stat-label">Decisões analisadas</div></div>
+  <div class="stat-card"><div class="stat-eyebrow">Demandas mais comuns</div><div class="stat-num">{TEMAS.length}</div><div class="stat-label">Temas do JEC</div></div>
+  <div class="stat-card"><div class="stat-eyebrow">Média estadual de decisões favoráveis</div><div class="stat-num">61,4%</div><div class="stat-label">Procedência no JEC paulista</div></div>
+</div></div></div>
+
+<section class="temas" id="temas"><div class="section-inner">
+  <div class="section-head"><div class="section-eyebrow">14 pilares do JEC</div><h2 class="section-title">Em qual situação você foi prejudicado?</h2><p class="section-sub">Seja um golpe financeiro, negativação indevida ou descaso de uma grande empresa: analisamos 39.727 decisões reais do TJSP para explicar o que separa quem recupera o dinheiro de quem perde no Juizado Especial Cível.</p></div>
+  <div class="tabs" id="tabs"><button class="tab on" data-f="all">Todos</button>{grupos.map((g) => <button class="tab" data-f={g}>{GRUPOS[g]}</button>)}</div>
+  <div class="tgrid" id="tgrid">{grupos.flatMap((g) => TEMAS.filter((t) => t.grupo === g)).map((t) => (
+    <a class="tcard" id={`tema-${t.slug}`} href={`/${t.slug}/`} data-g={t.grupo} data-k={`${t.nome.toLowerCase()} ${t.palavras}`}>
+      <div class="tcard-top"><span class="tcard-ic"><Icon name={t.icone} /></span><span class="tcard-g">{GRUPOS[t.grupo]}</span></div>
+      <h3 class="tcard-t">{t.nome}</h3><p class="tcard-d">{t.linha}</p>
+      <div class="tcard-metric">
+        <div class="tcard-bar-wrap">
+          <div class="tcard-bar-fill" style={`width:${t.procedenciaPct}%`}></div>
+        </div>
+        <div class="tcard-stats-line">
+          <span class="tcard-win"><strong>{t.procedenciaPct.toFixed(1).replace('.', ',')}%</strong> ganharam</span>
+          <span class="tcard-loss"><strong>{(100 - t.procedenciaPct).toFixed(1).replace('.', ',')}%</strong> perderam</span>
+        </div>
+      </div>
+      <div class="tcard-f">
+        <span class="tcard-hook">{t.hookCuriosidade}</span>
+        <span class="tcard-go">Ver provas <Icon name="arrow-right" size={14} stroke={2.2} /></span>
+      </div>
+    </a>))}
+  </div>
+  <p class="empty" id="empty">Nenhum tema encontrado. Tente outras palavras ou <a href="#temas" id="clearQ" style="color:var(--teal)">veja todos os temas</a>.</p>
+</div></section>
+
+<div style="padding:0 16px"><AdSlot variant="wide" /></div>
+
+{destaque && (
+<section class="section" id="artigos" style="padding-top:72px"><div class="section-inner">
+  <div class="section-head"><div class="section-eyebrow">Artigos</div><h2 class="section-title">Em destaque</h2></div>
+  <div class="feat-grid">
+    <a class="feat" href={`/${dT!.slug}/${destaque.data.slug}/`}>
+      <div class="feat-vis">
+        <div class="fv-main"><div class="fv-n">{destaque.data.kpis.find((k) => k.destaque)?.valor ?? destaque.data.kpis[0]?.valor}</div><div class="fv-l">{destaque.data.kpis.find((k) => k.destaque)?.rotulo ?? destaque.data.kpis[0]?.rotulo}</div></div>
+      </div>
+      <div class="feat-body"><span class="feat-tag">{dT!.nome}</span><h3 class="feat-t">{destaque.data.titulo}</h3><div class="feat-meta">{destaque.data.formato === 'guia' ? 'Guia · Redação DefendaMe' : 'Análise · por André L. Silva'} · {data(destaque.data.publicado)} · {destaque.data.leitura} min de leitura</div></div>
+    </a>
+    <div class="slots">
+      <div class="slots-h">{outrosArtigos.length ? 'Mais artigos' : 'Próximos temas em produção'}</div>
+      {outrosArtigos.map((a) => { const t = temaPorSlug(a.data.tema)!; return (
+        <a class="nx" href={`/${t.slug}/${a.data.slug}/`}><span class="tcard-ic"><Icon name={t.icone} /></span><span class="nx-b"><span class="nx-t">{a.data.titulo}</span><span class="nx-m"><span class={`post-fmt fmt-${a.data.formato}`}>{a.data.formato === 'guia' ? 'Guia' : 'Análise'}</span>{t.nome} · {a.data.leitura} min</span></span><span class="nx-go"><Icon name="arrow-right" size={16} stroke={2.2} /></span></a>); })}
+      {proximos.map((t) => (
+        <a class="nx" href={`/${t.slug}/`}><span class="tcard-ic"><Icon name={t.icone} /></span><span class="nx-b"><span class="nx-t">{t.nome}</span><span class="nx-m">{fmt(t.decisoes)} decisões analisadas · artigo em breve</span></span><span class="nx-go"><Icon name="arrow-right" size={16} stroke={2.2} /></span></a>))}
+      <a class="nx-all" href="/artigos/">Ver todos os artigos <Icon name="arrow-right" size={16} stroke={2.2} /></a>
+    </div>
+  </div>
+</div></section>)}
+
+<section class="section" id="jurimetria" style="background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="section-inner juri">
+    <div>
+      <div class="section-head"><div class="section-eyebrow">Tendências do Tribunal</div><h2 class="section-title">O que a Justiça costuma acolher <span class="title-pill-inv">e o que costuma rejeitar</span></h2><p class="section-sub">Em cada tema, uma linha nítida separa a procedência da improcedência no TJSP: a prova documental apresentada nas primeiras horas após o fato. Clique no tema para ver o que os juízes costumam exigir.</p></div>
+      <div class="juri-kpis"><div class="kpi"><b>61,4%</b><span>Média favorável no JEC</span></div><div class="kpi"><b>Estado de SP</b><span>Capital, Litoral e Interior</span></div></div>
+    </div>
+    <div>
+      <ol class="bars">{[...TEMAS].sort((a, b) => b.procedenciaPct - a.procedenciaPct).map((t) => (
+        <li class="bar"><a href={`/${t.slug}/`} class="bar-l" title={t.nome}>{t.nome}</a><div class="bar-t"><div class="bar-f" style={`width:${t.procedenciaPct}%`}></div></div><span class="bar-n">{t.procedenciaPct.toFixed(1).replace('.', ',')}%</span></li>))}
+      </ol>
+      <p class="bars-note">Fonte: Análise estatística de 39.727 decisões públicas do TJSP em todo o Estado de São Paulo. Os percentuais refletem tendências históricas consolidadas; cada caso concreto depende das provas apresentadas.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="como-funciona" style="background:var(--surface)"><div class="section-inner">
+  <div class="section-head"><div class="section-eyebrow">Rito da Lei 9.099/1995</div><h2 class="section-title">Como funciona o Juizado Especial Cível</h2><p class="section-sub">O rito sumaríssimo foi criado para dar agilidade e acesso gratuito à Justiça. Entenda o passo a passo da reclamação até a sentença.</p></div>
+  <div class="ph-lead-row">{etapas.filter((e) => e.lead).map((e) => (
+    <div class="ph ph-lead"><div class="ph-top"><span class="ph-ic"><Icon name={e.ic} /></span><span class="ph-tag">{e.tag}</span></div><div class="ph-n">Etapa {e.n}</div><h3 class="ph-t">{e.t}</h3><p class="ph-d">{e.d}</p></div>))}</div>
+  <div class="ph-div"><span><Icon name="gavel" size={15} /> Acesso direto à Justiça: Gratuito em 1º grau (art. 54 da Lei 9.099/95)</span></div>
+  <div class="ph-row">{etapas.filter((e) => !e.lead).map((e) => (
+    <div class="ph"><div class="ph-top"><span class="ph-ic"><Icon name={e.ic} /></span><span class="ph-tag">{e.tag}</span></div><div class="ph-n">Etapa {e.n}</div><h3 class="ph-t">{e.t}</h3><p class="ph-d">{e.d}</p></div>))}</div>
+  <div class="ph-bar"><span class="ph-bar-ic"><Icon name="chart" size={18} /></span><p><b>Informação e Cidadania:</b> Todas as orientações são fundamentadas no Código de Defesa do Consumidor e em {DATASET.totalFmt} decisões do TJSP. Em causas até 20 salários mínimos, a lei assegura seu direito de pleitear sem advogado.</p></div>
+</div></section>
+
+<section class="section" id="guia-jec" style="border-top:1px solid var(--border);background:var(--bg)">
+  <div class="section-inner">
+    <div class="section-head">
+      <div class="section-eyebrow">Tira-Dúvidas da Cidadania</div>
+      <h2 class="section-title">O que você precisa saber antes de ir ao Juizado <span class="title-pill-inv">JEC</span></h2>
+      <p class="section-sub">
+        Mapeamos as dúvidas mais frequentes de quem precisa recorrer à Justiça Especial Cível (Lei 9.099/1995), com base em 39.727 decisões reais julgadas no Tribunal de Justiça de São Paulo.
+      </p>
+    </div>
+
+    <div class="jec-guide-grid">
+      <div class="jec-card">
+        <div class="jec-card-ic"><Icon name="gavel" /></div>
+        <h3>O que o Juizado Especial Cível (JEC) faz?</h3>
+        <p>Resolve conflitos do cotidiano de <strong>menor complexidade com valor de até 40 salários mínimos</strong> (R$ 56.480 a R$ 60.720). Abrange indenizações por danos morais e materiais, cobranças, falhas de serviços bancários, companhias aéreas, planos de saúde e concessionárias, bem como ações de <strong>despejo para uso próprio</strong> e possessórias sobre imóveis de menor valor.</p>
+        <span class="jec-card-tag">Art. 3º da Lei 9.099/95</span>
+      </div>
+
+      <div class="jec-card">
+        <div class="jec-card-ic"><Icon name="pin" /></div>
+        <h3>Onde entrar com a ação (qual fórum procurar)?</h3>
+        <p>A regra de competência territorial do JEC é simples e protege o cidadão (art. 4º da Lei 9.099/95 e art. 101, I do CDC):<br>• <strong>Na sua cidade (domicílio do autor):</strong> se for problema com compras ou serviços (relação de consumo com bancos, companhias aéreas, telefonia, lojas online) ou reparação de danos em geral;<br>• <strong>Na cidade da empresa:</strong> no fórum onde a empresa ré mantém sede, filial, agência ou sucursal;<br>• <strong>Na cidade onde mora quem você irá processar:</strong> para litígios e contratos civis comuns entre pessoas físicas.</p>
+        <span class="jec-card-tag">Art. 4º da Lei 9.099/95 e CDC</span>
+      </div>
+
+      <div class="jec-card">
+        <div class="jec-card-ic"><Icon name="shield" /></div>
+        <h3>Preciso de advogado para reclamar?</h3>
+        <p><strong>Não há necessidade em ações de até 20 salários mínimos</strong> (<em>jus postulandi</em>): você pode ajuizar sozinho no fórum ou pelo peticionamento eletrônico do TJSP. <strong>Acima de 20 salários mínimos (até 40), é obrigatório contratar Advogado</strong> ou ser assistido pela Defensoria Pública. <strong>Atenção:</strong> se houver recurso para a Turma Recursal, a presença de advogado é obrigatória por lei para ambas as partes.</p>
+        <span class="jec-card-tag">Art. 9º e 41 da Lei 9.099/95</span>
+      </div>
+
+      <div class="jec-card">
+        <div class="jec-card-ic"><Icon name="swap" /></div>
+        <h3>E se o valor passar de 40 salários mínimos?</h3>
+        <p>Se o prejuízo total ultrapassar 40 salários mínimos, você tem duas opções: <strong>1) Renúncia ao excedente:</strong> você pode optar por ajuizar no JEC (inclusive sem advogado se for até 20 SM), mas terá que abrir mão expressamente do valor que passar do teto para usufruir da rapidez e gratuidade do rito; ou <strong>2) Vara Cível Comum:</strong> se não quiser renunciar ao saldo, a ação deve tramitar na Justiça Comum, onde o advogado é indispensável e há custas judiciais.</p>
+        <span class="jec-card-tag">Art. 3º, § 3º da Lei 9.099/95</span>
+      </div>
+
+      <div class="jec-card">
+        <div class="jec-card-ic"><Icon name="chat" /></div>
+        <h3>Antes de processar: busque solução prévia</h3>
+        <p>Antes de ajuizar, considere resolver nos canais oficiais de conciliação: <strong>Cejuscs</strong> (Centros Judiciários de Solução de Conflitos do TJSP), <strong>Procons</strong>, <strong>Agências Reguladoras</strong> (Anatel, ANS, Aneel, Anac, Banco Central) e na plataforma <a href="https://www.consumidor.gov.br" target="_blank" rel="noopener noreferrer">consumidor.gov.br</a>. Registrar essa tentativa gera o número de protocolo indispensável para comprovar que a empresa recusou uma solução voluntária.</p>
+        <span class="jec-card-tag">Solução Consensual e Provas</span>
+      </div>
+
+      <div class="jec-card">
+        <div class="jec-card-ic"><Icon name="user" /></div>
+        <h3>Quem pode ajuizar ação no JEC?</h3>
+        <p><strong>Pessoas físicas, MEIs (Microempreendedores Individuais) e Microempresas (ME/EPP).</strong> Grandes conglomerados, bancos, companhias aéreas e entes públicos não podem ser autores contra você no Juizado Estadual. O JEC foi concebido pela Constituição e pela Lei 9.099/1995 para reequilibrar as forças do cidadão comum perante o poder econômico.</p>
+        <span class="jec-card-tag">Art. 8º da Lei 9.099/95</span>
+      </div>
+
+      <div class="jec-card">
+        <div class="jec-card-ic"><Icon name="alert" /></div>
+        <h3>Quais são os riscos de ir sem advogado?</h3>
+        <p>A empresa ré comparece invariavelmente defendida por bancas especializadas e prepostos treinados. Sem a assistência de um <strong>Advogado especializado em JEC</strong>, o cidadão enfrenta severa assimetria na <strong style="color:var(--navy)">paridade de armas</strong> e corre dois riscos graves: <strong>1) Preclusão probatória</strong> (deixar de juntar documentos indispensáveis logo na inicial, perdendo a oportunidade de provar o fato), e <strong>2) Pedidos processualmente incompletos</strong> (ausência de tutela de urgência liminar, não inversão do ônus probatório ou falta de pedido de repetição de indébito em dobro e astreintes).</p>
+        <span class="jec-card-tag">Paridade de Armas no JEC</span>
+      </div>
+
+      <div class="jec-card">
+        <div class="jec-card-ic"><Icon name="folder" /></div>
+        <h3>Documentos que NÃO PODEM faltar:</h3>
+        <ul class="jec-doc-list">
+          <li><strong>Documento oficial com foto:</strong> RG ou CNH válida e CPF.</li>
+          <li><strong>Comprovante de residência atualizado:</strong> conta de luz, água ou telefone emitida há menos de 90 dias em seu nome.</li>
+          <li><strong>Protocolos de tentativa prévia:</strong> comprovante de reclamação no SAC, Consumidor.gov.br ou Reclame Aqui.</li>
+          <li><strong>Extratos e faturas do prejuízo:</strong> com data e hora da cobrança indevida ou transferência bancária.</li>
+          <li><strong>Boletim de Ocorrência (em caso de golpe/fraude):</strong> contendo narrativa cronológica detalhada dos fatos.</li>
+        </ul>
+        <span class="jec-card-tag">Checklist Inicial</span>
+      </div>
+
+      <div class="jec-card">
+        <div class="jec-card-ic"><Icon name="check" /></div>
+        <h3>Quanto custa o processo no JEC?</h3>
+        <p><strong>O 1º grau de jurisdição é 100% gratuito.</strong> Não há custas de distribuição, taxas judiciárias nem pagamento de diligência de citação de oficiais de justiça. Além disso, se o seu pedido for rejeitado pelo juiz em primeira instância, você <strong>não é condenado</strong> a pagar honorários de sucumbência aos advogados da empresa ré. As custas só existem se você recorrer e perder na Turma Recursal.</p>
+        <span class="jec-card-tag">Art. 54 da Lei 9.099/95</span>
+      </div>
+
+      <div class="jec-card">
+        <div class="jec-card-ic"><Icon name="x" /></div>
+        <h3>O que NUNCA levar ao Juizado:</h3>
+        <p><strong>Causas com necessidade de perícia técnica complexa:</strong> se o seu caso exigir perícia de engenharia estrutural pesada, exame grafotécnico sofisticado ou recálculo contábil de décadas, o juiz extinguirá a ação sem julgar o mérito por incompetência do rito sumaríssimo. Demandas no JEC devem ser comprovadas por prova documental imediata.</p>
+        <span class="jec-card-tag">Art. 3º e 51 da Lei 9.099/95</span>
+      </div>
+    </div>
+
+    <div style="margin-top:28px;background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--teal);border-radius:var(--r);padding:18px 22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span style="color:var(--teal);display:flex;"><Icon name="help" size={24} stroke={2} /></span>
+        <div>
+          <b style="font-size:15.5px;color:var(--navy);display:block;">Dúvidas frequentes ou termos jurídicos do seu processo?</b>
+          <span style="font-size:13.5px;color:var(--fg-mid);">Acesse o FAQ oficial do TJSP com 23 perguntas sobre audiências, recursos, custas e competência, ou explore nosso Glossário do JEC com 71 termos explicados.</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a href="/faq/" class="btn btn-primary" style="font-size:13.5px;padding:8px 16px;">Ver FAQ do JEC <Icon name="arrow-right" size={14} /></a>
+        <a href="/glossario/" class="btn btn-outline" style="font-size:13.5px;padding:8px 16px;">Glossário do JEC</a>
+      </div>
+    </div>
+
+    <div class="jec-banner">
+      <div class="jec-banner-content">
+        <h3>Deseja verificar a viabilidade da sua situação antes de acionar o fórum?</h3>
+        <p>Responda a algumas perguntas simples sobre o que aconteceu e receba uma orientação preliminar sobre o rito adequado e quais documentos indispensáveis você deve reunir.</p>
+      </div>
+      <a href="#verificar" class="btn btn-primary" data-open-case>Avaliar viabilidade preliminar <Icon name="arrow-right" size={15} /></a>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band"><div class="cta-box">
+  <h2>Ficou com dúvidas sobre o seu caso?</h2><p>Entenda a viabilidade da sua demanda e descubra quais documentos reunir antes de procurar o Juizado ou um Advogado.</p>
+  <div class="hero-ctas" style="margin:0"><a href="#temas" class="btn btn-outline">Explorar os temas</a><a href="#verificar" class="btn btn-primary" data-open-case>Fazer avaliação preliminar</a></div>
+</div></section>
+</BaseLayout>
+
+<script>
+  const cards = [...document.querySelectorAll<HTMLElement>('.tcard')], tabs = [...document.querySelectorAll<HTMLElement>('.tab')];
+  const q = document.getElementById('q') as HTMLInputElement, empty = document.getElementById('empty')!;
+  let group = 'all';
+  const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  function apply() {
+    const terms = norm(q.value).split(/\s+/).filter((w) => w.length > 2); let shown = 0;
+    cards.forEach((c) => { const k = norm(c.dataset.k || ''); const ok = (group === 'all' || c.dataset.g === group) && (!terms.length || terms.some((w) => k.includes(w))); c.hidden = !ok; if (ok) shown++; });
+    empty.style.display = shown ? 'none' : 'block';
+  }
+  const toTemas = () => document.getElementById('temas')!.scrollIntoView({ behavior: 'smooth' });
+  tabs.forEach((t) => t.addEventListener('click', () => { tabs.forEach((x) => x.classList.remove('on')); t.classList.add('on'); group = t.dataset.f!; apply(); }));
+  q.addEventListener('input', apply);
+  document.getElementById('searchForm')!.addEventListener('submit', (e) => { e.preventDefault(); apply(); toTemas(); });
+  document.querySelectorAll<HTMLElement>('.chip').forEach((c) => c.addEventListener('click', () => { q.value = c.dataset.q!; apply(); toTemas(); }));
+  document.getElementById('clearQ')!.addEventListener('click', () => { q.value = ''; group = 'all'; tabs.forEach((x) => x.classList.toggle('on', x.dataset.f === 'all')); apply(); });
+</script>
