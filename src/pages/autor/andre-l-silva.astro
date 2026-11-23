@@ -12,59 +12,241 @@ const data = (dt: Date) => dt.toLocaleDateString('pt-BR', { timeZone: 'UTC', day
 const url = new URL(AUTHOR.url, SITE.url).href;
 
 const toc: [string, string][] = [
-  ['sobre', 'Sobre'],
-  ['metodo', 'Como analiso os dados'],
-  ['papel', 'Papel no DefendaMe'],
-  ...(analises.length ? [['analises', 'Análises assinadas'] as [string, string]] : []),
-  ...(guias.length ? [['guias', 'Guias revisados'] as [string, string]] : []),
-  ['formacao', 'Formação'],
+  ['trajetoria', 'Trajetória e Propósito'],
+  ['dor-do-cidadao', 'Paridade de Armas e a Dor do Consumidor'],
+  ['apreco-tjsp-jec', 'O Respeito ao TJSP e a Função Social do JEC'],
+  ['metodologia', 'A Metodologia em 5 Etapas Forenses'],
+  ['formacao', 'Formação Acadêmica e Multidisciplinar'],
+  ['compromisso-etico', 'Compromisso Ético e CFOAB nº 205/2021'],
+  ...(analises.length ? [['analises', 'Análises Técnicas Assinadas'] as [string, string]] : []),
+  ...(guias.length ? [['guias', 'Guias Técnicos Revisados'] as [string, string]] : []),
 ];
+
 const jsonLd = [
-  { '@context': 'https://schema.org', '@type': 'ProfilePage', url, mainEntity: {
-      '@type': 'Person', '@id': `${url}#person`, name: AUTHOR.name, jobTitle: AUTHOR.jobTitle, image: new URL(AUTHOR.photo, SITE.url).href,
-      url, sameAs: [SITE.substack], alumniOf: AUTHOR.alumniOf.map((n) => ({ '@type': 'CollegeOrUniversity', name: n })),
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ProfilePage',
+    url,
+    mainEntity: {
+      '@type': 'Person',
+      '@id': `${url}#person`,
+      name: AUTHOR.name,
+      jobTitle: AUTHOR.jobTitle,
+      image: new URL(AUTHOR.photo, SITE.url).href,
+      url,
       worksFor: { '@type': 'Organization', name: SITE.name, url: SITE.url },
-      knowsAbout: ['Jurimetria', 'Legal Analytics', 'Juizado Especial Cível', 'Direito do Consumidor', 'Golpes bancários e Pix'] } },
-  { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+      alumniOf: AUTHOR.alumniOf.map((n) => ({ '@type': 'CollegeOrUniversity', name: n })),
+      knowsAbout: [
+        'Jurimetria',
+        'Legal Analytics',
+        'Juizados Especiais Cíveis',
+        'Direito do Consumidor',
+        'Decisões Judiciais do TJSP',
+        'Responsabilidade Civil no Transporte Aéreo',
+        'Fraudes Bancárias e Golpe do Pix',
+        'Negativação Indevida e Dano Moral'
+      ]
+    }
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Início', item: SITE.url },
-      { '@type': 'ListItem', position: 2, name: AUTHOR.name, item: url } ] },
+      { '@type': 'ListItem', position: 2, name: AUTHOR.name, item: url }
+    ]
+  }
 ];
 ---
-<PageLayout title={`${AUTHOR.name} — ${AUTHOR.role} | ${SITE.name}`} description={`${AUTHOR.name}, ${AUTHOR.jobTitle}. Análises assinadas e guias revisados sobre o Juizado Especial Cível, a partir de ${DATASET.totalFmt} decisões do TJSP.`}
-  h1={AUTHOR.name} lead={`${AUTHOR.jobTitle}. Lê decisões judiciais em escala para explicar, com dados, como o Juizado decide.`} toc={toc} jsonLd={jsonLd}>
+
+<PageLayout
+  title={`${AUTHOR.name} — ${AUTHOR.role} | ${SITE.name}`}
+  description={`${AUTHOR.name}, ${AUTHOR.jobTitle}. Pesquisador forense e especialista em Legal Analytics: transformando 39.727 decisões do TJSP em previsibilidade, clareza e paridade de armas para o cidadão no Juizado Especial Cível.`}
+  h1={AUTHOR.name}
+  lead={`${AUTHOR.jobTitle}. Lê decisões judiciais em escala para explicar, com dados empíricos e rigor dogmático, como o Juizado Especial Cível realmente decide.`}
+  toc={toc}
+  jsonLd={jsonLd}
+>
 
 <div class="autor-hero">
   <img src={AUTHOR.photo} alt={AUTHOR.name} width="112" height="112" />
-  <div><b>{AUTHOR.name}</b><span class="ah-r">{AUTHOR.role}</span>
-    <div class="aut-links"><a class="aut-sub" href="#metodo"><Icon name="chart" size={15} stroke={2} />Metodologia de Análise</a></div></div>
+  <div>
+    <b>{AUTHOR.name}</b>
+    <span class="ah-r">{AUTHOR.role}</span>
+    <p style="margin: 6px 0 16px; font-size: 14.5px; color: var(--fg-mid); line-height: 1.55;">
+      Pesquisador forense e especialista em Legal Analytics aplicado ao contencioso de consumo. Dedicado a transformar o mar de dados públicos do Tribunal de Justiça do Estado de São Paulo em inteligência estatística, clareza probatória e paridade de armas para o cidadão comum perante o Juizado Especial Cível.
+    </p>
+    <div class="aut-links">
+      <a class="aut-sub" href="#metodologia"><Icon name="chart" size={15} stroke={2} />Metodologia Forense</a>
+      <a class="aut-sub" href="#dor-do-cidadao"><Icon name="shield" size={15} stroke={2} />Paridade de Armas</a>
+      <a class="aut-sub" href="#formacao"><Icon name="doc" size={15} stroke={2} />Formação Acadêmica</a>
+    </div>
+  </div>
 </div>
 
-<h2 id="sobre">Sobre</h2>
-<p>Trabalho com <strong>Legal Analytics</strong>: a leitura de decisões judiciais em grande volume para encontrar padrões que um caso isolado não mostra. Quanto tempo um processo leva, em que situações o consumidor costuma ter o pedido acolhido, quais provas aparecem nas sentenças favoráveis e quais faltam nas desfavoráveis.</p>
-<p>No DefendaMe, essa leitura se apoia em uma base de <strong>{DATASET.totalFmt} decisões</strong> extraídas diretamente do Tribunal de Justiça de São Paulo, abrangendo a Capital, o Litoral e o Interior (10 Regiões Administrativas Judiciárias), organizadas nas principais demandas do Juizado Especial Cível.</p>
-
-<h2 id="metodo">Como analiso os dados</h2>
-<div class="about-grid">
-  <div class="about-card"><span class="med-icon"><Icon name="chart" size={22} stroke={2} /></span><h3>Recorte declarado</h3><p>Cada análise informa de onde vêm os números: tema, comarca e quantidade de decisões.</p></div>
-  <div class="about-card"><span class="med-icon"><Icon name="lock" size={22} stroke={2} /></span><h3>Casos anonimizados</h3><p>Os casos citados vêm de decisões públicas, com nomes e detalhes alterados. Nunca são clientes.</p></div>
-  <div class="about-card"><span class="med-icon"><Icon name="doc" size={22} stroke={2} /></span><h3>Fonte primária</h3><p>Lei, súmula ou norma citada vem com link para o repositório oficial.</p></div>
+<div class="big-stats">
+  <div>
+    <b>{DATASET.totalFmt}</b>
+    <span>Decisões públicas do TJSP auditadas e catalogadas</span>
+  </div>
+  <div>
+    <b>10 RAJs</b>
+    <span>Cobertura empírica: Capital, Grande SP, Litoral e Interior</span>
+  </div>
+  <div>
+    <b>14 Silos</b>
+    <span>Demandas críticas mapeadas no Juizado Especial Cível</span>
+  </div>
 </div>
-<p>Estatística descreve tendência, não destino. Por isso, nenhum percentual publicado aqui é promessa de resultado: cada caso depende das suas provas e circunstâncias.</p>
 
-<h2 id="papel">Papel no DefendaMe</h2>
-<p>O DefendaMe publica dois formatos. Nas <strong>Análises</strong>, assino o texto e escrevo em primeira pessoa: é a minha leitura sobre o que os dados mostram. Nos <strong>Guias</strong>, a Redação explica o passo a passo de uma situação prática e eu faço a revisão técnica do conteúdo.</p>
+<h2 id="trajetoria">Trajetória e Propósito</h2>
+<p>
+  A jurimetria não nasceu nos gabinetes teóricos: ela nasceu no choque diário com a realidade das pessoas comuns. Ao longo de anos acompanhando os litígios de consumo no Estado de São Paulo, um padrão dramático se repetia: o cidadão que é lesado por uma instituição financeira, que passa a noite abandonado em um saguão de aeroporto ou que tem seu nome manchado injustamente no cadastro de inadimplentes entrava na Justiça em estado de absoluto desamparo e desinformação.
+</p>
+<p>
+  De um lado da mesa, grandes conglomerados econômicos munidos de softwares de inteligência artificial, departamentos jurídicos massificados e bancas advocatícias altamente especializadas. Do outro, um consumidor comum, aflito, sem saber o que esperar, refém de boatos, promessas irreais de internet ou do medo paralisante de perder a causa.
+</p>
+<p>
+  Compreendi que <strong>o Judiciário não é uma loteria arbitrária</strong>. As decisões dos magistrados paulistas obedecem a entendimentos consolidados, critérios objetivos de dosimetria de indenização e regras probatórias estritas. O que faltava não era a Justiça — era uma ponte técnica capaz de ler, estruturar e traduzir em larga escala as decisões reais, permitindo ao cidadão enxergar com clareza matemática e jurídica onde ele está pisando antes de dar qualquer passo.
+</p>
+
+<h2 id="dor-do-cidadao">Paridade de Armas e a Dor do Consumidor</h2>
+<p>
+  Quando alguém sofre um golpe financeiro ou tem um direito violado, a dor primária do prejuízo é quase sempre agravada por duas dores secundárias ainda mais corrosivas: <strong>a perda de tempo vital</strong> (o chamado desvio produtivo do consumidor) e <strong>a incerteza sobre o futuro</strong>.
+</p>
+<p>
+  O modelo de pesquisa empírica desenvolvido para o <strong>DefendaMe</strong> atua cirurgicamente sobre essa incerteza. Não produzimos teses abstratas desconectadas da realidade prática; respondemos, com base em evidências públicas concretas, às perguntas cruciais que tiram o sono de quem foi lesado:
+</p>
+<ul style="margin: 16px 0 20px; line-height: 1.7;">
+  <li><strong>Qual é a probabilidade real de êxito?</strong> Mapeamos o percentual histórico de acolhimento dos pedidos para cada tipo específico de falha na prestação do serviço;</li>
+  <li><strong>Quais provas realmente decidem o julgamento?</strong> Identificamos nos acórdãos do TJSP quais documentos garantem procedência e quais ausências levam à improcedência sumária por falta de lastro;</li>
+  <li><strong>Quanto o Tribunal realmente arbitra de dano moral?</strong> Expurgamos promessas fantasiosas de valores milionários e revelamos as faixas reais e medianas concedidas pelas Turmas Recursais para casos análogos ao do leitor;</li>
+  <li><strong>Quanto tempo leva a tramitação?</strong> Informamos o tempo médio de tramitação em 1º grau para que a pessoa possa planejar sua vida com serenidade e previsibilidade.</li>
+</ul>
+<p>
+  Isso é <strong>paridade de armas</strong>: armar o cidadão com informação técnica verificável para que ele não seja engolido pela assimetria de poder das grandes corporações.
+</p>
+
+<h2 id="apreco-tjsp-jec">O Respeito ao TJSP e a Função Social do JEC</h2>
+<p>
+  A pesquisa do DefendaMe é alicerçada em um <strong>profundo e inegociável apreço institucional pelo Tribunal de Justiça do Estado de São Paulo (TJSP)</strong> e, muito especialmente, pela história e pela função social dos <strong>Juizados Especiais Cíveis (Lei Federal nº 9.099/1995)</strong>.
+</p>
+<p>
+  Criados sob a inspiração do artigo 98, inciso I, da Constituição Cidadã de 1988, os Juizados Especiais representaram a mais bela revolução republicana e humanista da história do processo civil brasileiro: abriram as portas do Judiciário ao cidadão comum mediante critérios de <em>oralidade, simplicidade, informalidade, economia processual e celeridade</em>, garantindo a gratuidade universal no primeiro grau e privilegiando a conciliação pacífica dos conflitos.
+</p>
+<div class="about-card" style="margin: 20px 0; border-left: 3px solid var(--teal);">
+  <div style="display: flex; gap: 14px; align-items: flex-start;">
+    <span style="color: var(--teal); margin-top: 2px;"><Icon name="gavel" size={24} stroke={2} /></span>
+    <div>
+      <h3 style="margin: 0 0 6px; font-size: 16.5px; color: var(--navy);">Conformidade Rigorosa com Dados Públicos e Transparência Judiciária</h3>
+      <p style="margin: 0; font-size: 14px; color: var(--fg-mid); line-height: 1.6;">
+        Nossa pesquisa respeita integralmente o princípio da publicidade dos atos processuais (art. 93, IX, da CF/88), a Lei de Acesso à Informação (Lei nº 12.527/2011) e a Resolução nº 331/2020 do Conselho Nacional de Justiça (CNJ - Base DataJud). Todas as decisões examinadas são dados abertos públicos e oficiais. A jurimetria do DefendaMe não avalia nem julga o mérito de magistrados: ela homenageia e sistematiza a inteligência da jurisprudência paulista para aproximar o cidadão da Justiça.
+      </p>
+    </div>
+  </div>
+</div>
+
+<h2 id="metodologia">A Metodologia em 5 Etapas Forenses</h2>
+<p>
+  Cada percentual, gráfico e conclusão apresentada nos artigos do DefendaMe passa por uma rigorosa esteira metodológica de processamento e auditoria em cinco fases sucessivas:
+</p>
+
+<div class="about-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px;">
+  <div class="about-card">
+    <span class="med-icon"><Icon name="search" size={22} stroke={2} /></span>
+    <h3>1. Coleta Pública e Filtragem Amostral</h3>
+    <p>Extração automatizada e sistemática de decisões dos repositórios oficiais públicos do TJSP (e-SAJ) e DataJud/CNJ, abrangendo as 10 Regiões Administrativas Judiciárias paulistas, com delimitação estrita de datas, comarcas e classes processuais.</p>
+  </div>
+
+  <div class="about-card">
+    <span class="med-icon"><Icon name="lock" size={22} stroke={2} /></span>
+    <h3>2. Anonimização Ética e LGPD</h3>
+    <p>Blindagem absoluta da privacidade de terceiros: nomes de partes vulneráveis, CPFs, números de conta e detalhes sensíveis são anonimizados. A análise estuda os fatos geradores e o direito aplicado, jamais expondo pessoas reais.</p>
+  </div>
+
+  <div class="about-card">
+    <span class="med-icon"><Icon name="shield" size={22} stroke={2} /></span>
+    <h3>3. Auditoria Precedencial Superior</h3>
+    <p>Confronto de cada grupo amostral com as teses vinculantes dos Tribunais Superiores: Temas 210 e 1.240 do STF, REsp 1.584.465/MG do STJ, Súmulas 385, 479 e 548 do STJ, e Enunciados Cíveis do FONAJE e FOJESP.</p>
+  </div>
+
+  <div class="about-card">
+    <span class="med-icon"><Icon name="chart" size={22} stroke={2} /></span>
+    <h3>4. Modelagem Quantitativa e Jurimétrica</h3>
+    <p>Cálculo estatístico de taxas reais de acolhimento (êxito), desmembramento de pedidos de dano moral vs. dano material, tempo médio de tramitação em 1º grau e cálculo da faixa interquartil de arbitramento indenizatório.</p>
+  </div>
+</div>
+
+<div class="about-card" style="margin-top: 16px;">
+  <span class="med-icon"><Icon name="doc" size={22} stroke={2} /></span>
+  <h3>5. Curadoria Editorial e Tradução Cidadã</h3>
+  <p>Conversão dos relatórios de legal analytics em artigos e guias práticos em português claro e acessível. A redação expurga o "juridiquês" estéril sem perder uma única gota de precisão dogmática, respeitando integralmente as balizas do Provimento CFOAB nº 205/2021.</p>
+</div>
+
+<h2 id="formacao">Formação Acadêmica e Multidisciplinar</h2>
+<p>
+  O exercício sério do Legal Analytics exige uma formação híbrida: sólida bagagem dogmática no Direito Processual Civil somada ao domínio dos métodos quantitativos, da inteligência de dados e da governança ética da informação.
+</p>
+
+<div class="about-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px;">
+  <div class="about-card">
+    <span class="med-icon"><Icon name="doc" size={22} stroke={2} /></span>
+    <h3>Direito e Processo Civil</h3>
+    <p><strong>Universidade Paulista (UNIP)</strong><br>Formação com ênfase em Direito Processual Civil, Direito do Consumidor, Teoria Geral da Responsabilidade Civil e os princípios fundamentais da Lei nº 9.099/1995.</p>
+  </div>
+
+  <div class="about-card">
+    <span class="med-icon"><Icon name="chart" size={22} stroke={2} /></span>
+    <h3>Ciência de Dados & Legal Analytics</h3>
+    <p><strong>Pontifícia Universidade Católica do Paraná (PUC-PR)</strong><br>Especialização voltada à aplicação de modelos analíticos, mineração de texto em jurisprudência e modelagem probabilística no ambiente judiciário brasileiro.</p>
+  </div>
+
+  <div class="about-card">
+    <span class="med-icon"><Icon name="shield" size={22} stroke={2} /></span>
+    <h3>Governança e Estratégia da Informação</h3>
+    <p><strong>Escola Paulista de Negócios (EPN)</strong><br>Capacitação executiva em governança de bases de dados, conformidade com a LGPD, integridade algorítmica e transparência pública de dados de tribunais.</p>
+  </div>
+
+  <div class="about-card">
+    <span class="med-icon"><Icon name="bank" size={22} stroke={2} /></span>
+    <h3>Ciências Jurídicas e Relações Sociais</h3>
+    <p><strong>Universidade de Mogi das Cruzes (UMC)</strong><br>Estudos aprofundados sobre a vulnerabilidade do consumidor moderno, direitos difusos e coletivos e a evolução do contencioso massificado perante os tribunais estaduais.</p>
+  </div>
+</div>
+
+<h2 id="compromisso-etico">Compromisso Ético e CFOAB nº 205/2021</h2>
+<div class="alert-box-info" style="margin: 20px 0;">
+  <div class="alert-header">
+    <Icon name="shield" size={20} stroke={2} />
+    <strong>Compromisso Inegociável com a Ética Jurídica</strong>
+  </div>
+  <p style="margin-bottom: 10px;">
+    Todas as análises e guias técnicos assinados ou revisados por André L. Silva no DefendaMe têm caráter <strong>estritamente informativo, educativo e orientativo</strong>, em plena obediência ao Provimento CFOAB nº 205/2021 e ao Código de Ética e Disciplina da OAB.
+  </p>
+  <p style="margin-bottom: 10px;">
+    <strong>Sem promessa de resultado:</strong> A jurimetria aponta tendências estatísticas de decisões passadas do Tribunal de Justiça de São Paulo; ela não garante o desfecho de nenhuma ação individual, cuja procedência dependerá exclusivamente da análise do magistrado e das provas carreadas aos autos no caso concreto.
+  </p>
+  <p style="margin: 0;">
+    <strong>Valorização da Defesa Técnica:</strong> O DefendaMe e seu corpo técnico reiteram que, embora a Lei 9.099/95 autorize o ingresso desacompanhado até 20 salários mínimos, o patrocínio técnico de um Advogado é indispensável para causas complexas, para o manejo de recursos perante os Colégios Recursais e para assegurar a paridade de armas contra grandes conglomerados empresariais.
+  </p>
+</div>
 
 {analises.length > 0 && <>
-<h2 id="analises">Análises assinadas</h2>
+<h2 id="analises">Análises Técnicas Assinadas</h2>
+<p style="color: var(--fg-muted); margin-bottom: 16px;">
+  Estudos aprofundados em primeira pessoa onde apresento a leitura analítica e a interpretação empírica dos dados judiciais.
+</p>
 <ul class="autor-list">{analises.map((a) => <li><a href={`/${a.data.tema}/${a.data.slug}/`}><span class="al-k"><span class="post-fmt fmt-analise">{FORMATOS.analise.rotulo}</span>{temaPorSlug(a.data.tema)?.nome} · {data(a.data.publicado)}</span><span class="al-t">{a.data.titulo}</span><span class="al-d">{a.data.descricao}</span></a></li>)}</ul>
 </>}
+
 {guias.length > 0 && <>
-<h2 id="guias">Guias revisados</h2>
+<h2 id="guias">Guias Técnicos Revisados</h2>
+<p style="color: var(--fg-muted); margin-bottom: 16px;">
+  Textos de orientação prática produzidos pela Redação DefendaMe com revisão metodológica e validação de precedentes.
+</p>
 <ul class="autor-list">{guias.map((a) => <li><a href={`/${a.data.tema}/${a.data.slug}/`}><span class="al-k"><span class="post-fmt fmt-guia">{FORMATOS.guia.rotulo}</span>{temaPorSlug(a.data.tema)?.nome} · {data(a.data.publicado)}</span><span class="al-t">{a.data.titulo}</span><span class="al-d">{a.data.descricao}</span></a></li>)}</ul>
 </>}
 
-<h2 id="formacao">Formação</h2>
-<ul>{AUTHOR.alumniOf.map((n) => <li>{n}</li>)}</ul>
+<p style="margin-top: 36px;"><a class="btn btn-primary" href="/#verificar" data-open-case>Verificar meu caso no Juizado <Icon name="arrow-right" size={16} stroke={2.2} /></a></p>
 
-<p><a class="btn btn-primary" href="/#verificar" data-open-case>Verificar meu caso <Icon name="arrow-right" size={16} stroke={2.2} /></a></p>
 </PageLayout>
