@@ -13,7 +13,6 @@ export interface NormaItem {
   titulo: string;
   diploma: string;
   rotuloTexto?: string;
-  aspas?: boolean;
   textoLiteral: string;
   explicacao?: string;
   linkOficial?: string;
@@ -239,7 +238,6 @@ export const BANCO_NORMAS: Record<string, NormaItem> = {
     titulo: 'REsp 1.584.465/MG',
     diploma: 'Superior Tribunal de Justiça — 3ª Turma (Rel. Min. Nancy Andrighi)',
     rotuloTexto: 'Síntese do julgado:',
-    aspas: false,
     textoLiteral: 'Na hipótese de atraso de voo, o dano moral não se configura in re ipsa (presumido). A frustração decorrente do descumprimento do horário contratado, por si só, caracteriza mero dissabor. A indenização exige a comprovação de lesão extrapatrimonial concreta, avaliada a partir do tempo de espera, da oferta de assistência material, de informações adequadas e de eventual perda de compromissos inadiáveis no destino.',
     explicacao: 'Precedente orientador das Turmas de Direito Privado do STJ que superou a tese de dano moral automático, exigindo prova de desamparo no aeroporto ou prejuízos concretos suportados.',
     linkOficial: 'https://processo.stj.jus.br/processo/pesquisa/?num_registro=201600378050'
@@ -250,7 +248,6 @@ export const BANCO_NORMAS: Record<string, NormaItem> = {
     titulo: 'AgInt no AREsp 1.520.449/SP',
     diploma: 'Superior Tribunal de Justiça — 4ª Turma (Rel. Min. Raul Araújo, DJe 04/10/2019)',
     rotuloTexto: 'Síntese do julgado:',
-    aspas: false,
     textoLiteral: 'A jurisprudência da Segunda Seção do Superior Tribunal de Justiça firmou-se no sentido de que o atraso ou cancelamento de voo não enseja dano moral presumido (in re ipsa), demandando a comprovação de ofensa concreta aos direitos da personalidade, avaliada a partir das peculiaridades da causa e da recusa de assistência material tempestiva.',
     explicacao: 'Precedente canônico da Quarta Turma do STJ que alinha o entendimento com a Terceira Turma (REsp 1.584.465/MG), consolidando a exigência de prova de prejuízo extraordinário ou desamparo.',
     linkOficial: 'https://processo.stj.jus.br/processo/pesquisa/?num_registro=201901691238'
@@ -261,7 +258,6 @@ export const BANCO_NORMAS: Record<string, NormaItem> = {
     titulo: 'AgInt no AREsp 2.150.150/SP',
     diploma: 'Superior Tribunal de Justiça — 4ª Turma (Rel. Min. Raul Araújo, DJe 21/05/2024)',
     rotuloTexto: 'Síntese do julgado:',
-    aspas: false,
     textoLiteral: 'Na hipótese de atraso de voo, o abalo moral indenizável não decorre automaticamente do mero descumprimento do contrato de transporte (ausência de dano moral in re ipsa), exigindo a comprovação de situação aflitiva extraordinária ou da falta de assistência material tempestiva pela concessionária aérea.',
     explicacao: 'Reafirmação contemporânea de 2024 da Quarta Turma do STJ, mantendo a firme exigência de comprovação do abalo concreto nos Juizados Especiais Cíveis.',
     linkOficial: 'https://processo.stj.jus.br/processo/pesquisa/?num_registro=202201844079'
@@ -310,7 +306,6 @@ export const BANCO_NORMAS: Record<string, NormaItem> = {
     titulo: 'Tema 210 (RE 636.331)',
     diploma: 'Supremo Tribunal Federal — Plenário (Rel. Min. Gilmar Mendes)',
     rotuloTexto: 'Tese de Repercussão Geral fixada pelo STF:',
-    aspas: false,
     textoLiteral: 'Nos termos do art. 178 da Constituição da República, as normas e os tratados internacionais limitadores da responsabilidade das transportadoras aéreas de passageiros, especialmente as Convenções de Varsóvia e Montreal, têm prevalência em relação ao Código de Defesa do Consumidor exclusivamente quanto à tarifação dos danos materiais e ao prazo prescricional bienal.',
     explicacao: 'O STF fixou que a Convenção de Montreal limita apenas o dano material (bagagem tarifada em DES). Não se aplica aos danos morais.',
     linkOficial: 'https://portal.stf.jus.br/jurisprudenciaRepercussao/tema.asp?num=210'
@@ -321,7 +316,6 @@ export const BANCO_NORMAS: Record<string, NormaItem> = {
     titulo: 'Tema 1.240 (ARE 1.373.406/SP)',
     diploma: 'Supremo Tribunal Federal — Plenário (Rel. Min. Rosa Weber)',
     rotuloTexto: 'Tese de Repercussão Geral fixada pelo STF:',
-    aspas: false,
     textoLiteral: 'Não se aplicam as convenções internacionais às ações de reparação de dano moral decorrente de má prestação de serviços no transporte aéreo internacional, aplicando-se integralmente a legislação consumerista e a Constituição Federal.',
     explicacao: 'Pacifica em definitivo que a indenização por dano moral em voos internacionais é regida pelo Código de Defesa do Consumidor, sem qualquer teto tarifado internacional.',
     linkOficial: 'https://portal.stf.jus.br/jurisprudenciaRepercussao/tema.asp?num=1240'

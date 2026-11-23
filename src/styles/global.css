@@ -431,20 +431,14 @@ h1, h2, h3 { font-family: var(--ff); }
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: var(--teal);
-  margin-bottom: 4px;
-}
-
-.popover-quote-mark {
-  font-weight: 700;
-  color: var(--teal);
+  margin-bottom: 5px;
 }
 
 .popover-text {
   font-style: normal;
-}
-
-.popover-text.is-literal {
-  font-style: italic;
+  display: block;
+  color: var(--fg);
+  line-height: 1.55;
 }
 
 .popover-expl {

@@ -22,7 +22,6 @@ interface Props {
   texto?: string;
   teor?: string;
   rotuloTexto?: string;
-  aspas?: boolean;
   titulo?: string;
   badge?: string;
   diploma?: string;
@@ -42,7 +41,6 @@ const {
   texto,
   teor,
   rotuloTexto,
-  aspas,
   titulo,
   badge,
   diploma,
@@ -105,7 +103,6 @@ const itemTitulo = titulo ?? norma?.titulo ?? label;
 const itemDiploma = diploma ?? norma?.diploma ?? (lei || tribunal || orgao || 'Repositório Oficial');
 const itemTextoLiteral = teor ?? norma?.textoLiteral ?? '';
 const itemRotuloTexto = rotuloTexto ?? norma?.rotuloTexto ?? (sumula ? 'Teor da Súmula:' : enunciado ? 'Teor do Enunciado:' : resp || tema ? 'Síntese do julgado:' : 'Texto da norma:');
-const itemAspas = aspas ?? norma?.aspas ?? (sumula || enunciado ? true : false);
 const itemExplicacao = explicacao ?? norma?.explicacao ?? '';
 const itemLink = linkOficial ?? norma?.linkOficial ?? '';
 ---
@@ -136,9 +133,7 @@ const itemLink = linkOficial ?? norma?.linkOficial ?? '';
     {itemTextoLiteral && (
       <span class="popover-body">
         {itemRotuloTexto && <strong class="popover-body-tag">{itemRotuloTexto}</strong>}
-        {itemAspas && <span class="popover-quote-mark">&ldquo;</span>}
-        <span class:list={["popover-text", { "is-literal": itemAspas }]}>{itemTextoLiteral}</span>
-        {itemAspas && <span class="popover-quote-mark">&rdquo;</span>}
+        <span class="popover-text">{itemTextoLiteral}</span>
       </span>
     )}
 
