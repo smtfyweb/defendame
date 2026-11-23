@@ -19,7 +19,7 @@ const data = (d: Date) => d.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
 const etapas = [
   { n: 1, ic: 'chat', t: 'Tentativa Prévia', d: 'Notifique a empresa pelo SAC ou registre no Consumidor.gov.br. O protocolo de atendimento é a primeira prova que o juiz verifica.', tag: '1. Passo Administrativo', lead: true },
   { n: 2, ic: 'folder', t: 'Reunião de Provas', d: 'Reúna prints, extratos, faturas e o Boletim de Ocorrência. As decisões mostram que a qualidade das provas define o acolhimento do pedido.', tag: '2. Provas Essenciais', lead: true },
-  { n: 3, ic: 'doc', t: 'Atermação no JEC', d: 'Em causas até 20 salários mínimos, você mesmo pode dar entrada diretamente no balcão do fórum ou pelo peticionamento eletrônico sem custas.', tag: '3. Jus Postulandi (Você)' },
+  { n: 3, ic: 'doc', t: 'Atermação no JEC', d: 'Em causas até 20 salários mínimos, você mesmo pode dar entrada diretamente no balcão do fórum ou pelo peticionamento eletrônico sem custas.', tag: '3. Jus Postulandi — Postulação Própria' },
   { n: 4, ic: 'swap', t: 'Audiência de Conciliação', d: 'O fórum designa audiência para tentativa de acordo. Se a empresa não fizer proposta justa, o processo segue para a sentença do juiz.', tag: '4. Conciliação' },
   { n: 5, ic: 'gavel', t: 'Sentença e Cumprimento', d: 'O magistrado profere a sentença julgando a restituição dos valores e eventual dano moral, determinando o pagamento em prazo legal.', tag: '5. Decisão Judicial' },
   { n: 6, ic: 'shield', t: 'Causas Complexas ou Recurso', d: 'Para causas acima de 20 salários mínimos ou se a empresa recorrer para a Turma Recursal, a assistência de um advogado inscrito na OAB é obrigatória.', tag: '6. Advocacia na OAB' },
@@ -114,7 +114,7 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SI
   <div class="section-head"><div class="section-eyebrow">Rito da Lei 9.099/1995</div><h2 class="section-title">Como funciona o Juizado Especial Cível</h2><p class="section-sub">O rito sumaríssimo foi criado para dar agilidade e acesso gratuito à Justiça. Entenda o passo a passo da reclamação até a sentença.</p></div>
   <div class="ph-lead-row">{etapas.filter((e) => e.lead).map((e) => (
     <div class="ph ph-lead"><div class="ph-top"><span class="ph-ic"><Icon name={e.ic} /></span><span class="ph-tag">{e.tag}</span></div><div class="ph-n">Etapa {e.n}</div><h3 class="ph-t">{e.t}</h3><p class="ph-d">{e.d}</p></div>))}</div>
-  <div class="ph-div"><span><Icon name="gavel" size={15} /> Acesso direto à Justiça: Gratuito em 1º grau (art. 54 da Lei 9.099/95)</span></div>
+  <div class="ph-div"><span><Icon name="gavel" size={15} /> Acesso direto à Justiça: Gratuito em 1º grau conforme o artigo 54 da Lei nº 9.099 de 1995</span></div>
   <div class="ph-row">{etapas.filter((e) => !e.lead).map((e) => (
     <div class="ph"><div class="ph-top"><span class="ph-ic"><Icon name={e.ic} /></span><span class="ph-tag">{e.tag}</span></div><div class="ph-n">Etapa {e.n}</div><h3 class="ph-t">{e.t}</h3><p class="ph-d">{e.d}</p></div>))}</div>
   <div class="ph-bar"><span class="ph-bar-ic"><Icon name="chart" size={18} /></span><p><b>Informação e Cidadania:</b> Todas as orientações são fundamentadas no Código de Defesa do Consumidor e em {DATASET.totalFmt} decisões do TJSP. Em causas até 20 salários mínimos, a lei assegura seu direito de pleitear sem advogado.</p></div>
@@ -124,59 +124,59 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SI
   <div class="section-inner">
     <div class="section-head">
       <div class="section-eyebrow">Tira-Dúvidas da Cidadania</div>
-      <h2 class="section-title">O que você precisa saber antes de ir ao Juizado <span class="title-pill-inv">JEC</span></h2>
+      <h2 class="section-title">O que você precisa saber antes de ir ao Juizado Especial Cível</h2>
       <p class="section-sub">
-        Mapeamos as dúvidas mais frequentes de quem precisa recorrer à Justiça Especial Cível (Lei 9.099/1995), com base em 39.727 decisões reais julgadas no Tribunal de Justiça de São Paulo.
+        Mapeamos as dúvidas mais frequentes de quem precisa recorrer à Justiça Especial Cível sob a Lei Federal nº 9.099 de 1995, com base em 39.727 decisões reais julgadas no Tribunal de Justiça de São Paulo.
       </p>
     </div>
 
     <div class="jec-guide-grid">
       <div class="jec-card">
         <div class="jec-card-ic"><Icon name="gavel" /></div>
-        <h3>O que o Juizado Especial Cível (JEC) faz?</h3>
-        <p>Resolve conflitos do cotidiano de <strong>menor complexidade com valor de até 40 salários mínimos</strong> (R$ 56.480 a R$ 60.720). Abrange indenizações por danos morais e materiais, cobranças, falhas de serviços bancários, companhias aéreas, planos de saúde e concessionárias, bem como ações de <strong>despejo para uso próprio</strong> e possessórias sobre imóveis de menor valor.</p>
+        <h3>O que o Juizado Especial Cível faz?</h3>
+        <p>Resolve conflitos do cotidiano de <strong>menor complexidade com valor de até 40 salários mínimos</strong>, faixa entre R$ 56.480 e R$ 60.720. Abrange indenizações por danos morais e materiais, cobranças, falhas de serviços bancários, companhias aéreas, planos de saúde e concessionárias, bem como ações de <strong>despejo para uso próprio</strong> e possessórias sobre imóveis de menor valor.</p>
         <span class="jec-card-tag">Art. 3º da Lei 9.099/95</span>
       </div>
 
       <div class="jec-card">
         <div class="jec-card-ic"><Icon name="pin" /></div>
-        <h3>Onde entrar com a ação (qual fórum procurar)?</h3>
-        <p>A regra de competência territorial do JEC é simples e protege o cidadão (art. 4º da Lei 9.099/95 e art. 101, I do CDC):<br>• <strong>Na sua cidade (domicílio do autor):</strong> se for problema com compras ou serviços (relação de consumo com bancos, companhias aéreas, telefonia, lojas online) ou reparação de danos em geral;<br>• <strong>Na cidade da empresa:</strong> no fórum onde a empresa ré mantém sede, filial, agência ou sucursal;<br>• <strong>Na cidade onde mora quem você irá processar:</strong> para litígios e contratos civis comuns entre pessoas físicas.</p>
+        <h3>Onde entrar com a ação e qual fórum procurar?</h3>
+        <p>A regra de competência territorial do Juizado Especial Cível protege o cidadão, conforme o artigo 4º da Lei nº 9.099 de 1995 e o artigo 101, inciso I do CDC:<br>• <strong>Na sua cidade — domicílio do autor:</strong> se for problema com compras ou serviços — relação de consumo com bancos, companhias aéreas, telefonia ou lojas online — ou reparação de danos em geral;<br>• <strong>Na cidade da empresa:</strong> no fórum onde a empresa ré mantém sede, filial, agência ou sucursal;<br>• <strong>Na cidade onde mora quem você irá processar:</strong> para litígios e contratos civis comuns entre pessoas físicas.</p>
         <span class="jec-card-tag">Art. 4º da Lei 9.099/95 e CDC</span>
       </div>
 
       <div class="jec-card">
         <div class="jec-card-ic"><Icon name="shield" /></div>
         <h3>Preciso de advogado para reclamar?</h3>
-        <p><strong>Não há necessidade em ações de até 20 salários mínimos</strong> (<em>jus postulandi</em>): você pode ajuizar sozinho no fórum ou pelo peticionamento eletrônico do TJSP. <strong>Acima de 20 salários mínimos (até 40), é obrigatório contratar Advogado</strong> ou ser assistido pela Defensoria Pública. <strong>Atenção:</strong> se houver recurso para a Turma Recursal, a presença de advogado é obrigatória por lei para ambas as partes.</p>
+        <p><strong>Não há necessidade em ações de até vinte salários mínimos</strong> — pelo instituto do jus postulandi — pois você pode ajuizar sozinho no fórum ou pelo peticionamento eletrônico do TJSP. <strong>Acima de vinte salários mínimos, no teto de quarenta salários, é obrigatório contratar Advogado</strong> ou ser assistido pela Defensoria Pública. <strong>Atenção:</strong> se houver recurso para a Turma Recursal, a presença de advogado é obrigatória por lei para ambas as partes.</p>
         <span class="jec-card-tag">Art. 9º e 41 da Lei 9.099/95</span>
       </div>
 
       <div class="jec-card">
         <div class="jec-card-ic"><Icon name="swap" /></div>
         <h3>E se o valor passar de 40 salários mínimos?</h3>
-        <p>Se o prejuízo total ultrapassar 40 salários mínimos, você tem duas opções: <strong>1) Renúncia ao excedente:</strong> você pode optar por ajuizar no JEC (inclusive sem advogado se for até 20 SM), mas terá que abrir mão expressamente do valor que passar do teto para usufruir da rapidez e gratuidade do rito; ou <strong>2) Vara Cível Comum:</strong> se não quiser renunciar ao saldo, a ação deve tramitar na Justiça Comum, onde o advogado é indispensável e há custas judiciais.</p>
+        <p>Se o prejuízo total ultrapassar 40 salários mínimos, você tem duas opções: <strong>1) Renúncia ao excedente:</strong> você pode optar por ajuizar no Juizado Especial Cível, inclusive sem advogado nas demandas de até vinte salários mínimos, mas terá que abrir mão expressamente do valor que passar do teto para usufruir da rapidez e gratuidade do rito; ou <strong>2) Vara Cível Comum:</strong> se não quiser renunciar ao saldo, a ação deve tramitar na Justiça Comum, onde o advogado é indispensável e há custas judiciais.</p>
         <span class="jec-card-tag">Art. 3º, § 3º da Lei 9.099/95</span>
       </div>
 
       <div class="jec-card">
         <div class="jec-card-ic"><Icon name="chat" /></div>
         <h3>Antes de processar: busque solução prévia</h3>
-        <p>Antes de ajuizar, considere resolver nos canais oficiais de conciliação: <strong>Cejuscs</strong> (Centros Judiciários de Solução de Conflitos do TJSP), <strong>Procons</strong>, <strong>Agências Reguladoras</strong> (Anatel, ANS, Aneel, Anac, Banco Central) e na plataforma <a href="https://www.consumidor.gov.br" target="_blank" rel="noopener noreferrer">consumidor.gov.br</a>. Registrar essa tentativa gera o número de protocolo indispensável para comprovar que a empresa recusou uma solução voluntária.</p>
+        <p>Antes de ajuizar, considere resolver nos canais oficiais de conciliação: <strong>Cejuscs</strong> — Centros Judiciários de Solução de Conflitos do TJSP —, <strong>Procons</strong>, <strong>Agências Reguladoras</strong> como Anatel, ANS, Aneel, Anac e Banco Central, e na plataforma <a href="https://www.consumidor.gov.br" target="_blank" rel="noopener noreferrer">consumidor.gov.br</a>. Registrar essa tentativa gera o número de protocolo indispensável para comprovar que a empresa recusou uma solução voluntária.</p>
         <span class="jec-card-tag">Solução Consensual e Provas</span>
       </div>
 
       <div class="jec-card">
         <div class="jec-card-ic"><Icon name="user" /></div>
         <h3>Quem pode ajuizar ação no JEC?</h3>
-        <p><strong>Pessoas físicas, MEIs (Microempreendedores Individuais) e Microempresas (ME/EPP).</strong> Grandes conglomerados, bancos, companhias aéreas e entes públicos não podem ser autores contra você no Juizado Estadual. O JEC foi concebido pela Constituição e pela Lei 9.099/1995 para reequilibrar as forças do cidadão comum perante o poder econômico.</p>
+        <p><strong>Pessoas físicas, microempreendedores individuais e microempresas ou empresas de pequeno porte.</strong> Grandes conglomerados, bancos, companhias aéreas e entes públicos não podem ser autores contra você no Juizado Estadual. O Juizado foi concebido pela Constituição e pela Lei nº 9.099 de 1995 para reequilibrar as forças do cidadão comum perante o poder econômico.</p>
         <span class="jec-card-tag">Art. 8º da Lei 9.099/95</span>
       </div>
 
       <div class="jec-card">
         <div class="jec-card-ic"><Icon name="alert" /></div>
         <h3>Quais são os riscos de ir sem advogado?</h3>
-        <p>A empresa ré comparece invariavelmente defendida por bancas especializadas e prepostos treinados. Sem a assistência de um <strong>Advogado especializado em JEC</strong>, o cidadão enfrenta severa assimetria na <strong style="color:var(--navy)">paridade de armas</strong> e corre dois riscos graves: <strong>1) Preclusão probatória</strong> (deixar de juntar documentos indispensáveis logo na inicial, perdendo a oportunidade de provar o fato), e <strong>2) Pedidos processualmente incompletos</strong> (ausência de tutela de urgência liminar, não inversão do ônus probatório ou falta de pedido de repetição de indébito em dobro e astreintes).</p>
+        <p>A empresa ré comparece invariavelmente defendida por bancas especializadas e prepostos treinados. Sem a assistência de um <strong>Advogado especializado em Juizados Especiais Cíveis</strong>, o cidadão enfrenta severa assimetria na <strong style="color:var(--navy)">paridade de armas</strong> e corre dois riscos graves: <strong>1) Preclusão probatória:</strong> deixar de juntar documentos indispensáveis logo na inicial, perdendo a oportunidade de provar o fato; e <strong>2) Pedidos processualmente incompletos:</strong> ausência de tutela de urgência liminar, falta de inversão do ônus probatório ou ausência de pedido de repetição de indébito em dobro e astreintes.</p>
         <span class="jec-card-tag">Paridade de Armas no JEC</span>
       </div>
 
@@ -188,7 +188,7 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SI
           <li><strong>Comprovante de residência atualizado:</strong> conta de luz, água ou telefone emitida há menos de 90 dias em seu nome.</li>
           <li><strong>Protocolos de tentativa prévia:</strong> comprovante de reclamação no SAC, Consumidor.gov.br ou Reclame Aqui.</li>
           <li><strong>Extratos e faturas do prejuízo:</strong> com data e hora da cobrança indevida ou transferência bancária.</li>
-          <li><strong>Boletim de Ocorrência (em caso de golpe/fraude):</strong> contendo narrativa cronológica detalhada dos fatos.</li>
+          <li><strong>Boletim de Ocorrência em caso de golpe ou fraude:</strong> contendo narrativa cronológica detalhada dos fatos.</li>
         </ul>
         <span class="jec-card-tag">Checklist Inicial</span>
       </div>
@@ -196,7 +196,7 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SI
       <div class="jec-card">
         <div class="jec-card-ic"><Icon name="check" /></div>
         <h3>Quanto custa o processo no JEC?</h3>
-        <p><strong>O 1º grau de jurisdição é 100% gratuito.</strong> Não há custas de distribuição, taxas judiciárias nem pagamento de diligência de citação de oficiais de justiça. Além disso, se o seu pedido for rejeitado pelo juiz em primeira instância, você <strong>não é condenado</strong> a pagar honorários de sucumbência aos advogados da empresa ré. As custas só existem se você recorrer e perder na Turma Recursal.</p>
+        <p><strong>O 1º grau de jurisdição é 100% gratuito.</strong> Não há custas de distribuição, taxas judiciárias nem pagamento de diligência de citação de oficiais de justiça, conforme o artigo 54 da Lei nº 9.099 de 1995. Além disso, se o seu pedido for rejeitado pelo juiz em primeira instância, você <strong>não é condenado</strong> a pagar honorários de sucumbência aos advogados da empresa ré. As custas só existem se você recorrer e perder na Turma Recursal.</p>
         <span class="jec-card-tag">Art. 54 da Lei 9.099/95</span>
       </div>
 

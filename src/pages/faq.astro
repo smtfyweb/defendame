@@ -43,7 +43,7 @@ const jsonLd = [
       <div class="faq-hero-inner">
         <nav class="crumb" aria-label="Navegação"><a href="/">Início</a><span>›</span><span class="crumb-cur">Perguntas Frequentes</span></nav>
         <div class="post-vinheta">Perguntas e Respostas Oficiais · TJSP e Lei 9.099/1995</div>
-        <h1>Perguntas Frequentes sobre o Juizado Especial Cível (JEC)</h1>
+        <h1>Perguntas Frequentes sobre o Juizado Especial Cível</h1>
         <p class="faq-lead">
           Respostas claras e fundamentadas para as principais dúvidas sobre como acionar a Justiça Especial Cível em São Paulo. Saiba onde entrar com a ação, quando o advogado é indispensável e como funcionam as audiências e recursos.
         </p>
@@ -184,17 +184,19 @@ const jsonLd = [
     margin: 0 auto;
   }
   .faq-hero h1 {
-    font-size: clamp(26px, 3.8vw, 38px);
-    font-weight: 700;
+    font-size: clamp(32px, 4.4vw, 48px);
+    font-weight: 400;
+    letter-spacing: -0.04em;
     color: var(--navy);
-    line-height: 1.25;
+    line-height: 1.1;
     margin: 14px 0 16px;
+    text-wrap: balance;
   }
   .faq-lead {
-    font-size: clamp(16px, 1.8vw, 17.5px);
+    font-size: 18px;
     line-height: 1.6;
     color: var(--fg-mid);
-    max-width: 720px;
+    max-width: 760px;
     margin: 0 auto 32px;
   }
   .faq-search-wrap {
