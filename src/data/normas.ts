@@ -33,52 +33,52 @@ export const BANCO_NORMAS: Record<string, NormaItem> = {
   // ── CÓDIGO CIVIL ──
   'art-186-cc': {
     id: 'art-186-cc',
-    badge: 'LEI SECA · CÓDIGO CIVIL',
+    badge: 'CÓDIGO CIVIL',
     titulo: 'Artigo 186',
-    diploma: 'Lei Federal nº 10.406/2002 (Código Civil)',
+    diploma: 'Lei Federal nº 10.406/2002',
     textoLiteral: 'Aquele que, por ação ou omissão voluntária, negligência ou imprudência, violar direito e causar dano a outrem, ainda que exclusivamente moral, comete ato ilícito.',
     linkOficial: 'https://www.planalto.gov.br/ccivil_03/leis/2002/l10406compilada.htm'
   },
   'art-290-cc': {
     id: 'art-290-cc',
-    badge: 'LEI SECA · CÓDIGO CIVIL',
+    badge: 'CÓDIGO CIVIL',
     titulo: 'Artigo 290',
-    diploma: 'Lei Federal nº 10.406/2002 (Código Civil)',
+    diploma: 'Lei Federal nº 10.406/2002',
     textoLiteral: 'A cessão do crédito não tem eficácia em relação ao devedor, senão quando a este notificada; mas por notificado se tem o devedor que, em escrito público ou particular, se declarou ciente da cessão feita.',
     explicacao: 'Exige que fundos de securitização ou empresas de cobrança comprovem a notificação prévia da dívida antes de inscrever o devedor nos cadastros restritivos.',
     linkOficial: 'https://www.planalto.gov.br/ccivil_03/leis/2002/l10406compilada.htm'
   },
   'art-734-cc': {
     id: 'art-734-cc',
-    badge: 'LEI SECA · CÓDIGO CIVIL',
+    badge: 'CÓDIGO CIVIL',
     titulo: 'Artigo 734',
-    diploma: 'Lei Federal nº 10.406/2002 (Código Civil)',
+    diploma: 'Lei Federal nº 10.406/2002',
     textoLiteral: 'O transportador responde pelos danos causados às pessoas transportadas e suas bagagens, salvo motivo de força maior, sendo nula qualquer cláusula excludente da responsabilidade.',
     explicacao: 'Estabelece a responsabilidade objetiva do transportador e a cláusula implícita de incolumidade durante a viagem.',
     linkOficial: 'https://www.planalto.gov.br/ccivil_03/leis/2002/l10406compilada.htm'
   },
   'art-737-cc': {
     id: 'art-737-cc',
-    badge: 'LEI SECA · CÓDIGO CIVIL',
+    badge: 'CÓDIGO CIVIL',
     titulo: 'Artigo 737',
-    diploma: 'Lei Federal nº 10.406/2002 (Código Civil)',
+    diploma: 'Lei Federal nº 10.406/2002',
     textoLiteral: 'O transportador está sujeito aos horários e itinerários previstos, sob pena de responder por perdas e danos, salvo motivo de força maior.',
     explicacao: 'Fixa a obrigação legal de pontualidade no contrato de transporte: atrasos e cancelamentos imprevistos constituem inadimplemento contratual gerador de reparação civil.',
     linkOficial: 'https://www.planalto.gov.br/ccivil_03/leis/2002/l10406compilada.htm'
   },
   'art-927-cc': {
     id: 'art-927-cc',
-    badge: 'LEI SECA · CÓDIGO CIVIL',
+    badge: 'CÓDIGO CIVIL',
     titulo: 'Artigo 927',
-    diploma: 'Lei Federal nº 10.406/2002 (Código Civil)',
+    diploma: 'Lei Federal nº 10.406/2002',
     textoLiteral: 'Aquele que, por ato ilícito (arts. 186 e 187), causar dano a outrem, fica obrigado a repará-lo.\n\nParágrafo único. Haverá obrigação de reparar o dano, independentemente de culpa, nos casos especificados em lei, ou quando a atividade normalmente desenvolvida pelo autor do dano implicar, por sua natureza, risco para os direitos de outrem.',
     linkOficial: 'https://www.planalto.gov.br/ccivil_03/leis/2002/l10406compilada.htm'
   },
   'art-944-cc': {
     id: 'art-944-cc',
-    badge: 'LEI SECA · CÓDIGO CIVIL',
+    badge: 'CÓDIGO CIVIL',
     titulo: 'Artigo 944',
-    diploma: 'Lei Federal nº 10.406/2002 (Código Civil)',
+    diploma: 'Lei Federal nº 10.406/2002',
     textoLiteral: 'A indenização mede-se pela extensão do dano.\n\nParágrafo único. Se houver excessiva desproporção entre a gravidade da culpa e o dano, poderá o juiz fixar, equitativamente, a indenização.',
     explicacao: 'Princípio da Reparação Integral: norteia o arbitramento judicial de danos morais com base no sofrimento real, duração do descaso e prejuízos causados ao consumidor.',
     linkOficial: 'https://www.planalto.gov.br/ccivil_03/leis/2002/l10406compilada.htm'
@@ -87,57 +87,57 @@ export const BANCO_NORMAS: Record<string, NormaItem> = {
   // ── CÓDIGO DE DEFESA DO CONSUMIDOR ──
   'art-6-cdc': {
     id: 'art-6-cdc',
-    badge: 'LEI SECA · CDC',
+    badge: 'CÓDIGO DE DEFESA DO CONSUMIDOR',
     titulo: 'Artigo 6º, incisos VI e VIII',
-    diploma: 'Lei Federal nº 8.078/1990 (Código de Defesa do Consumidor)',
+    diploma: 'Lei Federal nº 8.078/1990',
     textoLiteral: 'São direitos básicos do consumidor:\n\nVI - a efetiva prevenção e reparação de danos patrimoniais e morais, individuais, coletivos e difusos;\n\nVIII - a facilitação da defesa de seus direitos, inclusive com a inversão do ônus da prova, a seu favor, no processo civil, quando, a critério do juiz, for verossímil a alegação ou quando for ele hipossuficiente, segundo as regras ordinárias de experiências;',
     linkOficial: 'https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm'
   },
   'art-14-cdc': {
     id: 'art-14-cdc',
-    badge: 'LEI SECA · CDC',
+    badge: 'CÓDIGO DE DEFESA DO CONSUMIDOR',
     titulo: 'Artigo 14',
-    diploma: 'Lei Federal nº 8.078/1990 (Código de Defesa do Consumidor)',
+    diploma: 'Lei Federal nº 8.078/1990',
     textoLiteral: 'O fornecedor de serviços responde, independentemente da existência de culpa, pela reparação dos danos causados aos consumidores por defeitos relativos à prestação dos serviços, bem como por informações insuficientes ou inadequadas sobre sua fruição e riscos.\n\n§ 1° O serviço é defeituoso quando não fornece a segurança que o consumidor dele pode esperar...',
     explicacao: 'Consagra a Responsabilidade Objetiva do fornecedor de serviços: o consumidor não precisa provar dolo ou negligência da empresa, apenas a falha do serviço e o dano resultante.',
     linkOficial: 'https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm'
   },
   'art-20-cdc': {
     id: 'art-20-cdc',
-    badge: 'LEI SECA · CDC',
+    badge: 'CÓDIGO DE DEFESA DO CONSUMIDOR',
     titulo: 'Artigo 20',
-    diploma: 'Lei Federal nº 8.078/1990 (Código de Defesa do Consumidor)',
+    diploma: 'Lei Federal nº 8.078/1990',
     textoLiteral: 'O fornecedor de serviços responde pelos vícios de qualidade que os tornem impróprios ao consumo ou lhes diminuam o valor, assim como por aqueles decorrentes da disparidade com as indicações constantes da oferta ou mensagem publicitária...',
     linkOficial: 'https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm'
   },
   'art-27-cdc': {
     id: 'art-27-cdc',
-    badge: 'LEI SECA · CDC',
+    badge: 'CÓDIGO DE DEFESA DO CONSUMIDOR',
     titulo: 'Artigo 27',
-    diploma: 'Lei Federal nº 8.078/1990 (Código de Defesa do Consumidor)',
+    diploma: 'Lei Federal nº 8.078/1990',
     textoLiteral: 'Prescreve em cinco anos a pretensão à reparação pelos danos causados por fato do produto ou do serviço prevista na Seção II deste Capítulo, iniciando-se a contagem do prazo a partir do conhecimento do dano e de sua autoria.',
     explicacao: 'Prazo prescricional quinquenal (5 anos) para propositura de ações indenizatórias decorrentes de acidentes de consumo e má prestação de serviços (aplicável em voos domésticos e fraudes bancárias).',
     linkOficial: 'https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm'
   },
   'art-42-cdc': {
     id: 'art-42-cdc',
-    badge: 'LEI SECA · CDC',
+    badge: 'CÓDIGO DE DEFESA DO CONSUMIDOR',
     titulo: 'Artigo 42',
-    diploma: 'Lei Federal nº 8.078/1990 (Código de Defesa do Consumidor)',
+    diploma: 'Lei Federal nº 8.078/1990',
     textoLiteral: 'Na cobrança de débitos, o consumidor inadimplente não será exposto a ridículo, nem será submetido a qualquer tipo de constrangimento ou ameaça.\n\nParágrafo único. O consumidor cobrado em quantia indevida tem direito à repetição do indébito, por valor igual ao dobro do que pagou em excesso, acrescido de correção monetária e juros legais, salvo hipótese de engano justificável.',
     linkOficial: 'https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm'
   },
   'art-43-cdc': {
     id: 'art-43-cdc',
-    badge: 'LEI SECA · CDC',
+    badge: 'CÓDIGO DE DEFESA DO CONSUMIDOR',
     titulo: 'Artigo 43',
-    diploma: 'Lei Federal nº 8.078/1990 (Código de Defesa do Consumidor)',
+    diploma: 'Lei Federal nº 8.078/1990',
     textoLiteral: 'O consumidor terá acesso às informações existentes em cadastros, fichas, registros e dados pessoais e de consumo arquivados sobre ele, bem como sobre as suas respectivas fontes...\n\n§ 2° A abertura de cadastro, ficha, registro e dados pessoais e de consumo deverá ser comunicada por escrito ao consumidor, quando não solicitada por ele.',
     linkOficial: 'https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm'
   },
   'cdc-geral': {
     id: 'cdc-geral',
-    badge: 'LEGISLAÇÃO ESTRUTURANTE · CDC',
+    badge: 'CÓDIGO DE DEFESA DO CONSUMIDOR',
     titulo: 'Código de Defesa do Consumidor',
     diploma: 'Lei Federal nº 8.078/1990',
     textoLiteral: 'Art. 1º O presente código estabelece normas de proteção e defesa do consumidor, de ordem pública e interesse social, nos termos dos arts. 5º, inciso XXXII, 170, inciso V, da Constituição Federal e art. 48 de suas Disposições Transitórias.',
@@ -157,7 +157,7 @@ export const BANCO_NORMAS: Record<string, NormaItem> = {
   // ── LEI DOS JUIZADOS ESPECIAIS (LEI 9.099/1995) ──
   'lei-9099': {
     id: 'lei-9099',
-    badge: 'LEGISLAÇÃO ESTRUTURANTE',
+    badge: 'JUIZADOS ESPECIAIS CÍVEIS',
     titulo: 'Lei nº 9.099/1995',
     diploma: 'Lei dos Juizados Especiais Cíveis e Criminais',
     textoLiteral: 'Art. 2º O processo orientar-se-á pelos critérios da oralidade, simplicidade, informalidade, economia processual e celeridade, buscando, sempre que possível, a conciliação ou a transação.',
@@ -166,7 +166,7 @@ export const BANCO_NORMAS: Record<string, NormaItem> = {
   },
   'art-3-lei-9099': {
     id: 'art-3-lei-9099',
-    badge: 'LEI SECA · JEC',
+    badge: 'JUIZADOS ESPECIAIS CÍVEIS',
     titulo: 'Artigo 3º, inciso I',
     diploma: 'Lei Federal nº 9.099/1995',
     textoLiteral: 'Art. 3º O Juizado Especial Cível tem competência para conciliação, processo e julgamento das causas cíveis de menor complexidade, assim consideradas:\n\nI - as causas cujo valor não exceda a quarenta vezes o salário mínimo;',
@@ -175,7 +175,7 @@ export const BANCO_NORMAS: Record<string, NormaItem> = {
   },
   'art-9-lei-9099': {
     id: 'art-9-lei-9099',
-    badge: 'LEI SECA · JEC',
+    badge: 'JUIZADOS ESPECIAIS CÍVEIS',
     titulo: 'Artigo 9º',
     diploma: 'Lei Federal nº 9.099/1995',
     textoLiteral: 'Art. 9º Nas causas de valor até vinte salários mínimos, as partes comparecerão pessoalmente, podendo ser assistidas por advogado; nas de valor superior, a assistência é obrigatória.',
@@ -184,7 +184,7 @@ export const BANCO_NORMAS: Record<string, NormaItem> = {
   },
   'art-41-lei-9099': {
     id: 'art-41-lei-9099',
-    badge: 'LEI SECA · JEC',
+    badge: 'JUIZADOS ESPECIAIS CÍVEIS',
     titulo: 'Artigo 41, § 2º',
     diploma: 'Lei Federal nº 9.099/1995',
     textoLiteral: 'Art. 41. Da sentença, excetuada a homologatória de conciliação ou laudo arbitral, caberá recurso para o próprio juizado.\n\n§ 1º O recurso será interposto no prazo de dez dias, contados da ciência da sentença...\n\n§ 2º No recurso, as partes serão obrigatoriamente representadas por advogado.',
@@ -193,7 +193,7 @@ export const BANCO_NORMAS: Record<string, NormaItem> = {
   },
   'art-54-lei-9099': {
     id: 'art-54-lei-9099',
-    badge: 'LEI SECA · JEC',
+    badge: 'JUIZADOS ESPECIAIS CÍVEIS',
     titulo: 'Artigo 54',
     diploma: 'Lei Federal nº 9.099/1995',
     textoLiteral: 'Art. 54. O acesso ao Juizado Especial independerá, em primeiro grau de jurisdição, do pagamento de custas, taxas ou despesas.',
@@ -204,18 +204,18 @@ export const BANCO_NORMAS: Record<string, NormaItem> = {
   // ── CÓDIGO DE PROCESSO CIVIL ──
   'art-300-cpc': {
     id: 'art-300-cpc',
-    badge: 'LEI SECA · CPC',
+    badge: 'CÓDIGO DE PROCESSO CIVIL',
     titulo: 'Artigo 300',
-    diploma: 'Lei Federal nº 13.105/2015 (Código de Processo Civil)',
+    diploma: 'Lei Federal nº 13.105/2015',
     textoLiteral: 'A tutela de urgência será concedida quando houver elementos que evidenciem a probabilidade do direito e o perigo de dano ou o risco ao resultado útil do processo.',
     explicacao: 'Fundamenta pedidos liminares para exclusão imediata do nome em órgãos restritivos (SPC/Serasa) antes da citação da empresa ré.',
     linkOficial: 'https://www.planalto.gov.br/ccivil_03/leis/l13105.htm'
   },
   'art-373-cpc': {
     id: 'art-373-cpc',
-    badge: 'LEI SECA · CPC',
+    badge: 'CÓDIGO DE PROCESSO CIVIL',
     titulo: 'Artigo 373, inciso II',
-    diploma: 'Lei Federal nº 13.105/2015 (Código de Processo Civil)',
+    diploma: 'Lei Federal nº 13.105/2015',
     textoLiteral: 'O ônus da prova incumbe:\n\nI - ao autor, quanto ao fato constitutivo de seu direito;\n\nII - ao réu, quanto à existência de fato impeditivo, modificativo ou extintivo do direito do autor.',
     linkOficial: 'https://www.planalto.gov.br/ccivil_03/leis/l13105.htm'
   },
