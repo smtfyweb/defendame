@@ -5,10 +5,13 @@
  * Em estrita conformidade com o Provimento CFOAB nº 205/2021:
  * Caráter puramente didático e informativo de jurimetria sobre dados públicos do TJSP.
  * Não constitui serviço advocatício, não substitui consulta e não gera contratação.
- * Interface 100% harmoniosa:
- * - Launcher flutuante sem foto, apenas com o termo "Dúvidas sobre o JEC?" e quinas de 6px.
- * - Topo do chat com a Logo da DefendaMe centralizada (sem foto).
- * - Todos os botões internos de navegação com ícones SVG estilizados e quinas de 6px.
+ * 
+ * Paleta de Cores Oficial do Projeto (Tokens DataNova):
+ * - Fundo da janela e cabeçalho: var(--surface) (#ffffff)
+ * - Área de conversa: var(--bg) (#f6fbfa)
+ * - Botão launcher: var(--teal) (#12857e) com quinas de 6px
+ * - Logo DefendaMe 100% visível e centralizada no cabeçalho
+ * - Botões e chips em var(--surface) com hover em var(--teal-pale) (#e6f4f2)
  */
 import Logo from './Logo.astro';
 import Icon from './Icon.astro';
@@ -21,7 +24,7 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
 ---
 
 <div id="defendaChat" class="dc-root" aria-live="polite">
-  <!-- Botão Flutuante: Padrão DefendaMe com quinas de 6px, sem foto -->
+  <!-- Botão Flutuante: Padrão DefendaMe em Teal com quinas de 6px, sem foto -->
   <button type="button" id="dcToggle" class="dc-launcher" aria-label="Dúvidas sobre o JEC?" aria-expanded="false">
     <div class="dc-launcher-icon">
       <Icon name="chat" size={17} stroke={2.2} />
@@ -32,7 +35,7 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
 
   <!-- Janela do Chat -->
   <div id="dcWindow" class="dc-window" hidden role="dialog" aria-modal="true" aria-labelledby="dcHeaderTitle">
-    <!-- Cabeçalho com Logo DefendaMe Centralizada -->
+    <!-- Cabeçalho com Logo DefendaMe Centralizada em Fundo Surface Oficial -->
     <div class="dc-header">
       <div class="dc-header-spacer"></div>
       <div class="dc-header-center">
@@ -43,7 +46,7 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
       </button>
     </div>
 
-    <!-- Barra de Aviso Ético e Informativo -->
+    <!-- Barra de Aviso Ético e Didático em Teal Claro -->
     <div class="dc-notice" id="dcNoticeBar">
       <div class="dc-notice-head">
         <Icon name="shield" size={13} stroke={2.2} />
@@ -560,29 +563,28 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     font-family: inherit;
   }
 
-  /* Launcher Flutuante: Padrão DefendaMe quadrado com quina quebrada (6px) sem foto */
+  /* Launcher Flutuante: Padrão DefendaMe em Teal com quinas de 6px, sem foto */
   .dc-launcher {
     display: inline-flex;
     align-items: center;
     gap: 9px;
-    background: var(--navy);
-    border: 1px solid var(--border);
-    padding: 10px 16px;
-    border-radius: 6px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+    background: var(--teal);
+    border: 2px solid transparent;
+    padding: 10px 18px;
+    border-radius: var(--r-btn, 6px);
+    box-shadow: 0 4px 18px rgba(18, 133, 126, 0.32);
     cursor: pointer;
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    color: var(--fg);
+    color: #FFFFFF;
   }
   .dc-launcher:hover {
+    background: var(--teal-h);
     transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.36);
-    border-color: var(--teal);
+    box-shadow: 0 8px 24px rgba(18, 133, 126, 0.42);
   }
   .dc-launcher.active {
-    opacity: 0.9;
+    opacity: 0.95;
     transform: scale(0.98);
-    border-color: var(--teal);
   }
   .dc-launcher-icon {
     position: relative;
@@ -591,7 +593,7 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--teal);
+    color: #FFFFFF;
     flex-shrink: 0;
   }
   .dc-status-dot {
@@ -601,7 +603,7 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    border: 1.5px solid var(--navy);
+    border: 1.5px solid #FFFFFF;
   }
   .dc-status-dot.online {
     background: #10B981;
@@ -612,7 +614,7 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3);
   }
   .dc-launcher-text {
-    font-size: 13.5px;
+    font-size: 14px;
     font-weight: 600;
     color: #FFFFFF;
     line-height: 1.2;
@@ -620,7 +622,7 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     letter-spacing: 0.01em;
   }
 
-  /* Janela do Chat: quina de 8px */
+  /* Janela do Chat: quina de 8px e fundo surface oficial */
   .dc-window {
     position: absolute;
     bottom: 64px;
@@ -629,10 +631,10 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     max-width: calc(100vw - 32px);
     height: 540px;
     max-height: calc(100vh - 90px);
-    background: var(--bg-card);
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 8px;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+    box-shadow: 0 16px 48px rgba(16, 24, 40, 0.16);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -643,18 +645,18 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     to { opacity: 1; transform: translateY(0) scale(1); }
   }
 
-  /* Header do Chat com Logo Centralizada */
+  /* Header do Chat com Fundo Surface e Logo Centralizada */
   .dc-header {
-    background: var(--navy);
-    padding: 12px 14px;
+    background: var(--surface);
+    padding: 13px 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid var(--border);
   }
   .dc-header-spacer {
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     flex-shrink: 0;
   }
   .dc-header-center {
@@ -670,45 +672,49 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     cursor: default;
   }
   .dc-header-logo :global(.wm) {
-    font-size: 21px !important;
-    color: #FFFFFF !important;
+    font-size: 22px !important;
+    color: var(--navy) !important;
     line-height: 1 !important;
   }
+  .dc-header-logo :global(.wm-txt) {
+    color: var(--navy) !important;
+  }
   .dc-close-btn {
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     background: transparent;
-    border: none;
+    border: 1px solid transparent;
     color: var(--fg-muted);
     cursor: pointer;
     padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 4px;
+    border-radius: var(--r-btn, 6px);
     transition: all 0.15s ease;
     flex-shrink: 0;
   }
   .dc-close-btn:hover {
-    color: #FFFFFF;
-    background: rgba(255, 255, 255, 0.1);
+    color: var(--teal);
+    background: var(--teal-pale);
+    border-color: var(--line-teal);
   }
 
-  /* Barra de Aviso Institucional e Ético */
+  /* Barra de Aviso Institucional e Didático em Teal Claro */
   .dc-notice {
-    padding: 8px 12px;
+    padding: 8px 14px;
     font-size: 11px;
     text-align: left;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--line-teal);
     line-height: 1.35;
-    background: rgba(13, 148, 136, 0.06);
+    background: var(--teal-pale);
     border-left: 3px solid var(--teal);
   }
   .dc-notice-head {
     display: flex;
     align-items: center;
     gap: 6px;
-    margin-bottom: 3px;
+    margin-bottom: 2px;
     color: var(--teal);
     font-weight: 600;
     font-size: 11px;
@@ -719,17 +725,17 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
   .dc-notice-body {
     margin: 0;
     font-size: 10px;
-    color: var(--fg-muted);
+    color: var(--fg-mid);
     line-height: 1.35;
   }
   .dc-notice.is-open {
-    border-left-color: #10B981;
+    border-left-color: var(--teal);
   }
   .dc-notice.is-plantao {
     border-left-color: #F59E0B;
   }
 
-  /* Área de Mensagens */
+  /* Área de Mensagens com Fundo Mint/Suave Oficial */
   .dc-messages {
     flex: 1;
     overflow-y: auto;
@@ -737,12 +743,13 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     display: flex;
     flex-direction: column;
     gap: 10px;
+    background: var(--bg);
   }
 
   .dc-msg {
     max-width: 88%;
     padding: 9px 12px;
-    border-radius: 6px;
+    border-radius: var(--r-btn, 6px);
     font-size: 13.5px;
     line-height: 1.45;
   }
@@ -754,10 +761,11 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
   }
 
   .dc-msg-bot {
-    background: var(--bg-hover);
+    background: var(--surface);
     color: var(--fg);
     align-self: flex-start;
     border: 1px solid var(--border);
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
   }
   .dc-msg-user {
     background: var(--teal);
@@ -774,10 +782,10 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     margin-bottom: 4px;
   }
   .dc-chip {
-    background: var(--bg-card);
+    background: var(--surface);
     border: 1px solid var(--border);
-    color: var(--fg);
-    border-radius: 6px;
+    color: var(--navy);
+    border-radius: var(--r-btn, 6px);
     padding: 7px 12px;
     font-size: 12.5px;
     font-weight: 500;
@@ -789,7 +797,7 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     user-select: none;
     font-family: inherit;
     line-height: 1.25;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
   }
   .dc-chip-ic {
     flex-shrink: 0;
@@ -801,9 +809,9 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
   .dc-chip:hover {
     border-color: var(--teal);
     color: var(--teal);
-    background: var(--bg-hover);
+    background: var(--teal-pale);
     transform: translateY(-1.5px);
-    box-shadow: 0 4px 12px rgba(13, 148, 136, 0.15);
+    box-shadow: 0 4px 12px rgba(18, 133, 126, 0.15);
   }
   .dc-chip:active {
     transform: scale(0.98);
@@ -812,26 +820,26 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     border-style: dashed;
     border-color: var(--teal);
     color: var(--teal);
-    background: rgba(13, 148, 136, 0.04);
+    background: var(--teal-pale);
   }
   .dc-chip-write .dc-chip-ic {
     color: var(--teal);
   }
   .dc-chip-write:hover {
-    background: rgba(13, 148, 136, 0.1);
+    background: #d4ece8;
   }
   .dc-chip-submit {
     background: var(--teal);
     color: #FFFFFF;
     border-color: var(--teal);
-    font-weight: 500;
+    font-weight: 600;
   }
   .dc-chip-submit .dc-chip-ic {
     color: #FFFFFF;
   }
   .dc-chip-submit:hover {
-    background: var(--teal-h, #0F766E);
-    border-color: var(--teal-h, #0F766E);
+    background: var(--teal-h);
+    border-color: var(--teal-h);
     color: #FFFFFF;
   }
 
@@ -848,10 +856,10 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
   }
   .dc-text-input {
     flex: 1;
-    background: var(--bg-card);
+    background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 7px 10px;
+    border-radius: var(--r-btn, 6px);
+    padding: 8px 11px;
     font-size: 13px;
     color: var(--fg);
     font-family: inherit;
@@ -860,12 +868,13 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
   .dc-text-input:focus {
     outline: none;
     border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(18, 133, 126, 0.12);
   }
   .dc-textarea {
     width: 100%;
-    background: var(--bg-card);
+    background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 6px;
+    border-radius: var(--r-btn, 6px);
     padding: 8px 10px;
     font-size: 13px;
     color: var(--fg);
@@ -876,21 +885,23 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
   .dc-textarea:focus {
     outline: none;
     border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(18, 133, 126, 0.12);
   }
 
   .dc-card-contact {
-    background: var(--bg-hover);
-    padding: 10px;
-    border-radius: 6px;
+    background: var(--surface);
+    padding: 12px;
+    border-radius: var(--r-btn, 6px);
     border: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(16, 24, 40, 0.05);
     gap: 8px;
   }
   .dc-legal-badge {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: rgba(13, 148, 136, 0.08);
-    border: 1px solid rgba(13, 148, 136, 0.2);
+    background: var(--teal-pale);
+    border: 1px solid var(--line-teal);
     border-radius: 4px;
     padding: 4px 8px;
     font-size: 10.5px;
@@ -931,10 +942,10 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
   }
   .dc-send-btn {
     width: 100%;
-    padding: 9px;
+    padding: 10px;
     font-size: 13px;
     font-weight: 600;
-    border-radius: 6px;
+    border-radius: var(--r-btn, 6px);
     background: var(--teal);
     color: #FFFFFF;
     border: 1px solid var(--teal);
@@ -949,8 +960,8 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     color: #FFFFFF;
   }
   .dc-send-btn:hover {
-    background: var(--teal-h, #0F766E);
-    border-color: var(--teal-h, #0F766E);
+    background: var(--teal-h);
+    border-color: var(--teal-h);
   }
 
   /* Sucesso */
@@ -958,10 +969,11 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     text-align: left;
   }
   .dc-proto-badge {
-    background: var(--bg-card);
+    background: var(--teal-pale);
+    color: var(--teal);
     padding: 5px 8px;
     border-radius: 4px;
-    border: 1px solid var(--border);
+    border: 1px solid var(--line-teal);
     font-size: 12px;
     display: inline-block;
     margin: 6px 0;
@@ -979,8 +991,8 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     gap: 6px;
     font-weight: 600;
     font-size: 13px;
-    padding: 9px 12px;
-    border-radius: 6px;
+    padding: 10px 12px;
+    border-radius: var(--r-btn, 6px);
     box-shadow: 0 4px 12px rgba(37, 211, 102, 0.25);
   }
   .dc-wbtn .dc-chip-ic {
@@ -992,8 +1004,8 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
 
   /* Rodapé */
   .dc-footer {
-    padding: 6px 12px;
-    background: var(--bg-card);
+    padding: 8px 12px;
+    background: var(--surface);
     border-top: 1px solid var(--border);
     text-align: center;
   }
@@ -1018,7 +1030,7 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
     }
     .dc-launcher {
       padding: 8px 12px;
-      border-radius: 6px;
+      border-radius: var(--r-btn, 6px);
     }
     .dc-launcher-text {
       font-size: 12.5px;
