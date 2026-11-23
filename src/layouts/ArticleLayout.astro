@@ -77,7 +77,12 @@ if (d.faq.length) jsonLd.push({ '@context': 'https://schema.org', '@type': 'FAQP
     <div class="post-content">
       {d.kpis.length > 0 && (
         <div class="seo-kpis"><div class="juri-kpi-grid">{d.kpis.map((k) => <div class={`kpi-card${k.destaque ? ' highlight' : ''}`}><span class="kpi-val">{k.valor}</span><span class="kpi-label">{k.rotulo}</span></div>)}</div>
-        {d.kpiNota && <p class="kpi-disclaimer">{d.kpiNota}</p>}</div>
+        {d.kpiNota && (
+          <p class="kpi-disclaimer">
+            <Icon name="chart" size={13} />
+            <span><strong>Nota metodológica:</strong> {d.kpiNota}</span>
+          </p>
+        )}</div>
       )}
       {d.trilha && (
         <BoxTrilha trilha={d.trilha} variant="topo" temaSlug={d.tema} />
