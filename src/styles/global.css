@@ -219,6 +219,48 @@ h1, h2, h3 { font-family: var(--ff); }
 .sumula-src { font-size: 13px; color: var(--teal); font-weight: 500; margin-top: 8px; }
 @media (max-width: 520px) { .sumula { flex-direction: column; gap: 10px; } }
 
+/* Citação jurídica inline (Legis) — badges elegantes com ícone */
+.cite-legal {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.88em;
+  font-weight: 500;
+  color: var(--navy);
+  background: var(--teal-pale);
+  border: 1px solid var(--line-teal);
+  padding: 1px 7px;
+  border-radius: var(--r-btn);
+  vertical-align: 0.05em;
+  margin: 0 2px;
+  white-space: nowrap;
+  line-height: 1.4;
+  transition: background .15s, border-color .15s;
+}
+.cite-legal-sym {
+  color: var(--teal);
+  font-weight: 700;
+  font-size: 0.95em;
+}
+.cite-legal-art {
+  color: var(--navy);
+  font-weight: 700;
+}
+.cite-legal-lei {
+  color: var(--fg-mid);
+  font-size: 0.9em;
+}
+.cite-legal-trib {
+  color: var(--teal);
+  font-weight: 700;
+  font-size: 0.82em;
+  background: #fff;
+  padding: 0 4px;
+  border-radius: 3px;
+  border: 1px solid var(--line-teal);
+  text-transform: uppercase;
+}
+
 .chart-card {
   background: var(--surface); border-radius: var(--r-lg);
   padding: 28px; box-shadow: var(--shadow); margin: 36px 0;

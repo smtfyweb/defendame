@@ -1,0 +1,30 @@
+---
+/**
+ * Componente de citação jurídica visual inline (Artigo de Lei, Súmula ou Precedente STJ/STF).
+ * Substitui parênteses apagados por uma insígnia sutil e prestigiosa.
+ * Uso:
+ *   <Legis art="Art. 944" lei="Código Civil" />
+ *   <Legis art="Art. 14" lei="CDC" />
+ *   <Legis resp="REsp 1.584.465/MG" tribunal="STJ" />
+ *   <Legis sumula="548" tribunal="STJ" />
+ */
+interface Props {
+  art?: string;
+  lei?: string;
+  sumula?: string | number;
+  tribunal?: string;
+  resp?: string;
+  tema?: string;
+  texto?: string;
+}
+const { art, lei, sumula, tribunal, resp, tema, texto } = Astro.props;
+---
+<span class="cite-legal" title={texto ?? `${art ?? ''} ${lei ?? ''} ${resp ?? ''} ${tribunal ?? ''}`}>
+  <span class="cite-legal-sym">{sumula || resp || tribunal ? '⚖' : '§'}</span>
+  {art && <strong class="cite-legal-art">{art}</strong>}
+  {lei && <span class="cite-legal-lei">{lei}</span>}
+  {sumula && <strong class="cite-legal-art">Súmula {sumula}</strong>}
+  {resp && <strong class="cite-legal-art">{resp}</strong>}
+  {tema && <span class="cite-legal-lei">Tema {tema}</span>}
+  {tribunal && <span class="cite-legal-trib">{tribunal}</span>}
+</span>

@@ -15,3 +15,4 @@ export { default as LeiaTambem } from './LeiaTambem.astro';
 export { default as DataTable } from './DataTable.astro';
 export { default as CasoReal } from './CasoReal.astro';
 export { default as BoxTrilha } from './BoxTrilha.astro';
+export { default as Legis } from './Legis.astro';
