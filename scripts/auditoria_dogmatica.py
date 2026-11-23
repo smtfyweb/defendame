@@ -42,6 +42,7 @@ TERMOS_PROIBIDOS_OAB = [
     r"vit[oó]ria\s+certa",
     r"ganho\s+certo",
     r"indeniza[çc][ãa]o\s+garantida",
+    r"garante(m)?\s+proced[êe]ncia",
     r"desmonta\s+sumariamente",
     r"sem\s+risco\s+algum",
     r"melhor\s+advogado",

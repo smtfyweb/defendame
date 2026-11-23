@@ -265,6 +265,37 @@ Metas: 900–1.600 palavras · 3 CTAs · 1 anúncio · 2–3 figuras · 4–5 pe
 - **Normas:** conferir número e assunto na fonte oficial antes de citar (ex.: MED = Res. BCB 103/2021; bloqueio cautelar = Res. BCB 147/2021). Não citar normas revogadas (o Provimento 94/2000 foi substituído pelo 205/2021).
 - **Evitar:** superlativos, urgência artificial, "garantido", "ganhe", promessas de valor, nomes de clientes reais.
 
+### 13.1 Padrão Canônico de Tom, Voz e Vocabulário de André L. Silva
+
+A voz de André L. Silva traduz a autoridade técnica da jurimetria e a sobriedade do contencioso de consumo. O padrão canônico de redação é definido pelo seguinte trecho paradigmático:
+
+> *"Identificamos nos acórdãos do Tribunal quais documentos integraram com maior frequência o conjunto probatório das demandas acolhidas e, em contrapartida, em quais hipóteses a documentação apresentada se mostrou insuficiente, frágil ou desprovida de lastro fático para demonstrar a falha de serviço ou o prejuízo alegado."*
+
+#### Os 4 Pilares da Voz de André:
+
+1. **Jurimetria descritiva, nunca triunfalismo:**
+   André não formula promessas, não usa expressões como "causa ganha", "vitória certa", "como processar e ganhar" ou "documentos que garantem a procedência". A análise apoia-se sempre em frequências estatísticas de acolhimento, padrões de julgamento das Turmas Recursais e requisitos fático-probatórios observados nas decisões públicas do Tribunal de Justiça de São Paulo.
+
+2. **Equilíbrio analítico — luz e sombra:**
+   Toda análise técnica examina os dois lados da moeda: identifica o que costuma compor o conjunto probatório das ações acolhidas e, com igual ênfase e rigor, aponta onde o conjunto probatório foi insuficiente, frágil ou gerou improcedência sumária por falta de lastro.
+
+3. **Precisão dogmática com linguagem acessível:**
+   Emprega o rigor técnico do Direito Processual Civil e do Código de Defesa do Consumidor sem apelar para afetação ou "juridiquês" estéril. Termos como "acervo probatório", "falha de serviço", "fato do serviço", "desvio produtivo", "dosimetria indenizatória" e "faixa interquartil" são usados com precisão conceitual e explicados com naturalidade.
+
+4. **Fluência sintática sem parênteses:**
+   Veto absoluto ao uso de parênteses no texto: ideias complementares, siglas ou referências legais são intercaladas com travessões, vírgulas ou construções sintáticas diretas.
+
+#### Matriz Lexical de De/Para:
+
+| Evitar — Linguagem Popular ou Triunfalista | Preferir — Voz Canônica de André L. Silva |
+|---|---|
+| documentos que garantem a indenização | documentos que integram com maior frequência o conjunto probatório das ações acolhidas |
+| como ganhar a causa contra o banco | fatores determinantes para a responsabilização civil da instituição financeira |
+| o juiz errou na sentença | a decisão colegiada adotou linha restritiva alinhada ao precedente |
+| faltou documento no processo | documentação apresentada se mostrou insuficiente, frágil ou desprovida de lastro fático |
+| banco foi obrigado a pagar bolada | dosimetria indenizatória fixada pelas Turmas Recursais na faixa mediana |
+| causa ganha ou direito garantido | percentual histórico de procedência apurado na amostragem do Tribunal |
+
 ### Regras da OAB (Provimento CFOAB nº 205/2021) — obrigatórias
 - Proibido mencionar **valores de honorários, forma de pagamento, gratuidade ou descontos** (art. 3º, I). Não escrever "consulta grátis", "análise gratuita", "sem custo", "% no êxito".
 - Permitido informar que **o processo no JEC não tem custas no 1º grau** (é informação sobre a lei, não sobre honorários).
