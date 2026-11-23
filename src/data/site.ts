@@ -22,14 +22,19 @@ export const AUTHOR = {
   jobTitle: 'Especialista em Jurimetria e Legal Analytics no JEC',
   photo: '/images/andre-l-silva.jpg',
   url: '/autor/andre-l-silva/',
-  alumniOf: ['Universidade Paulista (UNIP)', 'Pontifícia Universidade Católica do Paraná (PUC-PR)', 'Escola Paulista de Negócios (EPN)', 'Universidade de Mogi das Cruzes (UMC)'],
+  alumniOf: [
+    'UNIP — Universidade Paulista',
+    'PUC-PR — Pontifícia Universidade Católica do Paraná',
+    'EPN — Escola Paulista de Negócios',
+    'UMC — Universidade de Mogi das Cruzes'
+  ],
 };
 
 export const DATASET = {
   total: 39727,
   totalFmt: '39.727',
   recorte: 'Estado de São Paulo',
-  fonte: 'Decisões públicas do Tribunal de Justiça de São Paulo (10 Regiões Administrativas)',
+  fonte: 'Decisões públicas do Tribunal de Justiça de São Paulo — 10 Regiões Administrativas',
   mediaFavoravel: '61,4%',
 };
 
