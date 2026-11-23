@@ -849,8 +849,22 @@ body.cz-lock { overflow: hidden; }
 .post-body { --pf: 18px; }
 .post-body.txt-sm { --pf: 16px; } .post-body.txt-md { --pf: 18px; } .post-body.txt-lg { --pf: 20px; } .post-body.txt-xl { --pf: 22px; }
 .post-body > p, .post-body .faq-a, .post-body .leia + p { font-size: var(--pf); line-height: 1.78; color: var(--fg-mid); margin: 0 0 22px; }
-.post-body h2 { font-size: clamp(26px, 3vw, 32px); font-weight: 400; letter-spacing: -.035em; line-height: 1.15; color: var(--navy); margin: 52px 0 18px; scroll-margin-top: 130px; }
-.post-body h2:first-child { margin-top: 0; }
+.post-body h2 {
+  font-size: clamp(24px, 2.6vw, 30px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+  color: var(--navy);
+  margin: 56px 0 20px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+  scroll-margin-top: 130px;
+}
+.post-body h2:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
 .post-body strong { color: var(--navy); font-weight: 600; }
 .post-body .med-steps { grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; margin: 8px 0 12px; }
 .post-body .med-step { padding: 22px 18px; }
@@ -1343,7 +1357,8 @@ svg text { font-family: var(--ff); }
 @media (max-width: 760px) { .flow4 { grid-template-columns: 1fr !important; } }
 .post-body > ul, .post-body > ol { padding-left: 22px; margin: 0 0 22px; }
 .post-body > ul li, .post-body > ol li { font-size: var(--pf); line-height: 1.75; color: var(--fg-mid); margin-bottom: 8px; }
-.post-body > h3 { font-size: 20px; font-weight: 600; color: var(--navy); margin: 32px 0 10px; letter-spacing: -.015em; }
+.post-body > h3,
+.post-body h3 { font-size: 20px; font-weight: 700; color: var(--navy); margin: 38px 0 14px; letter-spacing: -.015em; line-height: 1.35; }
 .post-body a { color: var(--teal); }
 .post-body > .table-container + p, .post-body table + p { margin-top: 8px; }
 .post-body section#faq, section.post-body#faq { margin-top: 48px; }
