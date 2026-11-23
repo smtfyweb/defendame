@@ -137,7 +137,7 @@ const UFS = ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','P
     var done=function(){ document.getElementById('czProto').textContent=proto; go(4); };
     if(!ENDPOINT){ console.warn('[DefendaMe] PUBLIC_FORM_ENDPOINT não configurado — caso não enviado', data); done(); return; }
     sendB.disabled=true;
-    fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)})
+    fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(data)})
       .then(function(r){ if(!r.ok) throw new Error(r.status); done(); })
       .catch(function(){ alertBox('Não foi possível enviar agora. Verifique sua conexão e tente novamente.'); })
       .finally(function(){ sendB.disabled=false; }); });
