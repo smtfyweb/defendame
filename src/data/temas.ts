@@ -157,7 +157,7 @@ const AFINIDADES_MAP: Record<string, { titulo: string; tituloHtml?: string; subt
   },
   'cartao-de-credito': {
     titulo: 'Cartão de Crédito e Fraudes Financeiras no JEC',
-    tituloHtml: '<span class="title-pill-inv">Cartão de Crédito</span> e Fraudes Financeiras no <span class="title-pill-inv">JEC</span>',
+    tituloHtml: '<span class="title-pill-inv">Cartão de Crédito</span> e Fraudes Financeiras no JEC',
     subtitulo: 'Jurisprudência do TJSP sobre compras clonadas, juros rotativos e golpes bancários.',
     slotsH: 'Ações bancárias e financeiras analisadas',
     top: 'golpe-pix',
