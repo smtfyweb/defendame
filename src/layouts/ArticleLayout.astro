@@ -256,17 +256,35 @@ if (d.faq.length) jsonLd.push({ '@context': 'https://schema.org', '@type': 'FAQP
       const synth = window.speechSynthesis;
       if (!synth || !('SpeechSynthesisUtterance' in window)) { btn.disabled = true; return; }
       let elapsed = 0;
+      // Pré-carrega vozes (Chrome/mobile não carrega de imediato)
+      let voices: SpeechSynthesisVoice[] = [];
+      const loadVoices = () => { voices = synth.getVoices(); };
+      loadVoices();
+      synth.onvoiceschanged = loadVoices;
       speedBtn.addEventListener('click', () => { si = (si+1)%speeds.length; speedBtn.textContent = speeds[si]+'×'; });
       btn.addEventListener('click', () => {
-        if (synth.speaking) { synth.cancel(); clearInterval(ticker); setPlaying(false); elapsed = 0; timeEl.textContent = '0:00'; return; }
-        const txt = (document.querySelector('.post-titulo')?.textContent || '') + '. ' +
-          [...document.getElementById('postBody')!.querySelectorAll('h2,h3,p,li')].map(n=>n.textContent!.trim()).join('. ');
-        const u = new SpeechSynthesisUtterance(txt); u.lang = 'pt-BR'; u.rate = speeds[si];
-        const v = synth.getVoices().find(v=>/pt-BR|pt_BR/i.test(v.lang)); if (v) u.voice = v;
-        u.onend = u.onerror = () => { clearInterval(ticker); setPlaying(false); elapsed = 0; timeEl.textContent = '0:00'; };
-        synth.speak(u); setPlaying(true);
-        elapsed = 0; clearInterval(ticker);
-        ticker = window.setInterval(() => { elapsed++; timeEl.textContent = fmt(elapsed); }, 1000);
+        if (synth.speaking || synth.pending) {
+          synth.cancel(); clearInterval(ticker); setPlaying(false); elapsed = 0; timeEl.textContent = '0:00'; return;
+        }
+        const titulo = document.querySelector('.post-titulo')?.textContent?.trim() || '';
+        const corpo = [...(document.getElementById('postBody')?.querySelectorAll('h2,h3,p,li') || [])].map(n => n.textContent?.trim()).filter(Boolean).join('. ');
+        const txt = (titulo ? titulo + '. ' : '') + corpo;
+        if (!txt.trim()) return;
+        // Chrome bug: pode estar paused sem motivo — força resume antes de falar
+        synth.cancel();
+        setTimeout(() => {
+          const u = new SpeechSynthesisUtterance(txt); u.lang = 'pt-BR'; u.rate = speeds[si];
+          const v = voices.find(v => /pt-BR|pt_BR/i.test(v.lang)) || voices.find(v => /pt/i.test(v.lang));
+          if (v) u.voice = v;
+          u.onend = u.onerror = () => { clearInterval(ticker); setPlaying(false); elapsed = 0; timeEl.textContent = '0:00'; };
+          synth.speak(u); setPlaying(true);
+          elapsed = 0; clearInterval(ticker);
+          ticker = window.setInterval(() => {
+            // Chrome 15s bug: síntese para sozinha — keep-alive
+            if (synth.speaking && !synth.paused) { synth.pause(); synth.resume(); }
+            elapsed++; timeEl.textContent = fmt(elapsed);
+          }, 1000);
+        }, 50);
       });
       addEventListener('beforeunload', () => { synth.cancel(); clearInterval(ticker); });
     }
