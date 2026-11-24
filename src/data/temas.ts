@@ -93,7 +93,7 @@ const AFINIDADES_MAP: Record<string, { titulo: string; tituloHtml?: string; subt
   },
   'golpe-pix': {
     titulo: 'Outras Ações de Direito Bancário e Proteção ao Crédito no JEC',
-    tituloHtml: 'Outras Ações de <span class="title-pill-inv">Direito Bancário</span> e <span class="title-pill-inv">Proteção ao Crédito</span> no JEC',
+    tituloHtml: 'Outras <span class="title-pill-inv">Ações de Direito Bancário e Proteção ao Crédito</span> no JEC',
     subtitulo: 'Decisões reais do TJSP sobre fraudes financeiras, juros e restrições indevidas no CPF.',
     slotsH: 'Ações bancárias e financeiras analisadas',
     top: 'negativacao-indevida',
