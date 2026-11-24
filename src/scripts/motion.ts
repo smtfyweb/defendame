@@ -79,8 +79,21 @@ export function settle(block: HTMLElement) {
   block.querySelectorAll<HTMLElement>('[data-count]').forEach(setFinal);
 }
 
+/**
+ * Textos longos (artigos, temas, institucionais): o texto NUNCA fica oculto (bom para SEO e leitura).
+ * Só os títulos h2 ganham um fio verde decorativo que se desenha ao aparecer.
+ */
+function autoTag(root: ParentNode) {
+  root.querySelectorAll<HTMLElement>('.post-body > h2, .doc > h2').forEach((el) => {
+    if (el.closest('[data-motion]') || el.hasAttribute('data-motion')) return;
+    el.setAttribute('data-motion', '');
+    el.classList.add('auto-in');
+  });
+}
+
 /** Observa todos os blocos [data-motion] da página. */
 export function initMotion(root: ParentNode = document) {
+  autoTag(root);
   root.querySelectorAll<HTMLElement>('[data-count-auto]').forEach((el) => { if (!el.dataset.count) parseAuto(el); });
   const blocks = [...root.querySelectorAll<HTMLElement>('[data-motion]')];
   if (reduce || !('IntersectionObserver' in window)) {

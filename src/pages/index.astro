@@ -17,6 +17,14 @@ const max = Math.max(...TEMAS.map((t) => t.decisoes));
 const pct = (v: number) => v.toFixed(1).replace('.', ',') + '%';
 const mediaFav = parseFloat(DATASET.mediaFavoravel.replace(',', '.'));
 const grupoIcone: Record<Grupo, string> = { banco: 'bank', essencial: 'zap', viagem: 'plane', cotidiano: 'cart' };
+const topVolume = [...TEMAS].sort((a, b) => b.decisoes - a.decisoes).slice(0, 5);
+// Abas da home: "Bancos e crédito" aparece dividido em dois (só na exibição; os dados não mudam)
+const bySlug = (ss: string[]) => ss.map((x) => TEMAS.find((t) => t.slug === x)!).filter(Boolean);
+const abas = [
+  { id: 'banco-fraude', nome: 'Fraudes e golpes', sec: GRUPOS.banco, temas: bySlug(['golpe-pix', 'consignado-rmc', 'cartao-de-credito']) },
+  { id: 'banco-credito', nome: 'Crédito e cadastro', temas: bySlug(['negativacao-indevida', 'protesto-indevido', 'superendividamento']) },
+  ...(['essencial', 'viagem', 'cotidiano'] as Grupo[]).map((g, i) => ({ id: g, nome: GRUPOS[g], sec: i === 0 ? 'Outros' : undefined, temas: TEMAS.filter((t) => t.grupo === g) })),
+];
 const chips = ['Golpe do Pix', 'Nome negativado', 'Voo cancelado', 'Conta de luz', 'Plano de saúde', 'Compra não entregue'];
 const data = (d: Date) => d.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
 const etapas = [
@@ -30,57 +38,60 @@ const etapas = [
 const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SITE.name, url: SITE.url, inLanguage: 'pt-BR', description: SITE.description }];
 ---
 <BaseLayout title={`${SITE.name} — ${SITE.tagline}`} description={SITE.description} jsonLd={jsonLd}>
-<section class="hero">
-  <div class="hero-inner">
-    <a href="#jurimetria" class="hero-pill"><span class="hero-pill-badge">Jurimetria TJSP</span><span class="hero-pill-text">{DATASET.totalFmt} decisões analisadas <Icon name="chevron-right" size={14} stroke={2.4} /></span></a>
-    <h1>Seus direitos no Juizado Especial Cível, <em>explicados com dados</em></h1>
-    <p class="hero-lead">Analisamos 39.727 decisões reais do TJSP para você entender suas chances, reunir as provas certas e fazer valer seus direitos — com ou sem advogado.</p>
-    <form class="search" id="searchForm" role="search">
-      <Icon name="search" size={20} stroke={2} />
-      <input id="q" type="search" placeholder="O que aconteceu com você? Ex.: golpe do Pix, nome negativado, voo atrasado…" autocomplete="off" aria-label="Buscar tema" />
-      <button class="btn btn-primary" type="submit">Buscar</button>
-    </form>
-    <div class="chips">{chips.map((c) => <button class="chip" type="button" data-q={c}>{c}</button>)}</div>
+<section class="hero hero-split">
+  <div class="hs-inner">
+    <div class="hs-text">
+      <a href="#jurimetria" class="hero-pill"><span class="hero-pill-badge">Jurimetria TJSP</span><span class="hero-pill-text">{DATASET.totalFmt} decisões analisadas <Icon name="chevron-right" size={14} stroke={2.4} /></span></a>
+      <h1>Seus direitos no Juizado Especial Cível, <em>explicados com dados</em></h1>
+      <p class="hero-lead">Analisamos 39.727 decisões reais do TJSP para você entender suas chances, reunir as provas certas e fazer valer seus direitos — com ou sem advogado.</p>
+      <form class="search" id="searchForm" role="search">
+        <Icon name="search" size={20} stroke={2} />
+        <input id="q" type="search" placeholder="O que aconteceu com você? Ex.: golpe do Pix, nome negativado, voo atrasado…" autocomplete="off" aria-label="Buscar tema" />
+        <button class="btn btn-primary" type="submit">Buscar</button>
+      </form>
+      <div class="chips">{chips.map((c) => <button class="chip" type="button" data-q={c}>{c}</button>)}</div>
+    </div>
+    <div class="hs-live" data-motion>
+      <div class="hs-big">
+        <div class="hs-big-n" data-count={mediaFav} data-dec="1" data-suffix="%" data-delay="200">{DATASET.mediaFavoravel}</div>
+        <p><strong>Procedência no JEC paulista</strong>Média estadual de decisões favoráveis</p>
+      </div>
+      <ul class="hs-bars">{topVolume.map((t, i) => (
+        <li data-reveal style={`--i:${i + 1}`}><a href={`/${t.slug}/`}>{t.curto}</a><span class="hs-tr"><i data-bar style={`--w:${t.procedenciaPct}%;--i:${i + 3}`}></i></span><b data-count={t.procedenciaPct} data-dec="1" data-suffix="%" data-delay={450 + i * 120}>{pct(t.procedenciaPct)}</b></li>))}
+      </ul>
+      <div class="hs-foot">
+        <div><b data-count={DATASET.total} data-delay="500">{DATASET.totalFmt}</b><span>Decisões analisadas</span><small>Decisões do TJSP · Todo o Estado de SP</small></div>
+        <div><b data-count={TEMAS.length} data-delay="850">{TEMAS.length}</b><span>Temas do JEC</span><small>Demandas mais comuns</small></div>
+      </div>
+    </div>
   </div>
 </section>
 
-<div class="stats-wrap"><div class="stats-panel"><div class="stats" data-motion>
-  <div class="stat-card" data-reveal style="--i:0"><div class="stat-eyebrow">Decisões do TJSP · Todo o Estado de SP</div><div class="stat-num" data-count={DATASET.total}>{DATASET.totalFmt}</div><div class="stat-label">Decisões analisadas</div></div>
-  <div class="stat-card" data-reveal style="--i:1"><div class="stat-eyebrow">Demandas mais comuns</div><div class="stat-num" data-count={TEMAS.length} data-delay="350">{TEMAS.length}</div><div class="stat-label">Temas do JEC</div></div>
-  <div class="stat-card" data-reveal style="--i:2"><div class="stat-eyebrow">Média estadual de decisões favoráveis</div><div class="stat-num" data-count={mediaFav} data-dec="1" data-suffix="%" data-delay="700">{DATASET.mediaFavoravel}</div><div class="stat-label">Procedência no JEC paulista</div></div>
-</div></div></div>
-
 <section class="temas" id="temas"><div class="section-inner">
-  <div class="section-head"><div class="section-eyebrow">14 pilares do JEC</div><h2 class="section-title">Em qual situação você foi prejudicado?</h2><p class="section-sub">Seja um golpe financeiro, negativação indevida ou descaso de uma grande empresa: analisamos 39.727 decisões reais do TJSP para explicar o que separa quem recupera o dinheiro de quem perde no Juizado Especial Cível.</p></div>
-  <div class="tg">
-    <div class="tg-groups" role="tablist" aria-label="Grupos de temas" data-motion>
-      {grupos.map((g, i) => (
-        <button class="tg-g" type="button" role="tab" aria-selected={i === 0 ? 'true' : 'false'} aria-controls="tgrid" data-f={g} data-reveal style={`--i:${i}`}>
-          <span class="tg-g-ic"><Icon name={grupoIcone[g]} /></span>
-          <span class="tg-g-b"><span class="tg-g-n">{GRUPOS[g]}</span><span class="tg-g-s">{TEMAS.filter((t) => t.grupo === g).length} temas</span></span>
-          <Icon name="chevron-right" size={18} stroke={2.2} class="tg-g-chev" />
-        </button>))}
+  <div class="section-head sh-left"><div class="section-eyebrow">14 pilares do JEC</div><h2 class="section-title">Em qual situação você foi prejudicado?</h2><p class="section-sub">Seja um golpe financeiro, negativação indevida ou descaso de uma grande empresa: analisamos 39.727 decisões reais do TJSP para explicar o que separa quem recupera o dinheiro de quem perde no Juizado Especial Cível.</p></div>
+  <div class="tg2">
+    <div class="tg2-tabs" role="tablist" aria-label="Grupos de temas" data-motion>
+      {abas.map((a, i) => (<>
+        {a.sec && <div class="tg2-sec" data-reveal style={`--i:${i}`}>{a.sec}</div>}
+        <button class="tg2-tab" type="button" role="tab" aria-selected={i === 0 ? 'true' : 'false'} aria-controls="tgrid" data-f={a.id} data-reveal style={`--i:${i}`}>
+          <span class="tg2-n">{a.nome}</span><span class="tg2-s">{a.temas.length} temas</span>
+        </button></>))}
     </div>
-    <div class="tg-panel" role="tabpanel" aria-labelledby="tgTitle">
-      <div class="tg-panel-h" id="tgTitle" aria-live="polite">{GRUPOS[grupos[0]]}</div>
-      <div class="tgrid" id="tgrid" data-motion>{grupos.flatMap((g) => TEMAS.filter((t) => t.grupo === g)).map((t) => (
-        <a class="tcard trow" id={`tema-${t.slug}`} href={`/${t.slug}/`} data-g={t.grupo} data-k={`${t.nome.toLowerCase()} ${t.linha.toLowerCase()} ${t.palavras} ${t.slug}`} data-reveal hidden={t.grupo !== grupos[0]}>
-          <div class="tcard-top"><span class="tcard-ic"><Icon name={t.icone} /></span><span class="tcard-g">{GRUPOS[t.grupo]}</span></div>
-          <h3 class="tcard-t">{t.nome}</h3><p class="tcard-d">{t.linha}</p>
-          <div class="tcard-metric">
-            <div class="tcard-bar-wrap">
-              <div class="tcard-bar-fill" data-bar style={`--w:${t.procedenciaPct}%`}></div>
-            </div>
-            <div class="tcard-stats-line">
-              <span class="tcard-win"><strong data-count={t.procedenciaPct} data-dec="1" data-suffix="%">{pct(t.procedenciaPct)}</strong> procedentes</span>
-              <span class="tcard-loss"><strong data-count={+(100 - t.procedenciaPct).toFixed(1)} data-dec="1" data-suffix="%">{pct(100 - t.procedenciaPct)}</strong> não procedentes</span>
+    <div class="tg2-panel" role="tabpanel" aria-labelledby="tgTitle">
+      <h3 class="tg2-h" id="tgTitle" aria-live="polite">{abas[0].nome}</h3>
+      <div class="tg2-list" id="tgrid" data-motion>{abas.flatMap((a) => a.temas.map((t) => (
+        <a class="trow2" id={`tema-${t.slug}`} href={`/${t.slug}/`} data-g={a.id} data-k={`${t.nome.toLowerCase()} ${t.linha.toLowerCase()} ${t.palavras} ${t.slug}`} hidden={a.id !== abas[0].id}>
+          <div class="trow2-b"><span class="trow2-g">{a.nome}</span><h4 class="trow2-t">{t.nome}</h4><p class="trow2-d">{t.linha}</p></div>
+          <div class="trow2-m">
+            <div class="trow2-tr"><i data-bar style={`--w:${t.procedenciaPct}%`}></i></div>
+            <div class="trow2-lg">
+              <span><strong data-count={t.procedenciaPct} data-dec="1" data-suffix="%">{pct(t.procedenciaPct)}</strong> procedentes</span>
+              <span><strong data-count={+(100 - t.procedenciaPct).toFixed(1)} data-dec="1" data-suffix="%">{pct(100 - t.procedenciaPct)}</strong> não procedentes</span>
             </div>
           </div>
-          <div class="tcard-f">
-            <span class="tcard-hook">{t.hookCuriosidade}</span>
-            <span class="tcard-go">Ver provas <Icon name="arrow-right" size={14} stroke={2.2} /></span>
-          </div>
-        </a>))}
+          <Icon name="arrow-right" size={18} stroke={2.2} class="trow2-arr" />
+          <div class="trow2-hk"><span>{t.hookCuriosidade}</span> Ver provas <Icon name="arrow-right" size={13} stroke={2.4} /></div>
+        </a>)))}
       </div>
       <p class="empty" id="empty">Nenhum tema encontrado. Tente outras palavras ou <a href="#temas" id="clearQ" style="color:var(--teal)">veja todos os temas</a>.</p>
     </div>
@@ -91,7 +102,7 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SI
 
 {destaque && (
 <section class="section" id="artigos" style="padding-top:72px"><div class="section-inner">
-  <div class="section-head"><div class="section-eyebrow">Artigos</div><h2 class="section-title">Em destaque</h2></div>
+  <div class="section-head sh-left"><div class="section-eyebrow">Artigos</div><h2 class="section-title">Em destaque</h2></div>
   <div class="feat-grid" data-motion>
     <a class="feat" data-reveal style="--i:0" href={`/${dT!.slug}/${destaque.data.slug}/`}>
       <div class="feat-vis">
@@ -128,10 +139,10 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SI
 <section class="section" id="como-funciona" style="background:var(--surface)"><div class="section-inner">
   <div class="section-head"><div class="section-eyebrow">Rito da Lei 9.099/1995</div><h2 class="section-title">Como funciona o Juizado Especial Cível</h2><p class="section-sub">O rito sumaríssimo foi criado para dar agilidade e acesso gratuito à Justiça. Entenda o passo a passo da reclamação até a sentença.</p></div>
   <div class="ph-lead-row" data-motion>{etapas.filter((e) => e.lead).map((e, i) => (
-    <div class="ph ph-lead" data-reveal style={`--i:${i}`}><div class="ph-top"><span class="ph-ic"><Icon name={e.ic} /></span><span class="ph-tag">{e.tag}</span></div><div class="ph-n">Etapa {e.n}</div><h3 class="ph-t">{e.t}</h3><p class="ph-d">{e.d}</p></div>))}</div>
+    <div class="ph ph-lead" data-reveal style={`--i:${i}`}><div class="ph-top"><span class="ph-ic"><Icon name={e.ic} /></span><span class="ph-tag">{e.tag}</span></div><div class="ph-n"><span class="ph-n-v" data-count={e.n} data-delay={250 + i * 150}>{e.n}</span><span class="ph-n-l">Etapa</span></div><h3 class="ph-t">{e.t}</h3><p class="ph-d">{e.d}</p></div>))}</div>
   <div class="ph-div"><span><Icon name="gavel" size={15} /> Acesso direto à Justiça: Gratuito em 1º grau conforme o artigo 54 da Lei nº 9.099 de 1995</span></div>
   <div class="ph-row" data-motion>{etapas.filter((e) => !e.lead).map((e, i) => (
-    <div class="ph" data-reveal style={`--i:${i}`}><div class="ph-top"><span class="ph-ic"><Icon name={e.ic} /></span><span class="ph-tag">{e.tag}</span></div><div class="ph-n">Etapa {e.n}</div><h3 class="ph-t">{e.t}</h3><p class="ph-d">{e.d}</p></div>))}</div>
+    <div class="ph" data-reveal style={`--i:${i}`}><div class="ph-top"><span class="ph-ic"><Icon name={e.ic} /></span><span class="ph-tag">{e.tag}</span></div><div class="ph-n"><span class="ph-n-v" data-count={e.n} data-delay={250 + i * 150}>{e.n}</span><span class="ph-n-l">Etapa</span></div><h3 class="ph-t">{e.t}</h3><p class="ph-d">{e.d}</p></div>))}</div>
   <div class="ph-bar"><span class="ph-bar-ic"><Icon name="chart" size={18} /></span><p><b>Informação e Cidadania:</b> Todas as orientações são fundamentadas no Código de Defesa do Consumidor e em {DATASET.totalFmt} decisões do TJSP. Em causas até 20 salários mínimos, a lei assegura seu direito de pleitear sem advogado.</p></div>
 </div></section>
 
@@ -256,13 +267,13 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SI
 <script>
   import { replay, settle } from '../scripts/motion';
 
-  const cards = [...document.querySelectorAll<HTMLElement>('.tcard')];
-  const tabs = [...document.querySelectorAll<HTMLElement>('.tg-g')];
+  const cards = [...document.querySelectorAll<HTMLElement>('.trow2')];
+  const tabs = [...document.querySelectorAll<HTMLElement>('.tg2-tab')];
   const grid = document.getElementById('tgrid')!, title = document.getElementById('tgTitle')!;
   const q = document.getElementById('q') as HTMLInputElement, empty = document.getElementById('empty')!;
-  let group = tabs[0]?.dataset.f || 'banco';
+  let group = tabs[0]?.dataset.f || 'banco-fraude';
   const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  const groupName = (g: string) => tabs.find((t) => t.dataset.f === g)?.querySelector('.tg-g-n')?.textContent || '';
+  const groupName = (g: string) => tabs.find((t) => t.dataset.f === g)?.querySelector('.tg2-n')?.textContent || '';
 
   // Mostra os temas do grupo escolhido ou, se houver busca, os temas encontrados em todos os grupos.
   function apply() {
@@ -277,7 +288,7 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SI
     });
     tabs.forEach((t) => t.setAttribute('aria-selected', String(!searching && t.dataset.f === group)));
     title.textContent = searching ? 'Resultados da busca' : groupName(group);
-    grid.closest('.tg-panel')!.classList.toggle('searching', searching);
+    grid.closest('.tg2-panel')!.classList.toggle('searching', searching);
     empty.style.display = shown ? 'none' : 'block';
     return shown;
   }

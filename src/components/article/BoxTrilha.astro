@@ -121,18 +121,17 @@ const getUrl = (slug: string) => slug.startsWith('/') ? slug : (temaSlug ? `/${t
 )}
 
 <style>
+  /* linha editorial: fios, sem caixa */
   .box-trilha {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--r);
-    box-shadow: var(--shadow-sm);
-    overflow: hidden;
+    background: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
   }
   .box-trilha-topo {
-    margin: 18px 0 24px;
-    padding: 14px 18px;
-    background: linear-gradient(180deg, var(--teal-pale) 0%, var(--surface) 100%);
-    border-left: 4px solid var(--teal);
+    margin: 18px 0 28px;
+    padding: 4px 0 4px 22px;
+    border-left: 2px solid var(--teal);
   }
   .trilha-header {
     display: flex;
@@ -204,9 +203,9 @@ const getUrl = (slug: string) => slug.startsWith('/') ? slug : (temaSlug ? `/${t
     line-height: 1.45;
   }
   .box-trilha-rodape {
-    margin: 36px 0;
-    padding: 24px;
-    border-top: 3px solid var(--teal);
+    margin: 40px 0;
+    padding: 24px 0 0;
+    border-top: 2px solid var(--teal);
   }
   .trilha-recap-box {
     margin-bottom: 22px;
