@@ -77,6 +77,7 @@ export interface SecaoCorrelatosConfig {
 const AFINIDADES_MAP: Record<string, { titulo: string; tituloHtml?: string; subtitulo: string; slotsH: string; top: string; side: string[] }> = {
   'transporte-aereo': {
     titulo: 'Direitos do Passageiro Aéreo e Demandas de Viagem no JEC',
+    tituloHtml: 'Direitos do <span class="title-pill-inv">Passageiro Aéreo e Demandas de Viagem</span> no JEC',
     subtitulo: 'Análise jurimétrica de 5.158 decisões do TJSP sobre problemas em voos, bagagens e compras de viagens.',
     slotsH: 'Demandas de consumo frequentes em viagens',
     top: 'bagagem',
