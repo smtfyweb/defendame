@@ -270,21 +270,21 @@ if (d.faq.length) jsonLd.push({ '@context': 'https://schema.org', '@type': 'FAQP
         const corpo = [...(document.getElementById('postBody')?.querySelectorAll('h2,h3,p,li') || [])].map(n => n.textContent?.trim()).filter(Boolean).join('. ');
         const txt = (titulo ? titulo + '. ' : '') + corpo;
         if (!txt.trim()) return;
-        // Chrome bug: pode estar paused sem motivo — força resume antes de falar
-        synth.cancel();
-        setTimeout(() => {
-          const u = new SpeechSynthesisUtterance(txt); u.lang = 'pt-BR'; u.rate = speeds[si];
-          const v = voices.find(v => /pt-BR|pt_BR/i.test(v.lang)) || voices.find(v => /pt/i.test(v.lang));
-          if (v) u.voice = v;
-          u.onend = u.onerror = () => { clearInterval(ticker); setPlaying(false); elapsed = 0; timeEl.textContent = '0:00'; };
-          synth.speak(u); setPlaying(true);
-          elapsed = 0; clearInterval(ticker);
-          ticker = window.setInterval(() => {
-            // Chrome 15s bug: síntese para sozinha — keep-alive
-            if (synth.speaking && !synth.paused) { synth.pause(); synth.resume(); }
-            elapsed++; timeEl.textContent = fmt(elapsed);
-          }, 1000);
-        }, 50);
+        const u = new SpeechSynthesisUtterance(txt); u.lang = 'pt-BR'; u.rate = speeds[si];
+        // Recarrega vozes no click (podem ter chegado depois do load)
+        const lv = synth.getVoices();
+        const v = lv.find(v => /pt-BR|pt_BR/i.test(v.lang)) || lv.find(v => /pt/i.test(v.lang));
+        if (v) u.voice = v;
+        u.onend = u.onerror = () => { clearInterval(ticker); setPlaying(false); elapsed = 0; timeEl.textContent = '0:00'; };
+        // Chrome: se paused (bug conhecido), resume antes de speak
+        if (synth.paused) synth.resume();
+        synth.speak(u); setPlaying(true);
+        elapsed = 0; clearInterval(ticker);
+        ticker = window.setInterval(() => {
+          // Chrome 15s bug keep-alive
+          if (synth.speaking && !synth.paused) { synth.pause(); synth.resume(); }
+          elapsed++; timeEl.textContent = fmt(elapsed);
+        }, 1000);
       });
       addEventListener('beforeunload', () => { synth.cancel(); clearInterval(ticker); });
     }
