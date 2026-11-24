@@ -9,14 +9,14 @@ const grupos = Object.keys(GRUPOS) as Grupo[];
   <div class="fmap">
     <div class="fbrand">
       <Logo />
+      <p class="fdesc">Plataforma independente de jurimetria e inteligência jurídica dedicada a esclarecer os direitos do cidadão no Juizado Especial Cível através da análise empírica de decisões do TJSP. Conteúdo estritamente informativo e educativo, em plena conformidade com o Provimento CFOAB nº 205/2021.</p>
       <div class="fsocial" aria-label="Redes sociais do DefendaMe">
+        <a href={SITE.whatsapp} target="_blank" rel="noopener noreferrer" title="WhatsApp" aria-label="Canal DefendaMe no WhatsApp" class="fs-wa"><Icon name="whatsapp" size={17} /></a>
+        <a href={SITE.twitter} target="_blank" rel="noopener noreferrer" title="X (Twitter)" aria-label="DefendaMe no X" class="fs-x"><Icon name="x-brand" size={17} /></a>
+        <a href={SITE.linkedin} target="_blank" rel="noopener noreferrer" title="LinkedIn" aria-label="DefendaMe no LinkedIn" class="fs-li"><Icon name="linkedin" size={17} /></a>
         <a href={SITE.youtube} target="_blank" rel="noopener noreferrer" title="YouTube" aria-label="Canal DefendaMe no YouTube" class="fs-yt"><Icon name="youtube" size={17} /></a>
         <a href={SITE.instagram} target="_blank" rel="noopener noreferrer" title="Instagram" aria-label="DefendaMe no Instagram" class="fs-in"><Icon name="instagram" size={17} /></a>
-        <a href={SITE.whatsapp} target="_blank" rel="noopener noreferrer" title="WhatsApp" aria-label="Canal DefendaMe no WhatsApp" class="fs-wa"><Icon name="whatsapp" size={17} /></a>
-        <a href={SITE.linkedin} target="_blank" rel="noopener noreferrer" title="LinkedIn" aria-label="DefendaMe no LinkedIn" class="fs-li"><Icon name="linkedin" size={17} /></a>
-        <a href={SITE.twitter} target="_blank" rel="noopener noreferrer" title="X (Twitter)" aria-label="DefendaMe no X" class="fs-x"><Icon name="x-brand" size={17} /></a>
       </div>
-      <p class="fdesc">Plataforma independente de jurimetria e inteligência jurídica dedicada a esclarecer os direitos do cidadão no Juizado Especial Cível através da análise empírica de decisões do TJSP. Conteúdo estritamente informativo e educativo, em plena conformidade com o Provimento CFOAB nº 205/2021.</p>
     </div>
     {grupos.map((g) => (
       <div class="fcol"><div class="fcol-h">{GRUPOS[g]}</div>{temasDoGrupo(g).map((t) => <a href={`/${t.slug}/`}>{t.nome}</a>)}</div>

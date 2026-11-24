@@ -834,6 +834,7 @@ body.cz-lock { overflow: hidden; }
 .pa:hover { color: var(--teal); border-color: var(--teal); }
 .pa.wa:hover { color: #1fa855; border-color: #1fa855; }
 .pa.yt:hover { color: #ff0000; border-color: #ff0000; }
+.pa.ig:hover { color: #e1306c; border-color: #e1306c; }
 .pa-font { display: inline-flex; align-items: center; height: 38px; border: 1px solid var(--border); border-radius: var(--r-btn); background: var(--surface); overflow: hidden; margin-left: 6px; }
 .pa-font button { height: 100%; padding: 0 12px; background: none; border: 0; font: 600 14px var(--ff); color: var(--fg-mid); cursor: pointer; }
 .pa-font button:hover { color: var(--teal); background: var(--teal-pale); }
