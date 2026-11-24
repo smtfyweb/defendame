@@ -74,7 +74,7 @@ export interface SecaoCorrelatosConfig {
   maisDoGrupo: Tema[];
 }
 
-const AFINIDADES_MAP: Record<string, { titulo: string; subtitulo: string; slotsH: string; top: string; side: string[] }> = {
+const AFINIDADES_MAP: Record<string, { titulo: string; tituloHtml?: string; subtitulo: string; slotsH: string; top: string; side: string[] }> = {
   'transporte-aereo': {
     titulo: 'Direitos do Passageiro Aéreo e Demandas de Viagem no JEC',
     subtitulo: 'Análise jurimétrica de 5.158 decisões do TJSP sobre problemas em voos, bagagens e compras de viagens.',
@@ -91,6 +91,7 @@ const AFINIDADES_MAP: Record<string, { titulo: string; subtitulo: string; slotsH
   },
   'golpe-pix': {
     titulo: 'Outras Ações de Direito Bancário e Proteção ao Crédito no JEC',
+    tituloHtml: 'Outras Ações de <span class="title-pill-inv">Direito Bancário</span> e <span class="title-pill-inv">Proteção ao Crédito</span> no JEC',
     subtitulo: 'Decisões reais do TJSP sobre fraudes financeiras, juros e restrições indevidas no CPF.',
     slotsH: 'Ações bancárias e financeiras analisadas',
     top: 'negativacao-indevida',

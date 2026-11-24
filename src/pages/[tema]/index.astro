@@ -265,7 +265,7 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'CollectionPage', n
     <section class="inst-correlatos" style="margin-top:64px;padding-top:48px;border-top:1px solid var(--border)">
       <div class="section-head sh-left">
         <div class="section-eyebrow">{GRUPOS[tema.grupo]}</div>
-        <h2 class="section-title">{tituloSecao}</h2>
+        <h2 class="section-title" set:html={secao.tituloHtml || tituloSecao} />
         <p class="section-sub">{subtituloSecao}</p>
       </div>
 
