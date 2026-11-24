@@ -2108,3 +2108,95 @@ h2.auto-in::before { content: ''; display: block; width: 36px; height: 2px; back
 .dist-bar span { transition: width var(--dur-dados) var(--ease-dados), opacity .25s, filter .25s; transition-delay: calc(200ms + var(--i, 0) * 60ms), 0s, 0s; }
 .proc-chart .bc-bar { transition: transform var(--dur-dados) var(--ease-dados); transition-delay: calc(150ms + var(--i, 0) * 120ms); }
 .proc-chart .bc-val { transition-delay: calc(1500ms + var(--i, 0) * 120ms); }
+
+/* ════ Temas da home no celular/tablet: sanfona de grupos (legível para todas as idades) ════ */
+@media (max-width: 960px) {
+  .tg2 { grid-template-columns: 1fr; gap: 0; }
+  .tg2-tabs { position: static; flex-direction: column; overflow: visible; border-top: 1px solid var(--navy); border-bottom: 0; }
+  .tg2-sec { display: block; padding: 18px 2px 6px; font-size: 12px; }
+  .tg2-tab { display: flex; align-items: center; gap: 12px; padding: 18px 4px; min-height: 60px; font-size: 18px; color: var(--navy); border-bottom: 1px solid var(--border); white-space: normal; }
+  .tg2-tab .tg2-n { flex: 1; }
+  .tg2-tab .tg2-s { font-size: 14px; color: var(--fg-muted); }
+  .tg2-tab::after { content: ''; width: 9px; height: 9px; flex: none; margin: 0 4px 4px 4px; border-right: 2px solid var(--teal); border-bottom: 2px solid var(--teal); transform: rotate(45deg); transition: transform .3s var(--ease-out); }
+  .tg2-tab[aria-expanded="true"] { font-weight: 600; padding-left: 14px; box-shadow: inset 3px 0 0 var(--teal); background: var(--teal-pale); border-bottom-color: transparent; }
+  .tg2-tab[aria-expanded="true"]::after { transform: rotate(-135deg); margin-bottom: -4px; }
+  .tg2-tab[aria-selected="true"]:not([aria-expanded="true"]) { font-weight: 400; padding-left: 4px; box-shadow: none; background: none; }
+  /* lista aberta logo abaixo do grupo */
+  .tg2-tabs .tg2-panel { padding: 4px 0 8px 14px; border-left: 3px solid var(--teal); background: var(--teal-pale); border-bottom: 1px solid var(--border); }
+  .tg2-tabs .tg2-h { display: none; }
+  .tg2-tabs .tg2-list { min-height: 0; }
+  .tg2-tabs .trow2 { padding-right: 14px; }
+  .tg2-tabs .trow2:hover { background: none; padding-left: 0; }
+}
+@media (max-width: 640px) {
+  .trow2 { grid-template-columns: minmax(0, 1fr); row-gap: 12px; padding: 20px 0; }
+  .trow2-m { grid-column: 1; grid-row: auto; }
+  .trow2-arr { display: none; }
+  .trow2-t { font-size: 18px; line-height: 1.3; }
+  .trow2-d { font-size: 15px; line-height: 1.45; }
+  .trow2-tr { height: 8px; }
+  .trow2-lg { font-size: 14px; }
+  .trow2-hk { display: block; max-height: none; opacity: 1; margin-top: 2px; font-size: 15px; line-height: 1.45; }
+  .trow2-hk span { display: block; color: var(--navy); font-weight: 500; margin-bottom: 6px; }
+  .trow2-hk svg { vertical-align: -2px; }
+  .tg2-panel.searching .trow2-g { font-size: 12px; }
+}
+@media (max-width: 900px) { .feat-grid { grid-template-columns: minmax(0, 1fr); gap: 48px; } }
+@media (max-width: 640px) { .trow2-hk, .trow2:hover .trow2-hk { max-height: none !important; overflow: visible; } }
+@media (max-width: 960px) { .tg2-tabs .tg2-list { --rc: var(--border); } }
+
+/* ════ Celular: tabelas viram fichas legíveis (sem rolagem lateral) ════ */
+@media (max-width: 640px) {
+  table.stack-sm { min-width: 0 !important; width: 100%; border: 0; }
+  table.stack-sm thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  table.stack-sm, table.stack-sm tbody, table.stack-sm tr, table.stack-sm td { display: block; width: 100%; }
+  table.stack-sm tr { padding: 14px 0; border-bottom: 1px solid var(--border); }
+  table.stack-sm td { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 5px 0 !important; border: 0 !important; text-align: right; font-size: 15px; box-shadow: none !important; }
+  table.stack-sm td::before { content: attr(data-label); flex: 0 0 44%; text-align: left; font-size: 12.5px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--fg-muted); }
+  table.stack-sm td:first-child { display: block; text-align: left; font-size: 16px; font-weight: 600; color: var(--navy); padding-bottom: 8px !important; }
+  table.stack-sm td:first-child::before { display: none; }
+  table.stack-sm tr.highlight-row { background: var(--teal-pale); box-shadow: inset 3px 0 0 var(--teal); padding-left: 12px; padding-right: 12px; }
+  table.stack-sm tr.highlight-row td { background: none !important; }
+  .table-container { overflow: visible; }
+}
+
+/* ════ Celular: tamanho mínimo de leitura (público 50+) ════ */
+@media (max-width: 640px) {
+  .jd-head > span, .jd-s, .jd-faixa span, .prova-row span, .post-vinheta, .feat-tag, .post-cta-l, .silo-tag, .aut-k,
+  .side-cta-l, .kpi-label, .chart-sub, .chart-note, .bars-note, .ed-eyebrow, .tg2-sec, .section-eyebrow, .stat-eyebrow,
+  .hs-foot small, .nx-m, .img-slot-sub, .img-slot-tag, .faq-count, .glossario-count, .kpi-disclaimer { font-size: 13px !important; }
+  .bar-l, .bar-n, .hs-bars li { font-size: 14.5px; }
+  .ph-d, .jec-card p, .about-card p { font-size: 15.5px !important; }
+}
+
+/* ════ Celular: ajustes por seção ════ */
+@media (max-width: 640px) {
+  /* topo: rótulo em cima, barra embaixo (nada de nome quebrado em 2 linhas) */
+  .hs-bars li { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "l n" "t t"; row-gap: 8px; padding: 10px 0; }
+  .hs-bars li > a { grid-area: l; }
+  .hs-bars li > b { grid-area: n; }
+  .hs-bars li > .hs-tr { grid-area: t; }
+
+  /* números em lista: valor à esquerda, legenda à direita, um por linha */
+  .juri-kpi-grid, .big-stats, .juri-kpis { grid-template-columns: 1fr !important; }
+  .kpi-card, .big-stats div, .kpi { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 16px 0 !important; border-left: 0 !important; border-bottom: 1px solid var(--border); }
+  .kpi-card .kpi-label, .big-stats span, .kpi span { margin: 0; text-align: right; max-width: 55%; }
+  .kpi-val, .big-stats b, .kpi b { font-size: 36px !important; }
+
+  /* gráfico de colunas: mantém legível e desliza para o lado */
+  .chart-card { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .chart-card .proc-chart { min-width: 600px; }
+  .chart-card::after { content: 'Deslize para ver o gráfico completo →'; display: block; font-size: 13px; color: var(--fg-muted); margin-top: 8px; position: sticky; left: 0; }
+
+  /* guia do JEC: sanfona */
+  .jec-card { padding: 0; }
+  .jec-card h3 { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0; padding: 18px 0; font-size: 17px; cursor: pointer; }
+  .jec-card h3::after { content: ''; width: 9px; height: 9px; flex: none; margin-right: 4px; border-right: 2px solid var(--teal); border-bottom: 2px solid var(--teal); transform: rotate(45deg); transition: transform .3s var(--ease-out); }
+  .jec-card.aberto h3::after { transform: rotate(-135deg); }
+  .jec-card-ic { display: none; }
+  .jec-card > :not(h3):not(.jec-card-ic) { display: none; }
+  .jec-card.aberto > :not(h3):not(.jec-card-ic) { display: block; }
+  .jec-card.aberto { padding-bottom: 20px; }
+  .jec-card.aberto h3 { color: var(--teal); }
+}
+@media (max-width: 640px) { .kpi-card, .big-stats div, .kpi { flex-direction: row !important; } .kpi-card .kpi-label, .big-stats span, .kpi span { flex: 0 1 55%; } }

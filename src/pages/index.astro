@@ -294,15 +294,55 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SI
   }
   const toTemas = () => document.getElementById('temas')!.scrollIntoView({ behavior: 'smooth' });
 
+  // Celular/tablet: os grupos viram uma "sanfona" — a lista abre logo abaixo do grupo tocado.
+  const panel = grid.closest('.tg2-panel') as HTMLElement, home = panel.parentElement!;
+  const mq = matchMedia('(max-width: 960px)');
+  let fechado = false;
+  function place() {
+    const searching = panel.classList.contains('searching');
+    if (mq.matches && !searching) {
+      const t = tabs.find((x) => x.dataset.f === group)!;
+      if (t.nextElementSibling !== panel) t.after(panel);
+      panel.hidden = fechado;
+      tabs.forEach((x) => x.setAttribute('aria-expanded', String(x === t && !fechado)));
+    } else {
+      if (panel.parentElement !== home) home.appendChild(panel);
+      panel.hidden = false;
+      tabs.forEach((x) => x.removeAttribute('aria-expanded'));
+    }
+  }
+  mq.addEventListener('change', () => { fechado = false; place(); });
+
   tabs.forEach((t) => t.addEventListener('click', () => {
+    const mesmo = t.dataset.f === group && !q.value;
     if (q.value) q.value = '';
+    if (mq.matches && mesmo && !fechado) { fechado = true; place(); return; } // toque no grupo aberto fecha
+    fechado = false;
     group = t.dataset.f!;
     apply();
+    place();
     replay(grid);
+    if (mq.matches) {
+      const y = t.getBoundingClientRect().top + scrollY - 110; // abaixo do menu fixo
+      if (Math.abs(scrollY - y) > 40) scrollTo({ top: y, behavior: 'smooth' });
+    }
   }));
-  q.addEventListener('input', () => { apply(); settle(grid); });
-  document.getElementById('searchForm')!.addEventListener('submit', (e) => { e.preventDefault(); apply(); toTemas(); replay(grid); });
-  document.querySelectorAll<HTMLElement>('.chip').forEach((c) => c.addEventListener('click', () => { q.value = c.dataset.q!; apply(); toTemas(); replay(grid); }));
-  document.getElementById('clearQ')!.addEventListener('click', () => { q.value = ''; apply(); replay(grid); });
+  q.addEventListener('input', () => { apply(); place(); settle(grid); });
+  document.getElementById('searchForm')!.addEventListener('submit', (e) => { e.preventDefault(); apply(); place(); toTemas(); replay(grid); });
+  document.querySelectorAll<HTMLElement>('.chip').forEach((c) => c.addEventListener('click', () => { q.value = c.dataset.q!; apply(); place(); toTemas(); replay(grid); }));
+  document.getElementById('clearQ')!.addEventListener('click', () => { q.value = ''; apply(); place(); replay(grid); });
   apply();
+  place();
+
+  // Guia do JEC no celular: cada pergunta abre e fecha (o texto continua no HTML para o Google)
+  const guia = document.querySelector('.jec-guide-grid');
+  guia?.querySelectorAll<HTMLElement>('.jec-card').forEach((card, i) => {
+    const h = card.querySelector('h3');
+    if (!h) return;
+    h.setAttribute('role', 'button'); h.tabIndex = 0;
+    const toggle = () => { if (!matchMedia('(max-width: 640px)').matches) return; card.classList.toggle('aberto'); h.setAttribute('aria-expanded', String(card.classList.contains('aberto'))); };
+    h.addEventListener('click', toggle);
+    h.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
+    if (i === 0) card.classList.add('aberto');
+  });
 </script>
