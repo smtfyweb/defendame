@@ -50,7 +50,31 @@ const ogImage = new URL(image, SITE.url).href;
   <link rel="sitemap" href="/sitemap-index.xml" />
   {jsonLd.map((j) => <script type="application/ld+json" set:html={JSON.stringify(j)} />)}
   <!-- Tema: escuro por padrão; respeita a escolha salva do visitante (antes da pintura, sem "piscar") -->
-  <script is:inline>document.documentElement.classList.add('js');try{var t=localStorage.getItem('dm-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+  <script is:inline>
+    document.documentElement.classList.add('js');
+    try {
+      var t = localStorage.getItem('dm-theme');
+      if (t === 'light' || t === 'dark') {
+        document.documentElement.setAttribute('data-theme', t);
+      }
+    } catch (e) {}
+
+    window.toggleTheme = function() {
+      var root = document.documentElement;
+      var cur = root.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+      var next = cur === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('dm-theme', next); } catch (e) {}
+      var meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) {
+        meta.setAttribute('content', next === 'dark' ? '#0b1719' : '#f6fbfa');
+      }
+      var txt = document.getElementById('drawerThemeTxt');
+      if (txt) {
+        txt.textContent = next === 'dark' ? 'Alternar para Modo Claro' : 'Alternar para Modo Escuro';
+      }
+    };
+  </script>
 </head>
 <body>
   <Header />

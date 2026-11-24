@@ -2099,3 +2099,12 @@ h2.auto-in::before { content: ''; display: block; width: 36px; height: 2px; back
   .js [data-motion]:not(.is-in) .jd-stat::before { width: 28px; }
   .js h2.auto-in:not(.is-in)::before { transform: none; }
 }
+
+
+/* ════ Velocidade única dos dados animados (números, barras e gráficos) ════
+   Mesmo valor de DUR em src/scripts/motion.ts. */
+:root { --dur-dados: 2.4s; --ease-dados: cubic-bezier(.5, 1, .89, 1); }
+[data-bar] { transition: width var(--dur-dados) var(--ease-dados); transition-delay: calc(200ms + var(--i, 0) * 60ms); }
+.dist-bar span { transition: width var(--dur-dados) var(--ease-dados), opacity .25s, filter .25s; transition-delay: calc(200ms + var(--i, 0) * 60ms), 0s, 0s; }
+.proc-chart .bc-bar { transition: transform var(--dur-dados) var(--ease-dados); transition-delay: calc(150ms + var(--i, 0) * 120ms); }
+.proc-chart .bc-val { transition-delay: calc(1500ms + var(--i, 0) * 120ms); }

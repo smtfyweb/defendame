@@ -36,7 +36,7 @@ const links = [
       {links.slice(1).map((l) => <li><a href={l.href}>{l.label}</a></li>)}
     </ul>
     <div class="nav-actions">
-      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema claro/escuro" title="Alternar tema">
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema claro/escuro" title="Alternar tema" onclick="window.toggleTheme && window.toggleTheme()">
         <Icon name="sun" size={18} stroke={2} class="ic-sun" /><Icon name="moon" size={18} stroke={2} class="ic-moon" />
       </button>
       <a href="/#verificar" class="btn btn-primary" data-open-case>Avaliar situação</a>
@@ -53,6 +53,14 @@ const links = [
       <a href="/" data-close>Início</a><a href="/#temas" data-close>Todos os temas</a>
       {links.slice(1).map((l) => <a href={l.href} data-close>{l.label}</a>)}
     </div>
+    <button type="button" class="drawer-theme-btn" id="drawerThemeBtn" onclick="window.toggleTheme && window.toggleTheme()">
+      <span class="theme-icon-wrap">
+        <Icon name="sun" size={18} stroke={2} class="ic-sun" />
+        <Icon name="moon" size={18} stroke={2} class="ic-moon" />
+        <span id="drawerThemeTxt">Alternar Tema</span>
+      </span>
+      <span class="drawer-theme-tag">Toque para mudar</span>
+    </button>
     {grupos.map((g) => (<>
       <div class="dr-h">{GRUPOS[g]}</div>
       {temasDoGrupo(g).map((t) => <a href={`/${t.slug}/`} class="dr-a">{t.nome}</a>)}
@@ -62,12 +70,6 @@ const links = [
 </div>
 
 <script>
-  const root = document.documentElement;
-  document.getElementById('themeToggle')?.addEventListener('click', () => {
-    const n = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    root.setAttribute('data-theme', n);
-    try { localStorage.setItem('dm-theme', n); } catch {}
-  });
   const mw = document.getElementById('megaWrap')!, mb = document.getElementById('megaBtn')!;
   let tmr: number | undefined;
   const hover = () => matchMedia('(hover:hover)').matches;
