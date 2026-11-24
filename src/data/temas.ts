@@ -148,6 +148,7 @@ const AFINIDADES_MAP: Record<string, { titulo: string; tituloHtml?: string; subt
   },
   'acidente-de-transito': {
     titulo: 'Acidentes de Trânsito e Reparação de Danos no JEC',
+    tituloHtml: 'Acidentes de Trânsito e <span class="title-pill-inv">Reparação de Danos</span> no JEC',
     subtitulo: 'Decisões do TJSP sobre colisões de veículos, recusa de conserto por seguradoras e danos materiais.',
     slotsH: 'Outras demandas de reparação de danos no JEC',
     top: 'desvio-produtivo',
