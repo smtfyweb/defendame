@@ -107,6 +107,7 @@ const AFINIDADES_MAP: Record<string, { titulo: string; tituloHtml?: string; subt
   },
   'telefonia': {
     titulo: 'Serviços Essenciais e Concessionárias no Juizado Especial',
+    tituloHtml: 'Serviços Essenciais e <span class="title-pill-inv">Concessionárias no Juizado Especial</span>',
     subtitulo: 'Como os juízes de SP julgam cobranças indevidas de operadoras, cortes de luz e planos de saúde.',
     slotsH: 'Concessionárias e serviços essenciais correlatos',
     top: 'energia-eletrica',
