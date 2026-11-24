@@ -21,10 +21,11 @@ const analise = d.formato === 'analise';
 const autorUrl = new URL(AUTHOR.url, SITE.url).href;
 const correlatos = (d.relacionados.length ? d.relacionados : TEMAS.filter((t) => t.grupo === tema.grupo && t.slug !== tema.slug).map((t) => t.slug)).slice(0, 4).map(temaPorSlug).filter(Boolean);
 
+const cleanTitle = (d.titulo || '').replace(/<[^>]*>/g, '');
 const pessoa = { '@type': 'Person', name: AUTHOR.name, jobTitle: AUTHOR.jobTitle, image: new URL(AUTHOR.photo, SITE.url).href, url: autorUrl, sameAs: [SITE.substack] };
 const jsonLd: object[] = [
   {
-    '@context': 'https://schema.org', '@type': analise ? 'OpinionNewsArticle' : 'Article', headline: d.titulo, description: d.descricao, inLanguage: 'pt-BR',
+    '@context': 'https://schema.org', '@type': analise ? 'OpinionNewsArticle' : 'Article', headline: cleanTitle, description: d.descricao, inLanguage: 'pt-BR',
     mainEntityOfPage: analise ? url : { '@type': 'WebPage', '@id': url, reviewedBy: pessoa }, datePublished: d.publicado.toISOString().slice(0, 10), dateModified: (d.atualizado ?? d.publicado).toISOString().slice(0, 10),
     image: new URL(d.ogImage ?? SITE.ogDefault, SITE.url).href, articleSection: tema.nome, keywords: d.palavrasChave,
     author: analise ? pessoa : { '@type': 'Organization', name: `Redação ${SITE.name}`, url: SITE.url },
@@ -34,17 +35,17 @@ const jsonLd: object[] = [
   { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Início', item: SITE.url },
     { '@type': 'ListItem', position: 2, name: tema.nome, item: new URL(`/${tema.slug}/`, SITE.url).href },
-    { '@type': 'ListItem', position: 3, name: d.titulo, item: url } ] },
+    { '@type': 'ListItem', position: 3, name: cleanTitle, item: url } ] },
 ];
 if (d.faq.length) jsonLd.push({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: d.faq.map((f) => ({ '@type': 'Question', name: f.pergunta, acceptedAnswer: { '@type': 'Answer', text: f.resposta } })) });
 ---
-<BaseLayout title={d.seoTitle ?? `${d.titulo} — ${SITE.name}`} description={d.descricao} image={d.ogImage} type="article" noindex={d.rascunho}
+<BaseLayout title={d.seoTitle ?? `${cleanTitle} — ${SITE.name}`} description={d.descricao} image={d.ogImage} type="article" noindex={d.rascunho}
   jsonLd={jsonLd} article={{ published: d.publicado, modified: d.atualizado, section: tema.nome, tags: d.tags }}>
 <main class="post">
   <div class="post-top">
     <nav class="crumb" aria-label="Navegação"><a href="/">Início</a><span>›</span><a href={`/${tema.slug}/`}>{tema.nome}</a><span>›</span><span class="crumb-cur">Artigo</span></nav>
     <div class="post-kicker"><span class={`post-fmt fmt-${d.formato}`}>{FORMATOS[d.formato].rotulo}</span><span class="post-vinheta">{d.vinheta}</span></div>
-    <h1 class="post-titulo">{d.titulo}</h1>
+    <h1 class="post-titulo" set:html={d.tituloHtml || d.titulo} />
     <p class="post-sub" set:html={md(d.linhaFina)} />
     <div class="post-meta">
       {analise ? (

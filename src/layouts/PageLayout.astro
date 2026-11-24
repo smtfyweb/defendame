@@ -3,12 +3,13 @@
 import BaseLayout from './BaseLayout.astro';
 interface Props { title: string; description: string; h1: string; lead: string; atualizado?: string; toc: [string, string][]; jsonLd?: object[] }
 const { title, description, h1, lead, atualizado, toc, jsonLd = [] } = Astro.props;
+const cleanH1 = (h1 || '').replace(/<[^>]*>/g, '');
 ---
 <BaseLayout title={title} description={description} jsonLd={jsonLd}>
 <main class="inst">
   <div class="inst-head">
-    <nav class="crumb" aria-label="Navegação"><a href="/">Início</a><span>›</span><span class="crumb-cur">{h1}</span></nav>
-    <h1>{h1}</h1><p>{lead}</p>{atualizado && <span class="inst-upd">Última atualização: {atualizado}</span>}
+    <nav class="crumb" aria-label="Navegação"><a href="/">Início</a><span>›</span><span class="crumb-cur">{cleanH1}</span></nav>
+    <h1 set:html={h1} /><p>{lead}</p>{atualizado && <span class="inst-upd">Última atualização: {atualizado}</span>}
   </div>
   <div class="inst-wrap">
     <article class="doc"><slot /></article>

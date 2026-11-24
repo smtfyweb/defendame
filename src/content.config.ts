@@ -7,7 +7,8 @@ import { TEMA_SLUGS } from './data/temas';
 const artigos = defineCollection({
   loader: glob({ pattern: '**/*.mdx', base: './src/content/artigos' }),
   schema: z.object({
-    titulo: z.string(),                       // H1 do artigo
+    titulo: z.string(),                       // H1 do artigo (texto limpo)
+    tituloHtml: z.string().optional(),          // H1 com destaque cromático <em>termo</em>
     seoTitle: z.string().optional(),          // <title> (se diferente do H1)
     descricao: z.string(),                    // meta description (até ~160 caracteres)
     linhaFina: z.string(),                    // subtítulo abaixo do H1 (aceita **negrito**)
