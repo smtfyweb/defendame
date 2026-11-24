@@ -22,7 +22,7 @@ const canonical = new URL(Astro.url.pathname, SITE.url).href;
 const ogImage = new URL(image, SITE.url).href;
 ---
 <!doctype html>
-<html lang="pt-BR" data-theme="dark">
+<html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
@@ -50,7 +50,21 @@ const ogImage = new URL(image, SITE.url).href;
   <link rel="sitemap" href="/sitemap-index.xml" />
   {jsonLd.map((j) => <script type="application/ld+json" set:html={JSON.stringify(j)} />)}
   <!-- Tema: escuro por padrão; respeita a escolha salva do visitante (antes da pintura, sem "piscar") -->
-  <script is:inline>document.documentElement.classList.add('js');try{var t=localStorage.getItem('dm-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+  <script is:inline>
+    (function(){
+      document.documentElement.classList.add('js');
+      try { var t=localStorage.getItem('dm-theme'); if(t==='light'||t==='dark') document.documentElement.setAttribute('data-theme',t); } catch(e){}
+      window.toggleTheme = function(){
+        var html = document.documentElement;
+        var cur = html.getAttribute('data-theme');
+        // Se não há data-theme, inferir pelo sistema
+        if (!cur) cur = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        var next = cur === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        try { localStorage.setItem('dm-theme', next); } catch(e){}
+      };
+    })();
+  </script>
 </head>
 <body>
   <Header />
