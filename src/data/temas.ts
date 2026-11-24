@@ -141,6 +141,7 @@ const AFINIDADES_MAP: Record<string, { titulo: string; tituloHtml?: string; subt
   },
   'desvio-produtivo': {
     titulo: 'Dano Moral e Perda de Tempo Útil no Juizado Especial Cível',
+    tituloHtml: '<span class="title-pill-inv">Dano Moral e Perda de Tempo Útil</span> no Juizado Especial Cível',
     subtitulo: 'Decisões do TJSP que acolhem o desvio produtivo contra concessionárias, operadoras e companhias aéreas.',
     slotsH: 'Segmentos com maior índice de desvio produtivo',
     top: 'compras-online',
