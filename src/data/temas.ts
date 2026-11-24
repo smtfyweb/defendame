@@ -114,6 +114,7 @@ const AFINIDADES_MAP: Record<string, { titulo: string; tituloHtml?: string; subt
   },
   'energia-eletrica': {
     titulo: 'Serviços Essenciais e Concessionárias Públicas no JEC',
+    tituloHtml: 'Serviços Essenciais e <span class="title-pill-inv">Concessionárias Públicas</span> no JEC',
     subtitulo: 'Decisões do TJSP sobre apagões, queima de aparelhos, telecomunicações e serviços contínuos.',
     slotsH: 'Outros serviços essenciais analisados',
     top: 'telefonia',
