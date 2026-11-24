@@ -36,7 +36,7 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'CollectionPage', n
   <div class="inst-head">
     <nav class="crumb" aria-label="Navegação"><a href="/">Início</a><span>›</span><a href="/#temas">Temas</a><span>›</span><span class="crumb-cur">{tema.nome}</span></nav>
     <span class="post-vinheta">{GRUPOS[tema.grupo]} · {tema.nome}</span>
-    <h1>{tema.seoH1 || tema.nome}</h1>
+    <h1 set:html={tema.seoH1Html || tema.seoH1 || tema.nome} />
     <p>{tema.linha}. Análise técnica de {fmt(tema.decisoes)} decisões judiciais do TJSP: entenda seus direitos, descubra o que separa quem ganha de quem perde e veja os precedentes consolidados.</p>
   </div>
   {detalhe ? (
