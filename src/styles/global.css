@@ -1070,6 +1070,8 @@ body.cz-lock { overflow: hidden; }
 .fsocial a.fs-wa:hover { color: #1fa855; border-color: #1fa855; }
 .fsocial a.fs-li:hover { color: #0a66c2; border-color: #0a66c2; }
 .fsocial a.fs-x:hover { color: var(--navy); border-color: var(--navy); }
+.fsocial a.fs-fb:hover { color: #1877f2; border-color: #1877f2; }
+.fsocial a.fs-ss:hover { color: #ff6719; border-color: #ff6719; }
 .fsocial svg { width: 17px; height: 17px; }
 .fdesc { font-size: 13px; line-height: 1.6; color: var(--fg-muted); margin: 0; }
 .flink { background: none; border: 0; padding: 4px 0; font: 400 13.5px var(--ff); color: var(--fg-muted); cursor: pointer; text-align: left; }
