@@ -123,6 +123,7 @@ const AFINIDADES_MAP: Record<string, { titulo: string; tituloHtml?: string; subt
   },
   'planos-de-saude': {
     titulo: 'Planos de Saúde e Serviços Essenciais no Juizado Especial',
+    tituloHtml: 'Planos de Saúde e <span class="title-pill-inv">Serviços Essenciais</span> no Juizado Especial',
     subtitulo: 'Jurisprudência do TJSP sobre negativas de cobertura cirúrgica, reajustes abusivos e serviços essenciais.',
     slotsH: 'Serviços essenciais e direitos correlatos',
     top: 'energia-eletrica',
