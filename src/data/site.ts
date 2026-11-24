@@ -12,8 +12,8 @@ export const SITE = {
   linkedin: 'https://www.linkedin.com/company/defendame',
   twitter: 'https://x.com/defendame',
   ogDefault: '/og-default.jpg',
-  // Endpoint que recebe o formulário "Verificar meu caso" (Formspree, Cloudflare Worker, etc.)
-  formEndpoint: import.meta.env.PUBLIC_FORM_ENDPOINT ?? '',
+  // Endpoint que recebe o formulário "Verificar meu caso" (Google Apps Script Web App / Formspree)
+  formEndpoint: import.meta.env.PUBLIC_FORM_ENDPOINT || 'https://script.google.com/macros/s/AKfycbw5Ecm-R6v8GKfF_EQAAwka_EsQaD6FTMGerkNLdwlc8Ll3yGYpaasjjHkDRvi29jkVyg/exec',
 };
 
 export const AUTHOR = {
