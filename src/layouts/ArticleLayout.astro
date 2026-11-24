@@ -64,6 +64,7 @@ if (d.faq.length) jsonLd.push({ '@context': 'https://schema.org', '@type': 'FAQP
       <a class="pa wa" href={`https://api.whatsapp.com/send?text=${enc(d.titulo + ' — ' + url)}`} target="_blank" rel="noopener" title="Compartilhar no WhatsApp" aria-label="Compartilhar no WhatsApp"><Icon name="whatsapp" /></a>
       <a class="pa" href={`https://www.linkedin.com/sharing/share-offsite/?url=${enc(url)}`} target="_blank" rel="noopener" title="Compartilhar no LinkedIn" aria-label="Compartilhar no LinkedIn"><Icon name="linkedin" /></a>
       <a class="pa" href={`https://twitter.com/intent/tweet?text=${enc(d.titulo)}&url=${enc(url)}`} target="_blank" rel="noopener" title="Compartilhar no X" aria-label="Compartilhar no X"><Icon name="x-brand" /></a>
+      <button class="pa" id="btnShare" type="button" title="Mais opções de compartilhamento" aria-label="Compartilhar"><Icon name="share" /></button>
       <button class="pa-audio" id="listen" type="button" aria-pressed="false"><Icon name="volume" /><span>Ouvir</span></button>
       <span class="pa-toast" id="toast" role="status"></span>
       <a class="pa-cta" href="/#verificar" data-open-case data-cat={d.tema}>Avaliar situação <Icon name="arrow-right" size={16} stroke={2.2} /></a>
@@ -170,6 +171,22 @@ if (d.faq.length) jsonLd.push({ '@context': 'https://schema.org', '@type': 'FAQP
 </BaseLayout>
 
 <script>
+  // share nativo
+  document.getElementById('btnShare')?.addEventListener('click', async () => {
+    const url = location.href;
+    const title = document.title;
+    if (navigator.share) {
+      try { await navigator.share({ title, url }); } catch {}
+    } else {
+      try { await navigator.clipboard.writeText(url); } catch {
+        const ta = document.createElement('textarea');
+        ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      }
+      const toast = document.getElementById('toast');
+      if (toast) { toast.textContent = 'Link copiado!'; setTimeout(() => { toast.textContent = ''; }, 2500); }
+    }
+  });
   // tamanho da fonte
   const body = document.getElementById('postBody')!;
   const S = ['txt-sm', 'txt-md', 'txt-lg', 'txt-xl'];
