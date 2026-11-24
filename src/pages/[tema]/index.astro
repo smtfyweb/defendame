@@ -183,7 +183,7 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'CollectionPage', n
       <div style="margin-top:36px;margin-bottom:20px;">
         <span class="post-vinheta" style="font-size:12px;margin-bottom:6px;">Trilha Editorial & Jurisprudência TJSP</span>
         <h2 id="artigos" style="font-size:clamp(22px, 2.6vw, 28px);font-weight:700;color:var(--navy);margin:4px 0 10px;line-height:1.25;">
-          {tema.secaoGuiasH2 || detalhe?.tituloSecaoGuias || `Artigos e guias especializados sobre ${tema.nome.toLowerCase()} no JEC`}
+          <span set:html={tema.secaoGuiasH2Html || tema.secaoGuiasH2 || detalhe?.tituloSecaoGuias || `Artigos e guias especializados sobre ${tema.nome.toLowerCase()} no JEC`} />
         </h2>
         <p style="font-size:15px;color:var(--fg-mid);line-height:1.65;margin:0;">
           {tema.secaoGuiasSub || detalhe?.subtituloSecaoGuias || `Análises técnicas, roteiros práticos e orientações fundamentadas em decisões reais do Tribunal de Justiça de São Paulo:`}
