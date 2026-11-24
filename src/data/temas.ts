@@ -67,6 +67,7 @@ export function getIconeArtigo(slug: string, fallbackTemaIcone: string, iconeExp
 
 export interface SecaoCorrelatosConfig {
   titulo: string;
+  tituloHtml?: string;
   subtitulo: string;
   slotsH: string;
   top: Tema;
@@ -202,6 +203,7 @@ export function getSecaoCorrelatos(slug: string): SecaoCorrelatosConfig {
 
     return {
       titulo: cfg.titulo,
+      tituloHtml: cfg.tituloHtml,
       subtitulo: cfg.subtitulo,
       slotsH: cfg.slotsH,
       top: topTema,
