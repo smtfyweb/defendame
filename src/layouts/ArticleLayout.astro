@@ -66,7 +66,6 @@ if (d.faq.length) jsonLd.push({ '@context': 'https://schema.org', '@type': 'FAQP
       <a class="pa" href={`https://www.facebook.com/sharer/sharer.php?u=${enc(url)}`} target="_blank" rel="noopener" title="Compartilhar no Facebook" aria-label="Compartilhar no Facebook"><Icon name="facebook" /></a>
       <a class="pa" href={`https://www.linkedin.com/sharing/share-offsite/?url=${enc(url)}`} target="_blank" rel="noopener" title="Compartilhar no LinkedIn" aria-label="Compartilhar no LinkedIn"><Icon name="linkedin" /></a>
       <a class="pa yt" href={SITE.youtube} target="_blank" rel="noopener noreferrer" title="Canal no YouTube" aria-label="Canal DefendaMe no YouTube"><Icon name="youtube" /></a>
-      <div class="pa-font" role="group" aria-label="Tamanho do texto"><button type="button" id="fMinus" aria-label="Diminuir fonte">A−</button><span></span><button type="button" id="fPlus" aria-label="Aumentar fonte">A+</button></div>
       <button class="pa-audio" id="listen" type="button" aria-pressed="false"><Icon name="volume" /><span>Ouvir</span></button>
       <span class="pa-toast" id="toast" role="status"></span>
       <a class="pa-cta" href="/#verificar" data-open-case data-cat={d.tema}>Avaliar situação <Icon name="arrow-right" size={16} stroke={2.2} /></a>
