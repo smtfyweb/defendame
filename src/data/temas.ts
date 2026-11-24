@@ -165,7 +165,7 @@ const AFINIDADES_MAP: Record<string, { titulo: string; tituloHtml?: string; subt
   },
   'consignado-rmc': {
     titulo: 'Empréstimos Consignados e Proteção ao Aposentado no JEC',
-    tituloHtml: 'Empréstimos Consignados e <span class="title-pill-inv">Proteção ao Aposentado</span> no JEC',
+    tituloHtml: '<span class="title-pill-inv">Empréstimos Consignados</span> e Proteção ao Aposentado no JEC',
     subtitulo: 'Decisões do TJSP sobre descontos indevidos no INSS, cartões RMC/RCC e fraudes financeiras.',
     slotsH: 'Ações bancárias e financeiras analisadas',
     top: 'golpe-pix',
