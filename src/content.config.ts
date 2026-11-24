@@ -25,6 +25,7 @@ const artigos = defineCollection({
     tags: z.array(z.string()).default([]),
     palavrasChave: z.array(z.string()).default([]),
     ogImage: z.string().optional(),
+    audioUrl: z.string().optional(),          // URL do MP3 gerado com voz clonada (ex.: /audio/slug.mp3)
     icone: z.string().optional(),             // ícone contextual do artigo (ex.: clock, gavel, chart, doc, shield)
     kpis: z.array(z.object({ valor: z.string(), rotulo: z.string(), destaque: z.boolean().optional() })).default([]),
     kpiNota: z.string().optional(),

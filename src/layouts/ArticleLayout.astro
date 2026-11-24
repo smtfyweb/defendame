@@ -65,9 +65,21 @@ if (d.faq.length) jsonLd.push({ '@context': 'https://schema.org', '@type': 'FAQP
       <a class="pa" href={`https://www.linkedin.com/sharing/share-offsite/?url=${enc(url)}`} target="_blank" rel="noopener" title="Compartilhar no LinkedIn" aria-label="Compartilhar no LinkedIn"><Icon name="linkedin" /></a>
       <a class="pa" href={`https://twitter.com/intent/tweet?text=${enc(d.titulo)}&url=${enc(url)}`} target="_blank" rel="noopener" title="Compartilhar no X" aria-label="Compartilhar no X"><Icon name="x-brand" /></a>
       <button class="pa" id="btnShare" type="button" title="Mais opções de compartilhamento" aria-label="Compartilhar"><Icon name="share" /></button>
-      <button class="pa-audio" id="listen" type="button" aria-pressed="false"><Icon name="volume" /><span>Ouvir</span></button>
       <span class="pa-toast" id="toast" role="status"></span>
       <a class="pa-cta" href="/#verificar" data-open-case data-cat={d.tema}>Avaliar situação <Icon name="arrow-right" size={16} stroke={2.2} /></a>
+    </div>
+  </div>
+
+  <div class="art-player" id="artPlayer" data-audio-url={d.audioUrl || ''}>
+    <span class="art-player-label">ouça este conteúdo</span>
+    <div class="art-player-inner">
+      <button class="art-play" id="artPlay" type="button" aria-label="Reproduzir" aria-pressed="false">
+        <svg id="icoPlay" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+        <svg id="icoPause" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" hidden><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+      </button>
+      <div class="art-wave" id="artWave" aria-hidden="true">{Array.from({length:48}).map((_,k)=><span style={`--h:${20+Math.round(Math.sin(k*0.9)*30+Math.random()*35)}%`}></span>)}</div>
+      <span class="art-time" id="artTime">0:00</span>
+      <button class="art-speed" id="artSpeed" type="button">1×</button>
     </div>
   </div>
 
@@ -209,19 +221,53 @@ if (d.faq.length) jsonLd.push({ '@context': 'https://schema.org', '@type': 'FAQP
     const cit = (e.currentTarget as HTMLElement).dataset.citation!;
     navigator.clipboard?.writeText(cit).then(() => say('Referência ABNT copiada!'), () => say(cit)) ?? say(cit);
   });
-  // ouvir (voz do navegador)
-  const lb = document.getElementById('listen') as HTMLButtonElement; const synth = window.speechSynthesis;
-  const lbl = lb.querySelector('span')!;
-  if (!synth || !('SpeechSynthesisUtterance' in window)) { lb.disabled = true; lb.title = 'Áudio não disponível neste navegador'; }
-  else lb.addEventListener('click', () => {
-    if (synth.speaking) { synth.cancel(); lb.setAttribute('aria-pressed', 'false'); lbl.textContent = 'Ouvir'; return; }
-    const txt = document.querySelector('.post-titulo')!.textContent + '. ' + [...body.querySelectorAll('h2,h3,p,li,.med-time-label,.med-desc,.proof-title,.proof-desc')].map((n) => n.textContent!.trim()).join('. ');
-    const u = new SpeechSynthesisUtterance(txt); u.lang = 'pt-BR';
-    const v = synth.getVoices().find((v) => /pt-BR|pt_BR/i.test(v.lang)); if (v) u.voice = v;
-    u.onend = u.onerror = () => { lb.setAttribute('aria-pressed', 'false'); lbl.textContent = 'Ouvir'; };
-    synth.speak(u); lb.setAttribute('aria-pressed', 'true'); lbl.textContent = 'Parar';
-  });
-  addEventListener('beforeunload', () => synth?.cancel());
+  // player de áudio
+  (function(){
+    const player = document.getElementById('artPlayer') as HTMLElement;
+    const btn = document.getElementById('artPlay') as HTMLButtonElement;
+    const icoPlay = document.getElementById('icoPlay') as SVGElement;
+    const icoPause = document.getElementById('icoPause') as SVGElement;
+    const timeEl = document.getElementById('artTime') as HTMLElement;
+    const speedBtn = document.getElementById('artSpeed') as HTMLButtonElement;
+    const audioUrl = player?.dataset.audioUrl || '';
+    const speeds = [1, 1.5, 2]; let si = 0;
+    const fmt = (s: number) => `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+    let ticker: number;
+    const setPlaying = (on: boolean) => {
+      btn.setAttribute('aria-pressed', String(on));
+      icoPlay.hidden = on; icoPause.hidden = !on;
+      player.classList.toggle('playing', on);
+    };
+
+    if (audioUrl) {
+      const audio = new Audio(audioUrl);
+      audio.addEventListener('timeupdate', () => { timeEl.textContent = fmt(audio.currentTime); });
+      audio.addEventListener('ended', () => setPlaying(false));
+      speedBtn.addEventListener('click', () => { si = (si+1)%speeds.length; audio.playbackRate = speeds[si]; speedBtn.textContent = speeds[si]+'×'; });
+      btn.addEventListener('click', () => {
+        if (audio.paused) { audio.play(); setPlaying(true); }
+        else { audio.pause(); setPlaying(false); }
+      });
+      addEventListener('beforeunload', () => audio.pause());
+    } else {
+      const synth = window.speechSynthesis;
+      if (!synth || !('SpeechSynthesisUtterance' in window)) { btn.disabled = true; return; }
+      let elapsed = 0;
+      speedBtn.addEventListener('click', () => { si = (si+1)%speeds.length; speedBtn.textContent = speeds[si]+'×'; });
+      btn.addEventListener('click', () => {
+        if (synth.speaking) { synth.cancel(); clearInterval(ticker); setPlaying(false); elapsed = 0; timeEl.textContent = '0:00'; return; }
+        const txt = (document.querySelector('.post-titulo')?.textContent || '') + '. ' +
+          [...document.getElementById('postBody')!.querySelectorAll('h2,h3,p,li')].map(n=>n.textContent!.trim()).join('. ');
+        const u = new SpeechSynthesisUtterance(txt); u.lang = 'pt-BR'; u.rate = speeds[si];
+        const v = synth.getVoices().find(v=>/pt-BR|pt_BR/i.test(v.lang)); if (v) u.voice = v;
+        u.onend = u.onerror = () => { clearInterval(ticker); setPlaying(false); elapsed = 0; timeEl.textContent = '0:00'; };
+        synth.speak(u); setPlaying(true);
+        elapsed = 0; clearInterval(ticker);
+        ticker = window.setInterval(() => { elapsed++; timeEl.textContent = fmt(elapsed); }, 1000);
+      });
+      addEventListener('beforeunload', () => { synth.cancel(); clearInterval(ticker); });
+    }
+  })();
   // FAQ
   document.querySelectorAll('.faq-q').forEach((b) => b.addEventListener('click', () => {
     const it = b.closest('.faq-item')!, was = it.classList.contains('open');
