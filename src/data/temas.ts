@@ -165,6 +165,7 @@ const AFINIDADES_MAP: Record<string, { titulo: string; tituloHtml?: string; subt
   },
   'superendividamento': {
     titulo: 'Superendividamento e Repactuação de Dívidas no JEC',
+    tituloHtml: 'Superendividamento e <span class="title-pill-inv">Repactuação de Dívidas</span> no JEC',
     subtitulo: 'Como a Justiça paulista aplica a Lei do Superendividamento contra abusos de bancos e financeiras.',
     slotsH: 'Ações bancárias e financeiras analisadas',
     top: 'cartao-de-credito',
