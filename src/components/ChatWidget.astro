@@ -202,9 +202,9 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
   });
 
   // Atividades do usuário dentro da janela do chat resetam o timer de inatividade
-  win.addEventListener('mousemove', resetInactivityTimer);
-  win.addEventListener('keydown', resetInactivityTimer);
-  win.addEventListener('scroll', resetInactivityTimer);
+  win.addEventListener('mousemove', resetInactivityTimer, { passive: true });
+  win.addEventListener('keydown', resetInactivityTimer, { passive: true });
+  win.addEventListener('scroll', resetInactivityTimer, { passive: true });
 
   function scrollBottom() {
     setTimeout(function(){
