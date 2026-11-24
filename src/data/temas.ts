@@ -85,6 +85,7 @@ const AFINIDADES_MAP: Record<string, { titulo: string; tituloHtml?: string; subt
   },
   'bagagem': {
     titulo: 'Direitos do Viajante e Transporte Aéreo no Juizado Especial',
+    tituloHtml: 'Direitos do Viajante e <span class="title-pill-inv">Transporte Aéreo</span> no Juizado Especial',
     subtitulo: 'Decisões do TJSP sobre extravio de malas, cancelamentos de voo e indenizações ao consumidor.',
     slotsH: 'Demandas correlatas de transporte e consumo',
     top: 'transporte-aereo',
