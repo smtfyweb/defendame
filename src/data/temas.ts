@@ -134,7 +134,7 @@ const AFINIDADES_MAP: Record<string, { titulo: string; tituloHtml?: string; subt
   },
   'compras-online': {
     titulo: 'Direito do Consumidor e Comércio Eletrônico no JEC',
-    tituloHtml: '<span class="title-pill-inv">Direito do Consumidor</span> e Comércio Eletrônico no JEC',
+    tituloHtml: 'Direito do Consumidor e <span class="title-pill-inv">Comércio Eletrônico</span> no JEC',
     subtitulo: 'Como o TJSP decide ações sobre produtos não entregues, trocas negadas e fraudes no e-commerce.',
     slotsH: 'Demandas correlatas de consumo e e-commerce',
     top: 'desvio-produtivo',
