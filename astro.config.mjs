@@ -5,7 +5,7 @@ import sitemap from '@astrojs/sitemap';
 
 // Site 100% estático hospedado no Cloudflare Pages.
 export default defineConfig({
-  site: 'https://defendame.online',
+  site: 'https://defendame.pages.dev',
   trailingSlash: 'always',
   integrations: [mdx(), sitemap({ filter: (page) => !page.includes('/guia-de-estilo') })],
   build: { inlineStylesheets: 'auto' },

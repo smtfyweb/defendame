@@ -35,7 +35,7 @@ const ogImage = new URL(image, SITE.url).href;
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <link rel="manifest" href="/site.webmanifest" />
   <meta name="theme-color" content="#0b1719" />
-  <meta name="color-scheme" content="light dark" />
+  <meta name="color-scheme" id="metaColorScheme" content="only dark" />
   <meta property="og:type" content={type} />
   <meta property="og:locale" content={SITE.locale} />
   <meta property="og:site_name" content={SITE.name} />
@@ -43,6 +43,11 @@ const ogImage = new URL(image, SITE.url).href;
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonical} />
   <meta property="og:image" content={ogImage} />
+  <meta property="og:image:secure_url" content={ogImage} />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content={title} />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
@@ -66,7 +71,9 @@ const ogImage = new URL(image, SITE.url).href;
       function applyTheme(t){
         d.setAttribute('data-theme', t);
         var meta = document.querySelector('meta[name="theme-color"]');
-        if (meta) meta.setAttribute('content', t === 'dark' ? '#0b1719' : '#f6fbfa');
+        if (meta) meta.setAttribute('content', t === 'dark' ? '#0b1719' : '#ffffff');
+        var metaCs = document.getElementById('metaColorScheme');
+        if (metaCs) metaCs.setAttribute('content', t === 'dark' ? 'only dark' : 'only light');
         var txt = document.getElementById('drawerThemeTxt');
         if (txt) txt.textContent = t === 'dark' ? 'Alternar para Modo Claro' : 'Alternar para Modo Escuro';
         var toggleBtn = document.getElementById('themeToggle');

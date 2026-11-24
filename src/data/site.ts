@@ -1,6 +1,6 @@
 export const SITE = {
   name: 'DefendaMe',
-  url: 'https://defendame.online',
+  url: import.meta.env.PUBLIC_SITE_URL || 'https://defendame.pages.dev',
   tagline: 'Seus direitos no Juizado Especial Cível, explicados com dados',
   description: 'Artigos e guias sobre as demandas mais comuns do Juizado Especial Cível, construídos a partir de decisões reais do TJSP.',
   locale: 'pt_BR',
