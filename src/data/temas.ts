@@ -173,6 +173,7 @@ const AFINIDADES_MAP: Record<string, { titulo: string; tituloHtml?: string; subt
   },
   'protesto-indevido': {
     titulo: 'Protesto de Títulos e Proteção Cadastral no JEC',
+    tituloHtml: 'Protesto de Títulos e <span class="title-pill-inv">Proteção Cadastral</span> no JEC',
     subtitulo: 'Jurisprudência do TJSP sobre cancelamento de protestos ilegítimos e indenizações por danos morais.',
     slotsH: 'Ações bancárias e financeiras analisadas',
     top: 'negativacao-indevida',
