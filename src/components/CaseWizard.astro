@@ -82,7 +82,10 @@ const UFS = ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','P
 <script type="application/json" id="czData" set:html={cfg} />
 <script is:inline>
 (function(){
-  var CFG=JSON.parse(document.getElementById('czData').textContent), FORMS=CFG.forms, LABELS=CFG.labels, ENDPOINT=CFG.endpoint;
+  var CFG = JSON.parse(document.getElementById('czData').textContent),
+      FORMS = CFG.forms,
+      LABELS = CFG.labels,
+      ENDPOINT = CFG.endpoint || 'https://script.google.com/macros/s/AKfycbw5Ecm-R6v8GKfF_EQAAwka_EsQaD6FTMGerkNLdwlc8Ll3yGYpaasjjHkDRvi29jkVyg/exec';
     var m=document.getElementById('caseModal'), form=document.getElementById('czForm'),
       panes=[].slice.call(m.querySelectorAll('.cz-pane')), next=document.getElementById('czNext'),
       sendB=document.getElementById('czSend'), backB=document.getElementById('czBack'), foot=document.getElementById('czFoot'),
@@ -225,7 +228,6 @@ const UFS = ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','P
       fetch(ENDPOINT, {
         method: 'POST',
         mode: 'no-cors',
-        keepalive: true,
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(data)
       })
