@@ -554,7 +554,8 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
       if (e) e.stopPropagation();
       var val = inp.value.trim();
       if (!val) {
-        alert('Por favor, informe este detalhe para continuarmos.');
+        addBotMsg('<p>Por favor, informe este detalhe para continuarmos.</p>');
+        inp.focus();
         return;
       }
       box.remove();
@@ -618,7 +619,8 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
       if (e) e.stopPropagation();
       var val = (city || inp.value).trim();
       if (!val) {
-        alert('Por favor, informe sua cidade.');
+        addBotMsg('<p>Por favor, informe sua cidade para continuarmos.</p>');
+        inp.focus();
         return;
       }
       box.remove();
@@ -714,9 +716,9 @@ const caseFormsJson = JSON.stringify(CASE_FORMS);
       var email = document.getElementById('dcEmail').value.trim();
       var lgpd = document.getElementById('dcLgpd').checked;
 
-      if (!nome) { alert('Informe seu nome completo.'); return; }
-      if (!whats || whats.replace(/\D/g, '').length < 10) { alert('Informe um WhatsApp válido com DDD.'); return; }
-      if (!lgpd) { alert('Você precisa concordar com os termos informativos.'); return; }
+      if (!nome) { addBotMsg('<p>Informe seu nome completo para finalizar.</p>'); document.getElementById('dcNome').focus(); return; }
+      if (!whats || whats.replace(/\D/g, '').length < 10) { addBotMsg('<p>Informe um WhatsApp válido com DDD (ex.: 11 99999-9999).</p>'); document.getElementById('dcWhats').focus(); return; }
+      if (!lgpd) { addBotMsg('<p>Marque a declaração de ciência antes de prosseguir.</p>'); return; }
 
       var proto = 'DM-' + new Date().toISOString().slice(2,10).replace(/-/g,'') + '-' + Math.random().toString(36).slice(2,6).toUpperCase();
       caso.nome = nome;

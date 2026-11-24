@@ -33,7 +33,7 @@ const {
 <figure class={`img-slot-wrap img-slot-${variant}`}>
   {src ? (
     <div class="img-slot-media">
-      <img src={src} alt={alt} loading="lazy" decoding="async" />
+      <img src={src} alt={alt} loading="lazy" decoding="async" style="aspect-ratio:16/9;width:100%;height:auto;" />
     </div>
   ) : (
     <div class="img-slot-placeholder">

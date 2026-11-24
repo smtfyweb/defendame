@@ -193,25 +193,17 @@ if (d.faq.length) jsonLd.push({ '@context': 'https://schema.org', '@type': 'FAQP
     if (navigator.share) {
       try { await navigator.share({ title, url }); } catch {}
     } else {
-      try { await navigator.clipboard.writeText(url); } catch {
-        const ta = document.createElement('textarea');
-        ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0';
-        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
-      }
+      await navigator.clipboard.writeText(url).catch(() => {});
       const toast = document.getElementById('toast');
       if (toast) { toast.textContent = 'Link copiado!'; setTimeout(() => { toast.textContent = ''; }, 2500); }
     }
   });
-  // tamanho da fonte
-  const body = document.getElementById('postBody')!;
+  // tamanho da fonte (persistido; botões removidos mas classe mantida para compatibilidade)
   const S = ['txt-sm', 'txt-md', 'txt-lg', 'txt-xl'];
   let i = 1;
   try { i = parseInt(localStorage.getItem('dm-font') || '1', 10); if (!(i >= 0 && i < S.length)) i = 1; } catch {}
-  const bodies = () => document.querySelectorAll('.post-body');
-  const setF = (n: number) => { bodies().forEach((b) => b.classList.remove(S[i])); i = Math.max(0, Math.min(S.length - 1, n)); bodies().forEach((b) => b.classList.add(S[i])); try { localStorage.setItem('dm-font', String(i)); } catch {} };
+  const setF = (n: number) => { document.querySelectorAll('.post-body').forEach((b) => { b.classList.remove(...S); b.classList.add(S[n]); }); i = n; try { localStorage.setItem('dm-font', String(n)); } catch {} };
   setF(i);
-  document.getElementById('fMinus')?.addEventListener('click', () => setF(i - 1));
-  document.getElementById('fPlus')?.addEventListener('click', () => setF(i + 1));
   // copiar link
   const toast = document.getElementById('toast')!; let tt: number;
   const say = (m: string) => { toast.textContent = m; toast.classList.add('on'); clearTimeout(tt); tt = window.setTimeout(() => toast.classList.remove('on'), 2200); };
