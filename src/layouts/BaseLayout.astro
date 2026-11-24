@@ -32,6 +32,7 @@ const ogImage = new URL(image, SITE.url).href;
   <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'} />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="theme-color" content="#0b1719" />
+  <meta name="color-scheme" content="light dark" />
   <meta property="og:type" content={type} />
   <meta property="og:locale" content={SITE.locale} />
   <meta property="og:site_name" content={SITE.name} />
@@ -53,15 +54,30 @@ const ogImage = new URL(image, SITE.url).href;
   <script is:inline>
     (function(){
       document.documentElement.classList.add('js');
-      try { var t=localStorage.getItem('dm-theme'); if(t==='light'||t==='dark') document.documentElement.setAttribute('data-theme',t); } catch(e){}
+      var saved = null;
+      try { saved = localStorage.getItem('dm-theme'); } catch(e){}
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+
+      function applyTheme(t){
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', t === 'dark' ? '#0b1719' : '#f6fbfa');
+        var txt = document.getElementById('drawerThemeTxt');
+        if (txt) txt.textContent = t === 'dark' ? 'Alternar para Modo Claro' : 'Alternar para Modo Escuro';
+      }
+
+      applyTheme(theme);
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function(){ applyTheme(theme); });
+      }
+
       window.toggleTheme = function(){
         var html = document.documentElement;
-        var cur = html.getAttribute('data-theme');
-        // Se não há data-theme, inferir pelo sistema
-        if (!cur) cur = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        var cur = html.getAttribute('data-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         var next = cur === 'dark' ? 'light' : 'dark';
         html.setAttribute('data-theme', next);
         try { localStorage.setItem('dm-theme', next); } catch(e){}
+        applyTheme(next);
       };
     })();
   </script>
