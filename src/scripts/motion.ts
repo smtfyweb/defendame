@@ -16,11 +16,11 @@
  */
 
 const reduce = typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches;
-// Velocidade única de TODOS os dados animados do site (números e barras).
+// Velocidade moderada e gradual de TODOS os dados animados do site (números e barras).
 // Para deixar mais lento ou mais rápido, mude aqui E em --dur-dados no global.css (mesmo valor).
-const DUR = 2600; // ms
-// começa devagar, acelera no meio e desacelera no fim (= --ease-dados)
-const ease = (p: number) => (p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2);
+const DUR = 3200; // ms
+// Curva gradual e suave (desaceleração contínua sem aceleração brusca no meio)
+const ease = (p: number) => 1 - Math.pow(1 - p, 2.2);
 
 function format(v: number, dec: number, suffix: string, prefix = '') {
   return prefix + v.toLocaleString('pt-BR', { minimumFractionDigits: dec, maximumFractionDigits: dec }) + suffix;
@@ -44,18 +44,40 @@ function setFinal(el: HTMLElement) {
   el.textContent = format(parseFloat(el.dataset.count!), Number(el.dataset.dec || 0), el.dataset.suffix || '', pre(el));
 }
 
-/** Conta um número do zero até o valor final. */
+/** Conta um número do zero até o valor final de forma moderada e legível. */
 export function countUp(el: HTMLElement, extraDelay = 0) {
   const to = parseFloat(el.dataset.count!);
   const dec = Number(el.dataset.dec || 0);
   const suffix = el.dataset.suffix || '';
   if (reduce || Number.isNaN(to)) return setFinal(el);
-  const start = performance.now() + Number(el.dataset.delay || 0) + extraDelay;
+
+  const delay = Number(el.dataset.delay || 0) + extraDelay;
+  const start = performance.now() + delay;
+  let lastUpdate = 0;
+  // Intervalo de 50ms (~20 atualizações por segundo): evita efeito roleta rápida em celulares 90Hz/120Hz
+  const TICK_MS = 50;
+
   el.textContent = format(0, dec, suffix, pre(el));
+
   const step = (now: number) => {
+    if (now < start) {
+      requestAnimationFrame(step);
+      return;
+    }
+    if (now - lastUpdate < TICK_MS && now - start < DUR) {
+      requestAnimationFrame(step);
+      return;
+    }
+    lastUpdate = now;
+
     const p = Math.min(1, Math.max(0, (now - start) / DUR));
     el.textContent = format(to * ease(p), dec, suffix, pre(el));
-    if (p < 1) requestAnimationFrame(step);
+
+    if (p < 1) {
+      requestAnimationFrame(step);
+    } else {
+      setFinal(el);
+    }
   };
   requestAnimationFrame(step);
 }

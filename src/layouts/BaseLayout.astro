@@ -35,6 +35,7 @@ const ogImage = new URL(image, SITE.url).href;
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <link rel="manifest" href="/site.webmanifest" />
   <meta name="theme-color" content="#0b1719" />
+  <meta name="color-scheme" content="light dark" />
   <meta property="og:type" content={type} />
   <meta property="og:locale" content={SITE.locale} />
   <meta property="og:site_name" content={SITE.name} />
@@ -53,7 +54,45 @@ const ogImage = new URL(image, SITE.url).href;
   <link rel="sitemap" href="/sitemap-index.xml" />
   {jsonLd.map((j) => <script type="application/ld+json" set:html={JSON.stringify(j)} />)}
   <!-- Tema: escuro por padrão; respeita a escolha salva do visitante (antes da pintura, sem "piscar") -->
-  <script is:inline>document.documentElement.classList.add('js');try{var t=localStorage.getItem('dm-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+  <script is:inline>
+    (function(){
+      var d = document.documentElement;
+      d.classList.add('js');
+      var saved = null;
+      try { saved = localStorage.getItem('dm-theme'); } catch(e){}
+      var theme = (saved === 'light' || saved === 'dark') ? saved : 'dark';
+      d.setAttribute('data-theme', theme);
+
+      function applyTheme(t){
+        d.setAttribute('data-theme', t);
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', t === 'dark' ? '#0b1719' : '#f6fbfa');
+        var txt = document.getElementById('drawerThemeTxt');
+        if (txt) txt.textContent = t === 'dark' ? 'Alternar para Modo Claro' : 'Alternar para Modo Escuro';
+        var toggleBtn = document.getElementById('themeToggle');
+        if (toggleBtn) {
+          toggleBtn.setAttribute('aria-label', t === 'dark' ? 'Mudar para tema claro' : 'Mudar para tema escuro');
+          toggleBtn.setAttribute('title', t === 'dark' ? 'Mudar para tema claro' : 'Mudar para tema escuro');
+        }
+      }
+
+      applyTheme(theme);
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function(){ applyTheme(d.getAttribute('data-theme') || theme); });
+      }
+
+      var lastToggle = 0;
+      window.toggleTheme = function(){
+        var now = Date.now();
+        if (now - lastToggle < 250) return;
+        lastToggle = now;
+        var cur = d.getAttribute('data-theme') || 'dark';
+        var next = cur === 'dark' ? 'light' : 'dark';
+        try { localStorage.setItem('dm-theme', next); } catch(e){}
+        applyTheme(next);
+      };
+    })();
+  </script>
 </head>
 <body>
   <Header />
