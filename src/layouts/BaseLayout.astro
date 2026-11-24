@@ -22,7 +22,7 @@ const canonical = new URL(Astro.url.pathname, SITE.url).href;
 const ogImage = new URL(image, SITE.url).href;
 ---
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
@@ -31,8 +31,10 @@ const ogImage = new URL(image, SITE.url).href;
   <link rel="canonical" href={canonical} />
   <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'} />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
   <meta name="theme-color" content="#0b1719" />
-  <meta name="color-scheme" content="light dark" />
   <meta property="og:type" content={type} />
   <meta property="og:locale" content={SITE.locale} />
   <meta property="og:site_name" content={SITE.name} />
@@ -51,36 +53,7 @@ const ogImage = new URL(image, SITE.url).href;
   <link rel="sitemap" href="/sitemap-index.xml" />
   {jsonLd.map((j) => <script type="application/ld+json" set:html={JSON.stringify(j)} />)}
   <!-- Tema: escuro por padrão; respeita a escolha salva do visitante (antes da pintura, sem "piscar") -->
-  <script is:inline>
-    (function(){
-      document.documentElement.classList.add('js');
-      var saved = null;
-      try { saved = localStorage.getItem('dm-theme'); } catch(e){}
-      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-      document.documentElement.setAttribute('data-theme', theme);
-
-      function applyTheme(t){
-        var meta = document.querySelector('meta[name="theme-color"]');
-        if (meta) meta.setAttribute('content', t === 'dark' ? '#0b1719' : '#f6fbfa');
-        var txt = document.getElementById('drawerThemeTxt');
-        if (txt) txt.textContent = t === 'dark' ? 'Alternar para Modo Claro' : 'Alternar para Modo Escuro';
-      }
-
-      applyTheme(theme);
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function(){ applyTheme(theme); });
-      }
-
-      window.toggleTheme = function(){
-        var html = document.documentElement;
-        var cur = html.getAttribute('data-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        var next = cur === 'dark' ? 'light' : 'dark';
-        html.setAttribute('data-theme', next);
-        try { localStorage.setItem('dm-theme', next); } catch(e){}
-        applyTheme(next);
-      };
-    })();
-  </script>
+  <script is:inline>document.documentElement.classList.add('js');try{var t=localStorage.getItem('dm-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
 </head>
 <body>
   <Header />
