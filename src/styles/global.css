@@ -1862,7 +1862,8 @@ html { overflow-x: clip; } /* evita rolagem lateral no celular causada pelos pop
 .section-head { text-align: left; margin-left: 0; margin-right: auto; max-width: 760px; margin-bottom: 44px; }
 .section-eyebrow { background: none; padding: 0; margin-bottom: 10px; font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--teal); }
 .section-title { text-wrap: pretty; }
-.section-title .title-pill-inv { display: inline; background: none !important; box-shadow: none !important; padding: 0; color: var(--teal) !important; font-size: inherit; font-weight: inherit; letter-spacing: inherit; white-space: normal; vertical-align: baseline; line-height: inherit; }
+.section-title .title-pill-inv,
+h1 .title-pill-inv { display: inline; background: none !important; box-shadow: none !important; padding: 0; color: var(--teal) !important; font-size: inherit; font-weight: inherit; letter-spacing: inherit; white-space: normal; vertical-align: baseline; line-height: inherit; }
 
 /* ════ Home · Jurimetria ════ */
 .juri-kpis { gap: 0; border-top: 1px solid var(--navy); margin-top: 32px; }
