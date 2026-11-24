@@ -18,8 +18,8 @@
 const reduce = typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 // Velocidade única de TODOS os dados animados do site (números e barras).
 // Para deixar mais lento ou mais rápido, mude aqui E em --dur-dados no global.css (mesmo valor).
-const DUR = 2400; // ms
-const ease = (p: number) => 1 - (1 - p) * (1 - p); // desacelera suave no final (= --ease-dados)
+const DUR = 3600; // ms
+const ease = (p: number) => -(Math.cos(Math.PI * p) - 1) / 2; // sine ease-in-out: começa e termina devagar
 
 function format(v: number, dec: number, suffix: string, prefix = '') {
   return prefix + v.toLocaleString('pt-BR', { minimumFractionDigits: dec, maximumFractionDigits: dec }) + suffix;

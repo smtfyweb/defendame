@@ -2125,7 +2125,7 @@ h2.auto-in::before { content: ''; display: block; width: 36px; height: 2px; back
 
 /* ════ Velocidade única dos dados animados (números, barras e gráficos) ════
    Mesmo valor de DUR em src/scripts/motion.ts. */
-:root { --dur-dados: 2.4s; --ease-dados: cubic-bezier(.5, 1, .89, 1); }
+:root { --dur-dados: 3.6s; --ease-dados: cubic-bezier(.37, 0, .63, 1); }
 [data-bar] { transition: width var(--dur-dados) var(--ease-dados); transition-delay: calc(200ms + var(--i, 0) * 60ms); }
 .dist-bar span { transition: width var(--dur-dados) var(--ease-dados), opacity .25s, filter .25s; transition-delay: calc(200ms + var(--i, 0) * 60ms), 0s, 0s; }
 .proc-chart .bc-bar { transition: transform var(--dur-dados) var(--ease-dados); transition-delay: calc(150ms + var(--i, 0) * 120ms); }
