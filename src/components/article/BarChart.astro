@@ -9,20 +9,22 @@ const n = barras.length, W = Math.max(500, 110 * n + 90), top = 20, base = 140, 
 const step = (W - 90) / n;
 const ticks = [max, max * 0.75, max * 0.5, max * 0.25];
 const fmt = (v: number) => (Number.isInteger(v) ? String(v) : v.toFixed(1).replace('.', ',')) + sufixo;
+// posição vertical de um valor no eixo (0 na base): corrige o rótulo do eixo, que antes não batia com as barras
+const yOf = (v: number) => base - (v / max) * (base - top);
 const fill = (t?: string) => (t === 'destaque' ? 'var(--teal)' : t === 'base' ? 'var(--line-teal)' : 'var(--teal-logo)');
 ---
-<div class="chart-card">
+<div class="chart-card" data-motion>
   <div class="chart-head"><div class="chart-title">{titulo}</div>{subtitulo && <div class="chart-sub">{subtitulo}</div>}</div>
   <svg class="proc-chart" viewBox={`0 0 ${W} ${H}`} fill="none" role="img" aria-label={titulo}>
-    {ticks.map((t, i) => (<>
-      {i < 3 && <line x1="70" y1={top + i * 40} x2={W - 20} y2={top + i * 40} stroke="var(--border)" />}
-      <text x="62" y={top + 3 + i * 40} font-size="10" fill="var(--fg-light)" text-anchor="end">{fmt(t)}</text>
+    {[...ticks, 0].map((t) => (<>
+      {t > 0 && <line x1="70" y1={yOf(t)} x2={W - 20} y2={yOf(t)} stroke="var(--border)" />}
+      <text x="62" y={yOf(t) + 3} font-size="10" fill="var(--fg-light)" text-anchor="end">{fmt(t)}</text>
     </>))}
     {barras.map((b, i) => {
       const cx = 70 + step * (i + 0.5), h = (b.valor / max) * (base - top), y = base - h, hl = b.tom === 'destaque';
       return (<>
-        <rect x={cx - 32} y={y} width="64" height={h} rx="4" fill={fill(b.tom)} opacity={b.tom === 'normal' || !b.tom ? 0.55 : undefined} />
-        <text x={cx} y={y - 7} font-size={hl ? 13 : 12} font-weight={hl ? 700 : 600} fill={hl ? 'var(--teal)' : 'var(--fg-muted)'} text-anchor="middle">{fmt(b.valor)}</text>
+        <rect class="bc-bar" style={`--i:${i}`} x={cx - 32} y={y} width="64" height={h} rx="4" fill={fill(b.tom)} opacity={b.tom === 'normal' || !b.tom ? 0.55 : undefined} />
+        <text class="bc-val" style={`--i:${i}`} x={cx} y={y - 7} font-size={hl ? 13 : 12} font-weight={hl ? 700 : 600} fill={hl ? 'var(--teal)' : 'var(--fg-muted)'} text-anchor="middle">{fmt(b.valor)}</text>
         <text x={cx} y="160" font-size="11" font-weight={hl ? 600 : 500} fill={hl ? 'var(--navy)' : 'var(--fg-mid)'} text-anchor="middle">{b.rotulo}</text>
         {b.sub && <text x={cx} y="174" font-size="10" fill="var(--fg-light)" text-anchor="middle">{b.sub}</text>}
         {b.extra && <text x={cx} y="190" font-size="10.5" font-weight="600" fill="var(--fg-mid)" text-anchor="middle">{b.extra}</text>}

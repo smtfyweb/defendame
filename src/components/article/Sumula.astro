@@ -3,4 +3,4 @@
 interface Props { rotulo: string; fonte?: string }
 const { rotulo, fonte } = Astro.props;
 ---
-<div class="sumula"><div class="sumula-badge">{rotulo}</div><div><div class="sumula-text"><slot /></div>{fonte && <div class="sumula-src">{fonte}</div>}</div></div>
+<div class="sumula" data-motion data-reveal><div class="sumula-badge">{rotulo}</div><div><div class="sumula-text"><slot /></div>{fonte && <div class="sumula-src">{fonte}</div>}</div></div>

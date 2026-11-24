@@ -7,9 +7,9 @@ interface Coluna { titulo: string; icone: string; tom: 'positivo' | 'neutro'; it
 interface Props { colunas: Coluna[]; rodape?: string }
 const { colunas, rodape } = Astro.props;
 ---
-<div class="ev-grid">
-  {colunas.map((c) => (
-    <div class={`ev-col ${c.tom === 'positivo' ? 'ev-c' : 'ev-b'}`}>
+<div class="ev-grid" data-motion>
+  {colunas.map((c, ci) => (
+    <div class={`ev-col ${c.tom === 'positivo' ? 'ev-c' : 'ev-b'}`} data-reveal style={`--i:${ci * 2}`}>
       <div class="ev-head"><span class="med-icon"><Icon name={c.icone} stroke={2} /></span><span>{c.titulo}</span></div>
       <ul>{c.itens.map((it) => <li><span class="ev-ic"><Icon name={c.tom === 'positivo' ? 'check' : 'lock'} size={15} stroke={2} /></span><span><b>{it.titulo}</b>{it.texto}</span></li>)}</ul>
     </div>

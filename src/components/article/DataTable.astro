@@ -4,7 +4,7 @@
 interface Props { colunas: string[]; linhas: { celulas: string[]; destaque?: boolean }[] }
 const { colunas, linhas } = Astro.props;
 ---
-<div class="table-container"><table class="juri-table">
+<div class="table-container" data-motion><table class="juri-table">
   <thead><tr>{colunas.map((c) => <th>{c}</th>)}</tr></thead>
-  <tbody>{linhas.map((l) => <tr class={l.destaque ? 'highlight-row' : undefined}>{l.celulas.map((c, i) => <td>{i === 0 || l.destaque ? <strong>{c}</strong> : c}</td>)}</tr>)}</tbody>
+  <tbody>{linhas.map((l, i) => <tr class={l.destaque ? 'highlight-row' : undefined} data-reveal style={`--i:${i}`}>{l.celulas.map((c, i) => <td>{i === 0 || l.destaque ? <strong>{c}</strong> : c}</td>)}</tr>)}</tbody>
 </table></div>

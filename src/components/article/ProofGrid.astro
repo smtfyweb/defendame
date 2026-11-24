@@ -3,6 +3,6 @@
 interface Props { itens: { titulo: string; texto: string }[] }
 const { itens } = Astro.props;
 ---
-<div class="proof-grid">
-  {itens.map((it, i) => <div class="proof-card"><div class="proof-num">{i + 1}</div><div class="proof-title">{it.titulo}</div><div class="proof-desc">{it.texto}</div></div>)}
+<div class="proof-grid" data-motion>
+  {itens.map((it, i) => <div class="proof-card" data-reveal style={`--i:${i}`}><div class="proof-num">{i + 1}</div><div class="proof-title">{it.titulo}</div><div class="proof-desc">{it.texto}</div></div>)}
 </div>

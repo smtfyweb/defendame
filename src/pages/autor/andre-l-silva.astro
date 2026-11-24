@@ -66,7 +66,7 @@ const jsonLd = [
   jsonLd={jsonLd}
 >
 
-<div class="autor-hero">
+<div class="autor-hero" data-motion data-reveal>
   <img src={AUTHOR.photo} alt={AUTHOR.name} width="112" height="112" />
   <div>
     <b>{AUTHOR.name}</b>
@@ -82,17 +82,17 @@ const jsonLd = [
   </div>
 </div>
 
-<div class="big-stats">
-  <div>
-    <b>{DATASET.totalFmt}</b>
+<div class="big-stats" data-motion>
+  <div data-reveal style="--i:0">
+    <b data-count-auto data-delay="0">{DATASET.totalFmt}</b>
     <span>Decisões públicas do TJSP catalogadas</span>
   </div>
-  <div>
-    <b>10 RAJs</b>
+  <div data-reveal style="--i:1">
+    <b data-count-auto data-delay="350">10 RAJs</b>
     <span>Cobertura empírica: Capital, Grande SP, Litoral e Interior</span>
   </div>
-  <div>
-    <b>14 Silos</b>
+  <div data-reveal style="--i:2">
+    <b data-count-auto data-delay="700">14 Silos</b>
     <span>Demandas de consumo estruturadas no Juizado Especial Cível</span>
   </div>
 </div>
@@ -193,7 +193,7 @@ const jsonLd = [
 <p style="color: var(--fg-muted); margin-bottom: 16px;">
   Estudos jurimétricos assinados com leitura analítica e empírica dos dados judiciais.
 </p>
-<ul class="autor-list">{analises.map((a) => <li><a href={`/${a.data.tema}/${a.data.slug}/`}><span class="al-k"><span class="post-fmt fmt-analise">{FORMATOS.analise.rotulo}</span>{temaPorSlug(a.data.tema)?.nome} · {data(a.data.publicado)}</span><span class="al-t">{a.data.titulo}</span><span class="al-d">{a.data.descricao}</span></a></li>)}</ul>
+<ul class="autor-list" data-motion>{analises.map((a) => <li><a href={`/${a.data.tema}/${a.data.slug}/`}><span class="al-k"><span class="post-fmt fmt-analise">{FORMATOS.analise.rotulo}</span>{temaPorSlug(a.data.tema)?.nome} · {data(a.data.publicado)}</span><span class="al-t">{a.data.titulo}</span><span class="al-d">{a.data.descricao}</span></a></li>)}</ul>
 </>}
 
 {guias.length > 0 && <>
@@ -201,7 +201,7 @@ const jsonLd = [
 <p style="color: var(--fg-muted); margin-bottom: 16px;">
   Textos de orientação prática produzidos pela Redação DefendaMe com validação metodológica de precedentes.
 </p>
-<ul class="autor-list">{guias.map((a) => <li><a href={`/${a.data.tema}/${a.data.slug}/`}><span class="al-k"><span class="post-fmt fmt-guia">{FORMATOS.guia.rotulo}</span>{temaPorSlug(a.data.tema)?.nome} · {data(a.data.publicado)}</span><span class="al-t">{a.data.titulo}</span><span class="al-d">{a.data.descricao}</span></a></li>)}</ul>
+<ul class="autor-list" data-motion>{guias.map((a) => <li><a href={`/${a.data.tema}/${a.data.slug}/`}><span class="al-k"><span class="post-fmt fmt-guia">{FORMATOS.guia.rotulo}</span>{temaPorSlug(a.data.tema)?.nome} · {data(a.data.publicado)}</span><span class="al-t">{a.data.titulo}</span><span class="al-d">{a.data.descricao}</span></a></li>)}</ul>
 </>}
 
 <p style="margin-top: 36px;"><a class="btn btn-primary" href="/#verificar" data-open-case>Verificar meu caso no Juizado <Icon name="arrow-right" size={16} stroke={2.2} /></a></p>

@@ -14,6 +14,9 @@ const outrosArtigos = artigos.filter((a) => a !== destaque).slice(0, 3);
 const proximos = TEMAS.filter((t) => !comArtigo.has(t.slug)).sort((a, b) => b.decisoes - a.decisoes).slice(0, Math.max(0, 3 - outrosArtigos.length));
 const grupos = Object.keys(GRUPOS) as Grupo[];
 const max = Math.max(...TEMAS.map((t) => t.decisoes));
+const pct = (v: number) => v.toFixed(1).replace('.', ',') + '%';
+const mediaFav = parseFloat(DATASET.mediaFavoravel.replace(',', '.'));
+const grupoIcone: Record<Grupo, string> = { banco: 'bank', essencial: 'zap', viagem: 'plane', cotidiano: 'cart' };
 const chips = ['Golpe do Pix', 'Nome negativado', 'Voo cancelado', 'Conta de luz', 'Plano de saúde', 'Compra não entregue'];
 const data = (d: Date) => d.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
 const etapas = [
@@ -41,35 +44,47 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SI
   </div>
 </section>
 
-<div class="stats-wrap"><div class="stats-panel"><div class="stats">
-  <div class="stat-card"><div class="stat-eyebrow">Decisões do TJSP · Todo o Estado de SP</div><div class="stat-num">{DATASET.totalFmt}</div><div class="stat-label">Decisões analisadas</div></div>
-  <div class="stat-card"><div class="stat-eyebrow">Demandas mais comuns</div><div class="stat-num">{TEMAS.length}</div><div class="stat-label">Temas do JEC</div></div>
-  <div class="stat-card"><div class="stat-eyebrow">Média estadual de decisões favoráveis</div><div class="stat-num">61,4%</div><div class="stat-label">Procedência no JEC paulista</div></div>
+<div class="stats-wrap"><div class="stats-panel"><div class="stats" data-motion>
+  <div class="stat-card" data-reveal style="--i:0"><div class="stat-eyebrow">Decisões do TJSP · Todo o Estado de SP</div><div class="stat-num" data-count={DATASET.total}>{DATASET.totalFmt}</div><div class="stat-label">Decisões analisadas</div></div>
+  <div class="stat-card" data-reveal style="--i:1"><div class="stat-eyebrow">Demandas mais comuns</div><div class="stat-num" data-count={TEMAS.length} data-delay="350">{TEMAS.length}</div><div class="stat-label">Temas do JEC</div></div>
+  <div class="stat-card" data-reveal style="--i:2"><div class="stat-eyebrow">Média estadual de decisões favoráveis</div><div class="stat-num" data-count={mediaFav} data-dec="1" data-suffix="%" data-delay="700">{DATASET.mediaFavoravel}</div><div class="stat-label">Procedência no JEC paulista</div></div>
 </div></div></div>
 
 <section class="temas" id="temas"><div class="section-inner">
   <div class="section-head"><div class="section-eyebrow">14 pilares do JEC</div><h2 class="section-title">Em qual situação você foi prejudicado?</h2><p class="section-sub">Seja um golpe financeiro, negativação indevida ou descaso de uma grande empresa: analisamos 39.727 decisões reais do TJSP para explicar o que separa quem recupera o dinheiro de quem perde no Juizado Especial Cível.</p></div>
-  <div class="tabs" id="tabs"><button class="tab on" data-f="all">Todos</button>{grupos.map((g) => <button class="tab" data-f={g}>{GRUPOS[g]}</button>)}</div>
-  <div class="tgrid" id="tgrid">{grupos.flatMap((g) => TEMAS.filter((t) => t.grupo === g)).map((t) => (
-    <a class="tcard" id={`tema-${t.slug}`} href={`/${t.slug}/`} data-g={t.grupo} data-k={`${t.nome.toLowerCase()} ${t.palavras}`}>
-      <div class="tcard-top"><span class="tcard-ic"><Icon name={t.icone} /></span><span class="tcard-g">{GRUPOS[t.grupo]}</span></div>
-      <h3 class="tcard-t">{t.nome}</h3><p class="tcard-d">{t.linha}</p>
-      <div class="tcard-metric">
-        <div class="tcard-bar-wrap">
-          <div class="tcard-bar-fill" style={`width:${t.procedenciaPct}%`}></div>
-        </div>
-        <div class="tcard-stats-line">
-          <span class="tcard-win"><strong>{t.procedenciaPct.toFixed(1).replace('.', ',')}%</strong> ganharam</span>
-          <span class="tcard-loss"><strong>{(100 - t.procedenciaPct).toFixed(1).replace('.', ',')}%</strong> perderam</span>
-        </div>
+  <div class="tg">
+    <div class="tg-groups" role="tablist" aria-label="Grupos de temas" data-motion>
+      {grupos.map((g, i) => (
+        <button class="tg-g" type="button" role="tab" aria-selected={i === 0 ? 'true' : 'false'} aria-controls="tgrid" data-f={g} data-reveal style={`--i:${i}`}>
+          <span class="tg-g-ic"><Icon name={grupoIcone[g]} /></span>
+          <span class="tg-g-b"><span class="tg-g-n">{GRUPOS[g]}</span><span class="tg-g-s">{TEMAS.filter((t) => t.grupo === g).length} temas</span></span>
+          <Icon name="chevron-right" size={18} stroke={2.2} class="tg-g-chev" />
+        </button>))}
+    </div>
+    <div class="tg-panel" role="tabpanel" aria-labelledby="tgTitle">
+      <div class="tg-panel-h" id="tgTitle" aria-live="polite">{GRUPOS[grupos[0]]}</div>
+      <div class="tgrid" id="tgrid" data-motion>{grupos.flatMap((g) => TEMAS.filter((t) => t.grupo === g)).map((t) => (
+        <a class="tcard trow" id={`tema-${t.slug}`} href={`/${t.slug}/`} data-g={t.grupo} data-k={`${t.nome.toLowerCase()} ${t.linha.toLowerCase()} ${t.palavras} ${t.slug}`} data-reveal hidden={t.grupo !== grupos[0]}>
+          <div class="tcard-top"><span class="tcard-ic"><Icon name={t.icone} /></span><span class="tcard-g">{GRUPOS[t.grupo]}</span></div>
+          <h3 class="tcard-t">{t.nome}</h3><p class="tcard-d">{t.linha}</p>
+          <div class="tcard-metric">
+            <div class="tcard-bar-wrap">
+              <div class="tcard-bar-fill" data-bar style={`--w:${t.procedenciaPct}%`}></div>
+            </div>
+            <div class="tcard-stats-line">
+              <span class="tcard-win"><strong data-count={t.procedenciaPct} data-dec="1" data-suffix="%">{pct(t.procedenciaPct)}</strong> procedentes</span>
+              <span class="tcard-loss"><strong data-count={+(100 - t.procedenciaPct).toFixed(1)} data-dec="1" data-suffix="%">{pct(100 - t.procedenciaPct)}</strong> não procedentes</span>
+            </div>
+          </div>
+          <div class="tcard-f">
+            <span class="tcard-hook">{t.hookCuriosidade}</span>
+            <span class="tcard-go">Ver provas <Icon name="arrow-right" size={14} stroke={2.2} /></span>
+          </div>
+        </a>))}
       </div>
-      <div class="tcard-f">
-        <span class="tcard-hook">{t.hookCuriosidade}</span>
-        <span class="tcard-go">Ver provas <Icon name="arrow-right" size={14} stroke={2.2} /></span>
-      </div>
-    </a>))}
+      <p class="empty" id="empty">Nenhum tema encontrado. Tente outras palavras ou <a href="#temas" id="clearQ" style="color:var(--teal)">veja todos os temas</a>.</p>
+    </div>
   </div>
-  <p class="empty" id="empty">Nenhum tema encontrado. Tente outras palavras ou <a href="#temas" id="clearQ" style="color:var(--teal)">veja todos os temas</a>.</p>
 </div></section>
 
 <div style="padding:0 16px"><AdSlot variant="wide" /></div>
@@ -77,14 +92,14 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SI
 {destaque && (
 <section class="section" id="artigos" style="padding-top:72px"><div class="section-inner">
   <div class="section-head"><div class="section-eyebrow">Artigos</div><h2 class="section-title">Em destaque</h2></div>
-  <div class="feat-grid">
-    <a class="feat" href={`/${dT!.slug}/${destaque.data.slug}/`}>
+  <div class="feat-grid" data-motion>
+    <a class="feat" data-reveal style="--i:0" href={`/${dT!.slug}/${destaque.data.slug}/`}>
       <div class="feat-vis">
         <div class="fv-main"><div class="fv-n">{destaque.data.kpis.find((k) => k.destaque)?.valor ?? destaque.data.kpis[0]?.valor}</div><div class="fv-l">{destaque.data.kpis.find((k) => k.destaque)?.rotulo ?? destaque.data.kpis[0]?.rotulo}</div></div>
       </div>
       <div class="feat-body"><span class="feat-tag">{dT!.nome}</span><h3 class="feat-t">{destaque.data.titulo}</h3><div class="feat-meta">{destaque.data.formato === 'guia' ? 'Guia · Redação DefendaMe' : 'Análise · por André L. Silva'} · {data(destaque.data.publicado)} · {destaque.data.leitura} min de leitura</div></div>
     </a>
-    <div class="slots">
+    <div class="slots" data-reveal style="--i:2">
       <div class="slots-h">{outrosArtigos.length ? 'Mais artigos' : 'Próximos temas em produção'}</div>
       {outrosArtigos.map((a) => { const t = temaPorSlug(a.data.tema)!; return (
         <a class="nx" href={`/${t.slug}/${a.data.slug}/`}><span class="tcard-ic"><Icon name={getIconeArtigo(a.data.slug, t.icone, a.data.icone)} /></span><span class="nx-b"><span class="nx-t">{a.data.titulo}</span><span class="nx-m"><span class={`post-fmt fmt-${a.data.formato}`}>{a.data.formato === 'guia' ? 'Guia' : 'Análise'}</span>{t.nome} · {a.data.leitura} min</span></span><span class="nx-go"><Icon name="arrow-right" size={16} stroke={2.2} /></span></a>); })}
@@ -99,11 +114,11 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SI
   <div class="section-inner juri">
     <div>
       <div class="section-head"><div class="section-eyebrow">Tendências do Tribunal</div><h2 class="section-title">O que a Justiça costuma acolher <span class="title-pill-inv">e o que costuma rejeitar</span></h2><p class="section-sub">Em cada tema, uma linha nítida separa a procedência da improcedência no TJSP: a prova documental apresentada nas primeiras horas após o fato. Clique no tema para ver o que os juízes costumam exigir.</p></div>
-      <div class="juri-kpis"><div class="kpi"><b>61,4%</b><span>Média favorável no JEC</span></div><div class="kpi"><b>Estado de SP</b><span>Capital, Litoral e Interior</span></div></div>
+      <div class="juri-kpis" data-motion><div class="kpi" data-reveal style="--i:0"><b data-count={mediaFav} data-dec="1" data-suffix="%">{DATASET.mediaFavoravel}</b><span>Média favorável no JEC</span></div><div class="kpi" data-reveal style="--i:1"><b>Estado de SP</b><span>Capital, Litoral e Interior</span></div></div>
     </div>
     <div>
-      <ol class="bars">{[...TEMAS].sort((a, b) => b.procedenciaPct - a.procedenciaPct).map((t) => (
-        <li class="bar"><a href={`/${t.slug}/`} class="bar-l" title={t.nome}>{t.nome}</a><div class="bar-t"><div class="bar-f" style={`width:${t.procedenciaPct}%`}></div></div><span class="bar-n">{t.procedenciaPct.toFixed(1).replace('.', ',')}%</span></li>))}
+      <ol class="bars" data-motion>{[...TEMAS].sort((a, b) => b.procedenciaPct - a.procedenciaPct).map((t, i) => (
+        <li class="bar" style={`--i:${i}`}><a href={`/${t.slug}/`} class="bar-l" title={t.nome}>{t.nome}</a><div class="bar-t"><div class="bar-f" data-bar style={`--w:${t.procedenciaPct}%`}></div></div><span class="bar-n" data-count={t.procedenciaPct} data-dec="1" data-suffix="%" data-delay={200 + i * 55}>{pct(t.procedenciaPct)}</span></li>))}
       </ol>
       <p class="bars-note">Fonte: Análise estatística de 39.727 decisões públicas do TJSP em todo o Estado de São Paulo. Os percentuais refletem tendências históricas consolidadas; cada caso concreto depende das provas apresentadas.</p>
     </div>
@@ -112,11 +127,11 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SI
 
 <section class="section" id="como-funciona" style="background:var(--surface)"><div class="section-inner">
   <div class="section-head"><div class="section-eyebrow">Rito da Lei 9.099/1995</div><h2 class="section-title">Como funciona o Juizado Especial Cível</h2><p class="section-sub">O rito sumaríssimo foi criado para dar agilidade e acesso gratuito à Justiça. Entenda o passo a passo da reclamação até a sentença.</p></div>
-  <div class="ph-lead-row">{etapas.filter((e) => e.lead).map((e) => (
-    <div class="ph ph-lead"><div class="ph-top"><span class="ph-ic"><Icon name={e.ic} /></span><span class="ph-tag">{e.tag}</span></div><div class="ph-n">Etapa {e.n}</div><h3 class="ph-t">{e.t}</h3><p class="ph-d">{e.d}</p></div>))}</div>
+  <div class="ph-lead-row" data-motion>{etapas.filter((e) => e.lead).map((e, i) => (
+    <div class="ph ph-lead" data-reveal style={`--i:${i}`}><div class="ph-top"><span class="ph-ic"><Icon name={e.ic} /></span><span class="ph-tag">{e.tag}</span></div><div class="ph-n">Etapa {e.n}</div><h3 class="ph-t">{e.t}</h3><p class="ph-d">{e.d}</p></div>))}</div>
   <div class="ph-div"><span><Icon name="gavel" size={15} /> Acesso direto à Justiça: Gratuito em 1º grau conforme o artigo 54 da Lei nº 9.099 de 1995</span></div>
-  <div class="ph-row">{etapas.filter((e) => !e.lead).map((e) => (
-    <div class="ph"><div class="ph-top"><span class="ph-ic"><Icon name={e.ic} /></span><span class="ph-tag">{e.tag}</span></div><div class="ph-n">Etapa {e.n}</div><h3 class="ph-t">{e.t}</h3><p class="ph-d">{e.d}</p></div>))}</div>
+  <div class="ph-row" data-motion>{etapas.filter((e) => !e.lead).map((e, i) => (
+    <div class="ph" data-reveal style={`--i:${i}`}><div class="ph-top"><span class="ph-ic"><Icon name={e.ic} /></span><span class="ph-tag">{e.tag}</span></div><div class="ph-n">Etapa {e.n}</div><h3 class="ph-t">{e.t}</h3><p class="ph-d">{e.d}</p></div>))}</div>
   <div class="ph-bar"><span class="ph-bar-ic"><Icon name="chart" size={18} /></span><p><b>Informação e Cidadania:</b> Todas as orientações são fundamentadas no Código de Defesa do Consumidor e em {DATASET.totalFmt} decisões do TJSP. Em causas até 20 salários mínimos, a lei assegura seu direito de pleitear sem advogado.</p></div>
 </div></section>
 
@@ -130,57 +145,57 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SI
       </p>
     </div>
 
-    <div class="jec-guide-grid">
-      <div class="jec-card">
+    <div class="jec-guide-grid" data-motion>
+      <div class="jec-card" data-reveal style="--i:0">
         <div class="jec-card-ic"><Icon name="gavel" /></div>
         <h3>O que o Juizado Especial Cível faz?</h3>
         <p>Resolve conflitos do cotidiano de <strong>menor complexidade com valor de até 40 salários mínimos</strong>, faixa entre R$ 56.480 e R$ 60.720. Abrange indenizações por danos morais e materiais, cobranças, falhas de serviços bancários, companhias aéreas, planos de saúde e concessionárias, bem como ações de <strong>despejo para uso próprio</strong> e possessórias sobre imóveis de menor valor.</p>
         <span class="jec-card-tag">Art. 3º da Lei 9.099/95</span>
       </div>
 
-      <div class="jec-card">
+      <div class="jec-card" data-reveal style="--i:1">
         <div class="jec-card-ic"><Icon name="pin" /></div>
         <h3>Onde entrar com a ação e qual fórum procurar?</h3>
         <p>A regra de competência territorial do Juizado Especial Cível protege o cidadão, conforme o artigo 4º da Lei nº 9.099 de 1995 e o artigo 101, inciso I do CDC:<br>• <strong>Na sua cidade — domicílio do autor:</strong> se for problema com compras ou serviços — relação de consumo com bancos, companhias aéreas, telefonia ou lojas online — ou reparação de danos em geral;<br>• <strong>Na cidade da empresa:</strong> no fórum onde a empresa ré mantém sede, filial, agência ou sucursal;<br>• <strong>Na cidade onde mora quem você irá processar:</strong> para litígios e contratos civis comuns entre pessoas físicas.</p>
         <span class="jec-card-tag">Art. 4º da Lei 9.099/95 e CDC</span>
       </div>
 
-      <div class="jec-card">
+      <div class="jec-card" data-reveal style="--i:2">
         <div class="jec-card-ic"><Icon name="shield" /></div>
         <h3>Preciso de advogado para reclamar?</h3>
         <p><strong>Não há necessidade em ações de até vinte salários mínimos</strong> — pelo instituto do jus postulandi — pois você pode ajuizar sozinho no fórum ou pelo peticionamento eletrônico do TJSP. <strong>Acima de vinte salários mínimos, no teto de quarenta salários, é obrigatório contratar Advogado</strong> ou ser assistido pela Defensoria Pública. <strong>Atenção:</strong> se houver recurso para a Turma Recursal, a presença de advogado é obrigatória por lei para ambas as partes.</p>
         <span class="jec-card-tag">Art. 9º e 41 da Lei 9.099/95</span>
       </div>
 
-      <div class="jec-card">
+      <div class="jec-card" data-reveal style="--i:0">
         <div class="jec-card-ic"><Icon name="swap" /></div>
         <h3>E se o valor passar de 40 salários mínimos?</h3>
         <p>Se o prejuízo total ultrapassar 40 salários mínimos, você tem duas opções: <strong>1) Renúncia ao excedente:</strong> você pode optar por ajuizar no Juizado Especial Cível, inclusive sem advogado nas demandas de até vinte salários mínimos, mas terá que abrir mão expressamente do valor que passar do teto para usufruir da rapidez e gratuidade do rito; ou <strong>2) Vara Cível Comum:</strong> se não quiser renunciar ao saldo, a ação deve tramitar na Justiça Comum, onde o advogado é indispensável e há custas judiciais.</p>
         <span class="jec-card-tag">Art. 3º, § 3º da Lei 9.099/95</span>
       </div>
 
-      <div class="jec-card">
+      <div class="jec-card" data-reveal style="--i:1">
         <div class="jec-card-ic"><Icon name="chat" /></div>
         <h3>Antes de processar: busque solução prévia</h3>
         <p>Antes de ajuizar, considere resolver nos canais oficiais de conciliação: <strong>Cejuscs</strong> — Centros Judiciários de Solução de Conflitos do TJSP —, <strong>Procons</strong>, <strong>Agências Reguladoras</strong> como Anatel, ANS, Aneel, Anac e Banco Central, e na plataforma <a href="https://www.consumidor.gov.br" target="_blank" rel="noopener noreferrer">consumidor.gov.br</a>. Registrar essa tentativa gera o número de protocolo indispensável para comprovar que a empresa recusou uma solução voluntária.</p>
         <span class="jec-card-tag">Solução Consensual e Provas</span>
       </div>
 
-      <div class="jec-card">
+      <div class="jec-card" data-reveal style="--i:2">
         <div class="jec-card-ic"><Icon name="user" /></div>
         <h3>Quem pode ajuizar ação no JEC?</h3>
         <p><strong>Pessoas físicas, microempreendedores individuais e microempresas ou empresas de pequeno porte.</strong> Grandes conglomerados, bancos, companhias aéreas e entes públicos não podem ser autores contra você no Juizado Estadual. O Juizado foi concebido pela Constituição e pela Lei nº 9.099 de 1995 para reequilibrar as forças do cidadão comum perante o poder econômico.</p>
         <span class="jec-card-tag">Art. 8º da Lei 9.099/95</span>
       </div>
 
-      <div class="jec-card">
+      <div class="jec-card" data-reveal style="--i:0">
         <div class="jec-card-ic"><Icon name="alert" /></div>
         <h3>Quais são os riscos de ir sem advogado?</h3>
         <p>A empresa ré comparece invariavelmente defendida por bancas especializadas e prepostos treinados. Sem a assistência de um <strong>Advogado especializado em Juizados Especiais Cíveis</strong>, o cidadão enfrenta severa assimetria na <strong style="color:var(--navy)">paridade de armas</strong> e corre dois riscos graves: <strong>1) Preclusão probatória:</strong> deixar de juntar documentos indispensáveis logo na inicial, perdendo a oportunidade de provar o fato; e <strong>2) Pedidos processualmente incompletos:</strong> ausência de tutela de urgência liminar, falta de inversão do ônus probatório ou ausência de pedido de repetição de indébito em dobro e astreintes.</p>
         <span class="jec-card-tag">Paridade de Armas no JEC</span>
       </div>
 
-      <div class="jec-card">
+      <div class="jec-card" data-reveal style="--i:1">
         <div class="jec-card-ic"><Icon name="folder" /></div>
         <h3>Documentos que NÃO PODEM faltar:</h3>
         <ul class="jec-doc-list">
@@ -193,14 +208,14 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SI
         <span class="jec-card-tag">Checklist Inicial</span>
       </div>
 
-      <div class="jec-card">
+      <div class="jec-card" data-reveal style="--i:2">
         <div class="jec-card-ic"><Icon name="check" /></div>
         <h3>Quanto custa o processo no JEC?</h3>
         <p><strong>O 1º grau de jurisdição é 100% gratuito.</strong> Não há custas de distribuição, taxas judiciárias nem pagamento de diligência de citação de oficiais de justiça, conforme o artigo 54 da Lei nº 9.099 de 1995. Além disso, se o seu pedido for rejeitado pelo juiz em primeira instância, você <strong>não é condenado</strong> a pagar honorários de sucumbência aos advogados da empresa ré. As custas só existem se você recorrer e perder na Turma Recursal.</p>
         <span class="jec-card-tag">Art. 54 da Lei 9.099/95</span>
       </div>
 
-      <div class="jec-card">
+      <div class="jec-card" data-reveal style="--i:0">
         <div class="jec-card-ic"><Icon name="x" /></div>
         <h3>O que NUNCA levar ao Juizado:</h3>
         <p><strong>Causas com necessidade de perícia técnica complexa:</strong> se o seu caso exigir perícia de engenharia estrutural pesada, exame grafotécnico sofisticado ou recálculo contábil de décadas, o juiz extinguirá a ação sem julgar o mérito por incompetência do rito sumaríssimo. Demandas no JEC devem ser comprovadas por prova documental imediata.</p>
@@ -232,26 +247,51 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SI
   </div>
 </section>
 
-<section class="cta-band"><div class="cta-box">
+<section class="cta-band" data-motion><div class="cta-box" data-reveal>
   <h2>Ficou com dúvidas sobre o seu caso?</h2><p>Entenda a viabilidade da sua demanda e descubra quais documentos reunir antes de procurar o Juizado ou um Advogado.</p>
   <div class="hero-ctas" style="margin:0"><a href="#temas" class="btn btn-outline">Explorar os temas</a><a href="#verificar" class="btn btn-primary" data-open-case>Fazer avaliação preliminar</a></div>
 </div></section>
 </BaseLayout>
 
 <script>
-  const cards = [...document.querySelectorAll<HTMLElement>('.tcard')], tabs = [...document.querySelectorAll<HTMLElement>('.tab')];
+  import { replay, settle } from '../scripts/motion';
+
+  const cards = [...document.querySelectorAll<HTMLElement>('.tcard')];
+  const tabs = [...document.querySelectorAll<HTMLElement>('.tg-g')];
+  const grid = document.getElementById('tgrid')!, title = document.getElementById('tgTitle')!;
   const q = document.getElementById('q') as HTMLInputElement, empty = document.getElementById('empty')!;
-  let group = 'all';
-  const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  let group = tabs[0]?.dataset.f || 'banco';
+  const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const groupName = (g: string) => tabs.find((t) => t.dataset.f === g)?.querySelector('.tg-g-n')?.textContent || '';
+
+  // Mostra os temas do grupo escolhido ou, se houver busca, os temas encontrados em todos os grupos.
   function apply() {
-    const terms = norm(q.value).split(/\s+/).filter((w) => w.length > 2); let shown = 0;
-    cards.forEach((c) => { const k = norm(c.dataset.k || ''); const ok = (group === 'all' || c.dataset.g === group) && (!terms.length || terms.some((w) => k.includes(w))); c.hidden = !ok; if (ok) shown++; });
+    const terms = norm(q.value).split(/\s+/).filter((w) => w.length >= 2);
+    const searching = terms.length > 0;
+    let shown = 0;
+    cards.forEach((c, i) => {
+      const k = norm(c.dataset.k || '');
+      const ok = searching ? terms.some((w) => k.includes(w)) : c.dataset.g === group;
+      c.hidden = !ok;
+      if (ok) c.style.setProperty('--i', String(shown++));
+    });
+    tabs.forEach((t) => t.setAttribute('aria-selected', String(!searching && t.dataset.f === group)));
+    title.textContent = searching ? 'Resultados da busca' : groupName(group);
+    grid.closest('.tg-panel')!.classList.toggle('searching', searching);
     empty.style.display = shown ? 'none' : 'block';
+    return shown;
   }
   const toTemas = () => document.getElementById('temas')!.scrollIntoView({ behavior: 'smooth' });
-  tabs.forEach((t) => t.addEventListener('click', () => { tabs.forEach((x) => x.classList.remove('on')); t.classList.add('on'); group = t.dataset.f!; apply(); }));
-  q.addEventListener('input', apply);
-  document.getElementById('searchForm')!.addEventListener('submit', (e) => { e.preventDefault(); apply(); toTemas(); });
-  document.querySelectorAll<HTMLElement>('.chip').forEach((c) => c.addEventListener('click', () => { q.value = c.dataset.q!; apply(); toTemas(); }));
-  document.getElementById('clearQ')!.addEventListener('click', () => { q.value = ''; group = 'all'; tabs.forEach((x) => x.classList.toggle('on', x.dataset.f === 'all')); apply(); });
+
+  tabs.forEach((t) => t.addEventListener('click', () => {
+    if (q.value) q.value = '';
+    group = t.dataset.f!;
+    apply();
+    replay(grid);
+  }));
+  q.addEventListener('input', () => { apply(); settle(grid); });
+  document.getElementById('searchForm')!.addEventListener('submit', (e) => { e.preventDefault(); apply(); toTemas(); replay(grid); });
+  document.querySelectorAll<HTMLElement>('.chip').forEach((c) => c.addEventListener('click', () => { q.value = c.dataset.q!; apply(); toTemas(); replay(grid); }));
+  document.getElementById('clearQ')!.addEventListener('click', () => { q.value = ''; apply(); replay(grid); });
+  apply();
 </script>

@@ -5,6 +5,6 @@ import { temaPorSlug, GRUPOS } from '../../data/temas';
 interface Props { temas: string[] }
 const itens = Astro.props.temas.map((s) => temaPorSlug(s)).filter(Boolean);
 ---
-<aside class="leia"><p class="leia-l">Leia também</p><div class="leia-list">
+<aside class="leia" data-motion data-reveal><p class="leia-l">Leia também</p><div class="leia-list">
   {itens.map((t) => <a class="leia-i" href={`/${t!.slug}/`}><span class="leia-th"><Icon name={t!.icone} /></span><span><span class="leia-v">{GRUPOS[t!.grupo]}</span><span class="leia-t">{t!.nome}: {t!.linha.toLowerCase()}</span></span></a>)}
 </div></aside>

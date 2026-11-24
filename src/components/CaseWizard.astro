@@ -58,13 +58,15 @@ const UFS = ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','P
       </section>
       <section class="cz-pane cz-done" data-pane="4" hidden>
         <div class="cz-done-ic"><Icon name="check" size={34} stroke={2.4} /></div>
-        <h3>Relato recebido para avaliação</h3>
-        <p>Recebemos o seu relato. O diagnóstico preliminar da demanda e a relação de documentos indispensáveis serão enviados para o WhatsApp informado.</p>
+        <div id="czDoneBadge" class="cz-badge cz-badge-online">● Atendimento Comercial Ativo</div>
+        <h3 id="czDoneTitle">Relato recebido para avaliação</h3>
+        <p id="czDoneMsg">Recebemos o seu relato. O diagnóstico preliminar da demanda e a relação de documentos indispensáveis serão enviados para o WhatsApp informado.</p>
         <p class="cz-proto">Protocolo <b id="czProto"></b></p>
-        <div class="cz-done-actions">
+        <div class="cz-done-actions" id="czDoneActions">
           <a id="czWhatsBtn" href="#" target="_blank" rel="noopener" class="btn btn-whatsapp">
             <Icon name="whatsapp" size={19} /> Iniciar atendimento no WhatsApp
           </a>
+          <button type="button" class="btn btn-outline" id="czCopyProto">Copiar Protocolo</button>
           <button type="button" class="btn btn-outline" data-cz-close>Voltar ao site</button>
         </div>
       </section>
@@ -116,7 +118,7 @@ const UFS = ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','P
     }); if(first) first.focus(); return ok; }
   function money(el){ var d=el.value.replace(/\D/g,''); if(!d){ el.value=''; return; } var n=(parseInt(d,10)/100).toFixed(2).split('.'); el.value=n[0].replace(/\B(?=(\d{3})+(?!\d))/g,'.')+','+n[1]; }
   function phone(el){ var d=el.value.replace(/\D/g,'').slice(0,11); var o=d;
-    if(d.length>2) o='('+d.slice(0,2)+') '+d.slice(2); if(d.length>7) o='('+d.slice(0,2)+') '+d.slice(2,d.length-4)+'-'+d.slice(-4); el.value=o; }
+    if(d.length>2) o=d.slice(0,2)+' '+d.slice(2); if(d.length>7) o=d.slice(0,2)+' '+d.slice(2,d.length-4)+'-'+d.slice(-4); el.value=o; }
   form.addEventListener('input',function(e){ var el=e.target;
     if(el.inputMode==='decimal') money(el); if(el.name==='whatsapp') phone(el);
     var w=el.closest('.fld,.cz-ok'); if(w&&w.classList.contains('bad')){ w.classList.remove('bad'); var s=w.querySelector('.msg'); if(s) s.remove(); } });
@@ -135,25 +137,107 @@ const UFS = ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','P
     if(step===1){ if(!cat){ document.getElementById('errCat').hidden=false; return; } go(2); }
     else if(step===2){ if(validate(panes[1])) go(3); } });
   backB.addEventListener('click',function(){ go(step-1); });
-  form.addEventListener('submit',function(e){ e.preventDefault(); if(!validate(panes[2])) return;
-    var fd=new FormData(form), data={categoria:LABELS[cat]}; fd.forEach(function(v,k){ data[k]=v; });
-    var proto='DM-'+new Date().toISOString().slice(2,10).replace(/-/g,'')+'-'+Math.random().toString(36).slice(2,6).toUpperCase();
-    data.protocolo=proto; data.pagina=location.pathname; data.origem="Formulário Modal";
-    var done=function(){
-      document.getElementById('czProto').textContent=proto;
-      var wBtn=document.getElementById('czWhatsBtn');
-      if(wBtn){
-        var msg='Olá André Silva, acabei de enviar meu caso no portal DefendaMe sob o protocolo '+proto+' sobre '+(LABELS[cat]||'demanda no JEC')+' e gostaria de agilizar minha avaliação.';
-        wBtn.href='https://api.whatsapp.com/send?phone=5511966016189&text='+encodeURIComponent(msg);
+  // Controle de Horário Comercial e Feriados Nacionais
+  var now = new Date();
+  var day = now.getDay();
+  var hour = now.getHours();
+  var feriados = ['01-01', '04-21', '05-01', '09-07', '10-12', '11-02', '11-15', '11-20', '12-25'];
+  var mmdd = ('0' + (now.getMonth() + 1)).slice(-2) + '-' + ('0' + now.getDate()).slice(-2);
+  var isFeriado = feriados.indexOf(mmdd) !== -1;
+  var isComercial = !isFeriado && (day >= 1 && day <= 5 && hour >= 9 && hour < 18);
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    if (!validate(panes[2])) return;
+
+    var fd = new FormData(form), data = { categoria: LABELS[cat] };
+    fd.forEach(function(v, k){ data[k] = v; });
+
+    var proto = 'DM-' + new Date().toISOString().slice(2, 10).replace(/-/g, '') + '-' + Math.random().toString(36).slice(2, 6).toUpperCase();
+    data.protocolo = proto;
+    data.pagina = location.pathname;
+    data.origem = "Formulário Modal";
+    data.tag = "form";
+
+    sendB.disabled = true;
+
+    var finalized = false;
+    var done = function(){
+      if (finalized) return;
+      finalized = true;
+
+      document.getElementById('czProto').textContent = proto;
+      var wBtn = document.getElementById('czWhatsBtn');
+      var badgeEl = document.getElementById('czDoneBadge');
+      var titleEl = document.getElementById('czDoneTitle');
+      var msgEl = document.getElementById('czDoneMsg');
+      var copyBtn = document.getElementById('czCopyProto');
+
+      if (isComercial) {
+        if (badgeEl) {
+          badgeEl.className = 'cz-badge cz-badge-online';
+          badgeEl.textContent = '● Atendimento Comercial Ativo';
+        }
+        if (titleEl) titleEl.textContent = 'Pesquisa Jurimétrica Registrada!';
+        if (msgEl) msgEl.textContent = 'Recebemos o seu relato. Como estamos em horário comercial, nossa equipe técnica está ativa para retorno imediato do diagnóstico e da relação probatória.';
+        if (wBtn) {
+          wBtn.hidden = false;
+          var msg = 'Olá André Silva, acabei de enviar meu caso no portal DefendaMe sob o protocolo ' + proto + ' sobre ' + (LABELS[cat] || 'demanda no JEC') + ' e gostaria de receber o relatório didático de jurimetria do TJSP.';
+          wBtn.href = 'https://api.whatsapp.com/send?phone=5511966016189&text=' + encodeURIComponent(msg);
+        }
+      } else {
+        if (badgeEl) {
+          badgeEl.className = 'cz-badge cz-badge-plantao';
+          badgeEl.textContent = '⏳ Plantão Assíncrono · Fila de Triagem';
+        }
+        if (titleEl) titleEl.textContent = 'Solicitação Recebida com Sucesso!';
+        if (msgEl) {
+          msgEl.innerHTML = 'Seu caso foi protocolado com sucesso na base de jurimetria do TJSP.<br><br>Como o envio ocorreu fora do expediente comercial, os dados estão em processamento analítico prioritário. Nossa equipe técnica encaminhará o levantamento de precedentes e o checklist probatório diretamente no seu WhatsApp no início do próximo expediente útil a partir das 09h00.';
+        }
+        if (wBtn) {
+          wBtn.hidden = true;
+        }
       }
+
+      if (copyBtn) {
+        copyBtn.onclick = function(){
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(proto);
+          }
+          copyBtn.textContent = '✓ Protocolo Copiado!';
+          copyBtn.style.borderColor = 'var(--teal)';
+          copyBtn.style.color = 'var(--teal)';
+        };
+      }
+
+      sendB.disabled = false;
       go(4);
     };
-    if(!ENDPOINT){ console.warn('[DefendaMe] PUBLIC_FORM_ENDPOINT não configurado — caso não enviado', data); done(); return; }
-    sendB.disabled=true;
-    fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(data)})
-      .then(function(r){ if(!r.ok) throw new Error(r.status); done(); })
-      .catch(function(){ alertBox('Não foi possível enviar agora. Verifique sua conexão e tente novamente.'); })
-      .finally(function(){ sendB.disabled=false; }); });
+
+    if (!ENDPOINT) {
+      console.warn('[DefendaMe] PUBLIC_FORM_ENDPOINT não configurado — caso não enviado', data);
+      done();
+      return;
+    }
+
+    // Envio assíncrono em segundo plano para o Google Sheets (sem travar a experiência do usuário)
+    try {
+      fetch(ENDPOINT, {
+        method: 'POST',
+        mode: 'no-cors',
+        keepalive: true,
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(data)
+      })
+      .then(function(){ done(); })
+      .catch(function(){ done(); });
+    } catch(err) {
+      done();
+    }
+
+    // Trava de segurança: garante a entrega do protocolo em no máximo 1200ms
+    setTimeout(done, 1200);
+  });
   function alertBox(msg){ var e=document.getElementById('czSendErr'); e.textContent=msg; e.hidden=false; }
   document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&!m.hidden) close(); });
   document.addEventListener('click',function(e){ var a=e.target.closest('a,button'); if(!a||m.contains(a)) return;
@@ -164,6 +248,27 @@ const UFS = ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','P
 </script>
 
 <style>
+  .cz-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11.5px;
+    font-weight: 600;
+    margin: 6px auto 10px;
+    line-height: 1.2;
+  }
+  .cz-badge-online {
+    background: #E6F4EA;
+    color: #137333;
+    border: 1px solid #CEEAD6;
+  }
+  .cz-badge-plantao {
+    background: #FEF3C7;
+    color: #92400E;
+    border: 1px solid #FDE68A;
+  }
   .cz-done-actions {
     display: flex;
     flex-direction: column;

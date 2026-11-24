@@ -8,7 +8,7 @@ interface Props {
 const { titulo, tipo = 'info' } = Astro.props;
 const isWarning = tipo === 'warning';
 ---
-<div class={isWarning ? 'alert-box-warning' : 'alert-box-info'}>
+<div class={isWarning ? 'alert-box-warning' : 'alert-box-info'} data-motion data-reveal>
   <div class="alert-header">
     <Icon name={isWarning ? 'alert' : 'shield'} size={18} stroke={2} />
     <strong>{titulo}</strong>

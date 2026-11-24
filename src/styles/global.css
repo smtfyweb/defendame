@@ -1634,3 +1634,98 @@ a.aut-n { text-decoration: none; } a.aut-n:hover { color: var(--teal); }
   line-height: 1.55;
 }
 
+
+/* =====================================================================
+   ANIMAÇÕES (src/scripts/motion.ts) — padrão "Jurimetria animada"
+   data-motion = bloco observado · data-reveal = entra com fade/subida
+   data-bar = barra que cresce até --w · data-count = número que conta
+   ===================================================================== */
+:root { --ease-out: cubic-bezier(.22, 1, .36, 1); }
+[data-reveal] { transition: opacity .6s var(--ease-out), transform .6s var(--ease-out); transition-delay: calc(var(--i, 0) * 90ms); }
+.js [data-motion]:not(.is-in) [data-reveal],
+.js [data-motion]:not(.is-in) > [data-reveal] { opacity: 0; transform: translateY(16px); }
+[data-bar] { width: var(--w); transition: width 1s var(--ease-out); transition-delay: calc(200ms + var(--i, 0) * 60ms); }
+.js [data-motion]:not(.is-in) [data-bar] { width: 0; }
+[data-count] { font-variant-numeric: tabular-nums; }
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal], [data-bar] { transition: none !important; }
+  .js [data-motion]:not(.is-in) [data-reveal] { opacity: 1; transform: none; }
+  .js [data-motion]:not(.is-in) [data-bar] { width: var(--w); }
+}
+
+/* ===== HOME · TEMAS POR GRUPO (substitui a grade de 14 cards) ===== */
+.tg { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 20px; align-items: start; }
+.tg-groups { display: flex; flex-direction: column; gap: 10px; position: sticky; top: 120px; }
+.tg-g {
+  display: flex; align-items: center; gap: 14px; width: 100%; min-height: 72px; padding: 12px 16px;
+  border-radius: var(--r-lg); border: 1px solid var(--border); background: var(--surface); color: var(--navy);
+  font: inherit; text-align: left; cursor: pointer;
+}
+.tg-g[data-reveal] {
+  transition: background .25s, border-color .25s, color .25s, box-shadow .25s,
+    opacity .6s var(--ease-out) calc(var(--i, 0) * 90ms), transform .6s var(--ease-out) calc(var(--i, 0) * 90ms);
+}
+.tg-g:hover { border-color: var(--line-teal); }
+.tg-g-ic { width: 44px; height: 44px; flex: none; border-radius: var(--r); display: grid; place-items: center; background: var(--teal-pale); color: var(--teal); transition: background .25s, color .25s; }
+.tg-g-b { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.tg-g-n { font-size: 16.5px; font-weight: 600; letter-spacing: -.01em; line-height: 1.25; }
+.tg-g-s { font-size: 13px; color: var(--fg-muted); transition: color .25s; }
+.tg-g-chev { color: var(--fg-light); transition: transform .25s, color .25s; }
+.tg-g[aria-selected="true"] { background: var(--teal); border-color: var(--teal); color: #fff; box-shadow: 0 10px 24px rgba(18, 133, 126, .22); }
+.tg-g[aria-selected="true"] .tg-g-ic { background: rgba(255, 255, 255, .18); color: #fff; }
+.tg-g[aria-selected="true"] .tg-g-s { color: rgba(255, 255, 255, .82); }
+.tg-g[aria-selected="true"] .tg-g-chev { color: #fff; transform: translateX(4px); }
+.tg-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 18px; min-width: 0; }
+.tg-panel-h { font-size: 17px; font-weight: 600; color: var(--navy); margin: 2px 4px 14px; letter-spacing: -.01em; }
+.tg .tgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.tg .tcard { background: var(--bg); box-shadow: none; }
+.tg .tcard[data-reveal] {
+  transition: border-color .2s, box-shadow .2s,
+    opacity .5s var(--ease-out) calc(var(--i, 0) * 70ms), transform .5s var(--ease-out) calc(var(--i, 0) * 70ms);
+}
+.js .tg .tgrid:not(.is-in) .tcard[data-reveal] { opacity: 0; transform: translateX(24px); }
+.tg .tgrid.is-in .tcard:hover { transition-delay: 0s; }
+.tg .tcard-hook { transition: opacity .5s var(--ease-out) calc(450ms + var(--i, 0) * 70ms); }
+.js .tg .tgrid:not(.is-in) .tcard-hook { opacity: 0; }
+@media (max-width: 960px) {
+  .tg { grid-template-columns: 1fr; }
+  .tg-groups { position: static; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tg-g { min-height: 64px; padding: 10px 12px; gap: 10px; }
+  .tg-g-ic { width: 38px; height: 38px; }
+  .tg-g-chev { display: none; }
+}
+@media (max-width: 640px) {
+  .tg .tgrid { grid-template-columns: 1fr; }
+  .tg-panel { padding: 12px; }
+  .tg-g-n { font-size: 15px; }
+}
+
+/* procedentes x não procedentes: neutro para o segundo número (sem vermelho de alarme) */
+.tcard-bar-wrap { background: rgba(127, 145, 150, .28); }
+.tcard-loss strong { color: var(--fg-mid); }
+/* o painel já mostra o nome do grupo; o rótulo do card só aparece nos resultados da busca */
+.tg-panel:not(.searching) .tcard-g { display: none; }
+
+/* ===== ANIMAÇÕES · blocos que animam a si mesmos e gráficos SVG ===== */
+.js [data-motion][data-reveal]:not(.is-in) { opacity: 0; transform: translateY(16px); }
+.proc-chart .bc-bar { transform-box: fill-box; transform-origin: 50% 100%; transition: transform .9s var(--ease-out); transition-delay: calc(150ms + var(--i, 0) * 120ms); }
+.js [data-motion]:not(.is-in) .proc-chart .bc-bar { transform: scaleY(0); }
+.proc-chart .bc-val { transition: opacity .45s ease; transition-delay: calc(650ms + var(--i, 0) * 120ms); }
+.js [data-motion]:not(.is-in) .proc-chart .bc-val { opacity: 0; }
+.ev-col li { transition: opacity .45s var(--ease-out), transform .45s var(--ease-out); }
+@media (prefers-reduced-motion: reduce) {
+  .proc-chart .bc-bar, .proc-chart .bc-val { transition: none !important; }
+  .js [data-motion]:not(.is-in) .proc-chart .bc-bar { transform: none; }
+  .js [data-motion]:not(.is-in) .proc-chart .bc-val { opacity: 1; }
+  .js [data-motion][data-reveal]:not(.is-in) { opacity: 1; transform: none; }
+}
+/* barra empilhada da distribuição de decisões (página de tema) */
+.dist-bar { display: flex; height: 12px; border-radius: 99px; overflow: hidden; background: var(--muted-bg); margin: 12px 2px 2px; }
+.dist-bar > span { display: block; height: 100%; }
+.autor-list[data-motion] > li { transition: opacity .5s var(--ease-out), transform .5s var(--ease-out); }
+.js .autor-list[data-motion]:not(.is-in) > li { opacity: 0; transform: translateY(12px); }
+.autor-list > li:nth-child(2) { transition-delay: 90ms; } .autor-list > li:nth-child(3) { transition-delay: 180ms; } .autor-list > li:nth-child(n+4) { transition-delay: 270ms; }
+.faq-answer-body { transition: opacity .35s ease .05s; }
+.faq-item-card:not(.open) .faq-answer-body { opacity: 0; }
+.table-container { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+html { overflow-x: clip; } /* evita rolagem lateral no celular causada pelos popovers de lei ocultos */

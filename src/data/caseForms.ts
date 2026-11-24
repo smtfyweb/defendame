@@ -314,7 +314,7 @@ export const CASE_FORMS: Record<string, { titulo: string; campos: Campo[] }> = {
         "id": "empresa",
         "rotulo": "Operadora do plano",
         "tipo": "text",
-        "placeholder": "Ex.: Amil, Hapvida, Unimed",
+        "placeholder": "Ex.: Notredame, Hapvida, Amil, SulAmérica, Unimed",
         "obrigatorio": true
       },
       {

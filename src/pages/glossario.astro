@@ -99,7 +99,7 @@ const jsonLd = [
                 <AdSlot variant="wide" />
               </div>
             )}
-            <article class="g-card" data-term={item.termo.toLowerCase()} data-letter={item.letra}>
+            <article class="g-card" data-motion data-reveal style={`--i:${idx % 3}`} data-term={item.termo.toLowerCase()} data-letter={item.letra}>
               <div class="g-card-top">
                 <span class="g-card-letter">{item.letra}</span>
                 <h2 class="g-card-term">{item.termo}</h2>
@@ -412,8 +412,9 @@ const jsonLd = [
     s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
   function filterGlossario() {
-    const q = norm(searchInput.value.trim());
-    clearBtn.hidden = !searchInput.value;
+    const raw = searchInput.value.trim();
+    const terms = norm(raw).split(/\s+/).filter(Boolean);
+    clearBtn.hidden = !raw;
     let visibleCount = 0;
 
     cards.forEach((card) => {
@@ -422,7 +423,7 @@ const jsonLd = [
       const letter = card.dataset.letter || '';
 
       const matchLetter = activeLetter === 'all' || letter === activeLetter;
-      const matchQuery = !q || term.includes(q) || def.includes(q);
+      const matchQuery = !terms.length || terms.every((t) => term.includes(t) || def.includes(t));
 
       if (matchLetter && matchQuery) {
         card.style.display = 'flex';
@@ -435,10 +436,16 @@ const jsonLd = [
     matchCount.textContent = String(visibleCount);
     emptyState.hidden = visibleCount > 0;
     const midAd = document.querySelector<HTMLElement>('.glossario-mid-ad');
-    if (midAd) midAd.style.display = (activeLetter === 'all' && !q && visibleCount > 0) ? 'block' : 'none';
+    if (midAd) midAd.style.display = (activeLetter === 'all' && !raw && visibleCount > 0) ? 'block' : 'none';
   }
 
-  searchInput.addEventListener('input', filterGlossario);
+  searchInput.addEventListener('input', () => {
+    if (searchInput.value.trim() && activeLetter !== 'all') {
+      activeLetter = 'all';
+      alphaButtons.forEach((b) => b.classList.toggle('on', b.dataset.letter === 'all'));
+    }
+    filterGlossario();
+  });
 
   clearBtn.addEventListener('click', () => {
     searchInput.value = '';

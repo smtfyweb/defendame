@@ -57,17 +57,17 @@ const jsonLd = [
   Os Juizados Especiais foram concebidos sob a inspiração do artigo 98, inciso I, da Constituição Federal, inaugurando um microssistema processual orientado pelos princípios da <em>oralidade, simplicidade, informalidade, economia processual e celeridade</em>. Essa estrutura garante o acesso democrático ao Poder Judiciário, assegura a gratuidade de custas no primeiro grau e prioriza a solução consensual dos litígios.
 </p>
 
-<div class="big-stats">
-  <div>
-    <b>{DATASET.totalFmt}</b>
+<div class="big-stats" data-motion>
+  <div data-reveal style="--i:0">
+    <b data-count-auto data-delay="0">{DATASET.totalFmt}</b>
     <span>Decisões públicas do TJSP catalogadas</span>
   </div>
-  <div>
-    <b>10 RAJs</b>
+  <div data-reveal style="--i:1">
+    <b data-count-auto data-delay="350">10 RAJs</b>
     <span>Cobertura empírica: Capital, Grande SP, Litoral e Interior</span>
   </div>
-  <div>
-    <b>14 Silos</b>
+  <div data-reveal style="--i:2">
+    <b data-count-auto data-delay="700">14 Silos</b>
     <span>Temas críticos de consumo estruturados</span>
   </div>
 </div>
@@ -98,26 +98,26 @@ const jsonLd = [
   Cada artigo, indicador e faixa indenizatória exposta no portal resulta de uma esteira metodológica de legal analytics dividida em cinco fases sucessivas:
 </p>
 
-<div class="about-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px;">
-  <div class="about-card">
+<div class="about-grid" data-motion style="grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px;">
+  <div class="about-card" data-reveal style="--i:0">
     <span class="med-icon"><Icon name="search" size={22} stroke={2} /></span>
     <h3>1. Coleta Pública e Amostragem</h3>
     <p>Extração automatizada e sistemática de decisões dos repositórios oficiais públicos do TJSP — portal e-SAJ — e da base DataJud do CNJ, abrangendo as 10 Regiões Administrativas Judiciárias paulistas, com recorte temporal e temático detalhado.</p>
   </div>
 
-  <div class="about-card">
+  <div class="about-card" data-reveal style="--i:1">
     <span class="med-icon"><Icon name="lock" size={22} stroke={2} /></span>
     <h3>2. Anonimização Ética e LGPD</h3>
     <p>Higienização automatizada de dados pessoais sensíveis das partes. O processo blinda a privacidade individual e isola unicamente as variáveis técnicas de julgamento.</p>
   </div>
 
-  <div class="about-card">
+  <div class="about-card" data-reveal style="--i:2">
     <span class="med-icon"><Icon name="shield" size={22} stroke={2} /></span>
     <h3>3. Auditoria Precedencial Superior</h3>
     <p>Confronto de cada conjunto amostral com as teses vinculantes e repetitivas dos Tribunais Superiores: Temas 210 e 1.240 do STF, REsp 1.584.465/MG do STJ, Súmulas 385, 479 e 548 do STJ, e Enunciados Cíveis do FONAJE e do FOJESP.</p>
   </div>
 
-  <div class="about-card">
+  <div class="about-card" data-reveal style="--i:3">
     <span class="med-icon"><Icon name="chart" size={22} stroke={2} /></span>
     <h3>4. Modelagem Quantitativa e Jurimétrica</h3>
     <p>Cálculo estatístico de frequências de êxito, desmembramento entre pedidos de dano moral e material, cálculo do tempo médio de tramitação até a sentença e aferição das faixas interquartis de condenação.</p>

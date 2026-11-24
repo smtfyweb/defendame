@@ -6,7 +6,7 @@ import Icon from '../Icon.astro';
 interface Props { titulo: string; origem?: string; nome?: string }
 const { titulo, origem, nome } = Astro.props;
 ---
-<aside class="caso" aria-label="Caso ilustrativo">
+<aside class="caso" aria-label="Caso ilustrativo" data-motion data-reveal>
   <div class="caso-head">
     <span class="caso-ic"><Icon name="gavel" size={18} stroke={2} /></span>
     <div><span class="caso-k">Caso da base · decisão analisada</span><strong class="caso-t">{titulo}</strong>{origem && <span class="caso-o">{origem}</span>}</div>

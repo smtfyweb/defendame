@@ -4,7 +4,7 @@ import { AUTHOR } from '../../data/site';
 interface Props { cite?: string; rotulo?: string }
 const { cite = `${AUTHOR.name}`, rotulo } = Astro.props;
 ---
-<blockquote class={`expert-quote eq${rotulo ? ' eq-pull' : ''}`}>
+<blockquote class={`expert-quote eq${rotulo ? ' eq-pull' : ''}`} data-motion data-reveal>
   {rotulo
     ? <div class="eq-head"><span class="eq-k">{rotulo}</span></div>
     : <div class="eq-head"><span class="eq-av" aria-hidden="true"></span><span>Análise de <b>{AUTHOR.name}</b></span></div>}

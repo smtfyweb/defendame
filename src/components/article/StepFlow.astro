@@ -8,12 +8,12 @@ const { etapas, setas = true } = Astro.props;
 const cols = etapas.length;
 const tpl = setas ? Array.from({ length: cols }, () => '1fr').join(' auto ') : `repeat(${cols}, minmax(0,1fr))`;
 ---
-<div class="flow4" style={`grid-template-columns:${tpl}`}>
+<div class="flow4" data-motion style={`grid-template-columns:${tpl}`}>
   {etapas.map((e, i) => (<>
-    {i > 0 && setas && <span class="flow-arrow" aria-hidden="true"><Icon name="arrow-right" size={18} stroke={2} /></span>}
-    <div class="med-step">
+    {i > 0 && setas && <span class="flow-arrow" aria-hidden="true" data-reveal style={`--i:${i * 2 - 1}`}><Icon name="arrow-right" size={18} stroke={2} /></span>}
+    <div class="med-step" data-reveal style={`--i:${i * 2}`}>
       <div class="med-top"><div class="med-icon"><Icon name={e.icone} stroke={2} /></div><div class="med-step-n">Etapa {String(i + 1).padStart(2, '0')}</div></div>
-      {e.valor && <div class="med-num">{e.valor}<span>{e.unidade}</span></div>}
+      {e.valor && <div class="med-num"><span class="med-num-v" data-count-auto data-delay={300 + i * 180}>{e.valor}</span><span>{e.unidade}</span></div>}
       <div class="med-time-label">{e.titulo}</div>
       <div class="med-desc">{e.texto}</div>
     </div>

@@ -109,7 +109,7 @@ const jsonLd = [
               {cat.itens.map((item, iIdx) => {
                 const isOpen = cIdx === 0 && iIdx === 0;
                 return (
-                  <div class={`faq-item-card${isOpen ? ' open' : ''}`}>
+                  <div class={`faq-item-card${isOpen ? ' open' : ''}`} data-motion data-reveal style={`--i:${iIdx % 4}`}>
                     <button type="button" class="faq-question-btn" aria-expanded={isOpen ? 'true' : 'false'}>
                       <span class="faq-q-text">{item.pergunta}</span>
                       <span class="faq-q-icon"><Icon name="plus" size={14} stroke={2.5} /></span>
@@ -482,8 +482,9 @@ const jsonLd = [
     s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
   function filterFaq() {
-    const q = norm(searchInput.value.trim());
-    clearBtn.hidden = !searchInput.value;
+    const raw = searchInput.value.trim();
+    const terms = norm(raw).split(/\s+/).filter(Boolean);
+    clearBtn.hidden = !raw;
     let totalVisible = 0;
 
     sections.forEach((sec) => {
@@ -495,17 +496,25 @@ const jsonLd = [
       cards.forEach((card) => {
         const question = norm(card.querySelector('.faq-q-text')?.textContent || '');
         const answer = norm(card.querySelector('.faq-answer-body')?.textContent || '');
-        const matchQuery = !q || question.includes(q) || answer.includes(q);
+        const matchQuery = !terms.length || terms.every((t) => question.includes(t) || answer.includes(t));
 
         if (matchCat && matchQuery) {
           card.style.display = 'block';
           visibleInSec++;
           totalVisible++;
           // Se tiver busca ativa, abre automaticamente para leitura direta
-          if (q) {
+          if (terms.length) {
             card.classList.add('open');
+            const btn = card.querySelector('.faq-question-btn') as HTMLElement;
+            if (btn) btn.setAttribute('aria-expanded', 'true');
             const pane = card.querySelector('.faq-answer-pane') as HTMLElement;
-            if (pane) pane.style.maxHeight = '800px';
+            if (pane) pane.style.maxHeight = `${pane.scrollHeight + 40}px`;
+          } else {
+            card.classList.remove('open');
+            const btn = card.querySelector('.faq-question-btn') as HTMLElement;
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+            const pane = card.querySelector('.faq-answer-pane') as HTMLElement;
+            if (pane) pane.style.maxHeight = '0px';
           }
         } else {
           card.style.display = 'none';
@@ -518,7 +527,7 @@ const jsonLd = [
     matchCount.textContent = String(totalVisible);
     emptyState.hidden = totalVisible > 0;
     const midAd = document.querySelector<HTMLElement>('.faq-mid-ad');
-    if (midAd) midAd.style.display = (activeCat === 'all' && !q && totalVisible > 0) ? 'block' : 'none';
+    if (midAd) midAd.style.display = (activeCat === 'all' && !raw && totalVisible > 0) ? 'block' : 'none';
   }
 
   // Accordion click toggle
