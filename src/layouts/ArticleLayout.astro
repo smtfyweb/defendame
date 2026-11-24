@@ -71,13 +71,16 @@ if (d.faq.length) jsonLd.push({ '@context': 'https://schema.org', '@type': 'FAQP
   </div>
 
   <div class="art-player" id="artPlayer" data-audio-url={d.audioUrl || ''}>
-    <span class="art-player-label">ouça este conteúdo</span>
-    <div class="art-player-inner">
+    <div class="art-header">
+      <span class="art-label">ouça este conteúdo</span>
+      <span class="art-badge">DefendaMe</span>
+    </div>
+    <div class="art-controls">
       <button class="art-play" id="artPlay" type="button" aria-label="Reproduzir" aria-pressed="false">
-        <svg id="icoPlay" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
-        <svg id="icoPause" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" hidden><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+        <svg id="icoPlay" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="6,3 20,12 6,21"/></svg>
+        <svg id="icoPause" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" hidden><rect x="5" y="3" width="4" height="18"/><rect x="15" y="3" width="4" height="18"/></svg>
       </button>
-      <div class="art-wave" id="artWave" aria-hidden="true">{Array.from({length:48}).map((_,k)=><span style={`--h:${20+Math.round(Math.sin(k*0.9)*30+Math.random()*35)}%`}></span>)}</div>
+      <div class="art-wave" id="artWave" aria-hidden="true">{Array.from({length:60}).map((_,k)=><span style={`--h:${18+Math.round(Math.abs(Math.sin(k*0.72))*55+Math.random()*22)}%`}></span>)}</div>
       <span class="art-time" id="artTime">0:00</span>
       <button class="art-speed" id="artSpeed" type="button">1×</button>
     </div>
