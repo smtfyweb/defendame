@@ -101,7 +101,7 @@ const AFINIDADES_MAP: Record<string, { titulo: string; tituloHtml?: string; subt
   },
   'negativacao-indevida': {
     titulo: 'Ações de Proteção ao Crédito e Direito Bancário no JEC',
-    tituloHtml: '<span class="title-pill-inv">Ações de Proteção ao Crédito</span> e Direito Bancário no <span class="title-pill-inv">JEC</span>',
+    tituloHtml: 'Ações de <span class="title-pill-inv">Proteção ao Crédito e Direito Bancário</span> no JEC',
     subtitulo: 'Jurisprudência do TJSP sobre restrições cadastrais no SPC/Serasa, golpes e cobranças indevidas.',
     slotsH: 'Ações bancárias e financeiras analisadas',
     top: 'protesto-indevido',
