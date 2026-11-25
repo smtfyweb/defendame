@@ -4,9 +4,12 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Icon from '../../components/Icon.astro';
 import AdSlot from '../../components/article/AdSlot.astro';
 import ImageSlot from '../../components/article/ImageSlot.astro';
+import JurimetricsPanel from '../../components/themes/JurimetricsPanel.astro';
+import EvidenceChecklist from '../../components/themes/EvidenceChecklist.astro';
+import LegalParityCard from '../../components/themes/LegalParityCard.astro';
 import { TEMAS, GRUPOS, fmt, getSecaoCorrelatos, getIconeArtigo, type Tema } from '../../data/temas';
 import { getTemaDetalhamento } from '../../data/temasDetalhamento';
-import { SITE, DATASET } from '../../data/site';
+import { SITE } from '../../data/site';
 
 export function getStaticPaths() { return TEMAS.map((t) => ({ params: { tema: t.slug }, props: { tema: t } })); }
 const { tema } = Astro.props as { tema: Tema };
@@ -39,142 +42,22 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'CollectionPage', n
     <h1 set:html={tema.seoH1Html || tema.seoH1 || tema.nome} />
     <p>{tema.linha}. Análise técnica de {fmt(tema.decisoes)} decisões judiciais do TJSP: entenda seus direitos, descubra o que separa quem ganha de quem perde e veja os precedentes consolidados.</p>
   </div>
-  {detalhe ? (
-    <div class="jurimetria-dash">
-      <div class="jd-panel">
-        <div class="jd-head">
-          <span style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--fg-muted);">Distribuição de Decisões no TJSP (10 RAJs)</span>
-          <span style="font-size:12.5px;color:var(--fg-muted);font-weight:600;">{fmt(detalhe.jurimetria.total)} sentenças analisadas</span>
-        </div>
-        <div class="stats-jurimetria-grid" data-motion>
-          <div class="jd-stat" data-reveal style="--i:0;--c:var(--teal)">
-            <b class="jd-n" data-count-auto data-delay="0">{detalhe.jurimetria.procedenteTotalPct.toFixed(1).replace('.', ',')}%</b>
-            <span class="jd-l">Procedente Total</span>
-            <span class="jd-s">Acolhimento integral</span>
-          </div>
-          <div class="jd-stat" data-reveal style="--i:1;--c:#d97706">
-            <b class="jd-n" data-count-auto data-delay="350">{detalhe.jurimetria.parcialPct.toFixed(1).replace('.', ',')}%</b>
-            <span class="jd-l">Parcialmente Proc.</span>
-            <span class="jd-s">Dano moral reduzido</span>
-          </div>
-          <div class="jd-stat" data-reveal style="--i:2;--c:#2563eb">
-            <b class="jd-n" data-count-auto data-delay="700">{detalhe.jurimetria.acordosPct.toFixed(1).replace('.', ',')}%</b>
-            <span class="jd-l">Acordos Homologados</span>
-            <span class="jd-s">Conciliação prévia</span>
-          </div>
-          <div class="jd-stat" data-reveal style="--i:3;--c:#dc2626">
-            <b class="jd-n" data-count-auto data-delay="1050">{detalhe.jurimetria.improcedentePct.toFixed(1).replace('.', ',')}%</b>
-            <span class="jd-l">Improcedente</span>
-            <span class="jd-s">Falta de provas</span>
-          </div>
-        </div>
-        <div class="dist-bar" data-motion aria-hidden="true">
-          <span data-bar style={`--w:${detalhe.jurimetria.procedenteTotalPct}%;--i:0;background:var(--teal)`}></span>
-          <span data-bar style={`--w:${detalhe.jurimetria.parcialPct}%;--i:4;background:#d97706`}></span>
-          <span data-bar style={`--w:${detalhe.jurimetria.acordosPct}%;--i:8;background:#2563eb`}></span>
-          <span data-bar style={`--w:${detalhe.jurimetria.improcedentePct}%;--i:12;background:#dc2626`}></span>
-        </div>
 
-        <div class="jd-faixa" data-motion data-reveal>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:var(--r-btn);background:var(--teal-pale);color:var(--teal);"><Icon name="gavel" size={16} /></span>
-            <span style="font-size:13px;color:var(--fg-mid);"><strong>Faixa típica de indenização no TJSP:</strong> <span style="color:var(--navy);font-weight:700;">{detalhe.jurimetria.faixaDanoMoral}</span></span>
-          </div>
-          <span style="font-size:12px;color:var(--fg-muted);">Valores médios para cancelamento sem assistência ou atraso &gt; 4h</span>
-        </div>
-      </div>
-
-      <div class="ed-note" data-motion data-reveal>
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-          <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:var(--r-btn);background:var(--teal-pale);color:var(--teal);"><Icon name="chart" size={16} /></span>
-          <h3 style="font-size:17.5px;font-weight:700;color:var(--navy);margin:0;">O que os números revelam sobre as decisões de {tema.nome.toLowerCase()}?</h3>
-        </div>
-        <p style="font-size:14.5px;line-height:1.65;color:var(--fg-mid);margin:0 0 10px;">
-          {detalhe.jurimetria.comentario}
-        </p>
-        <div style="font-size:13px;color:var(--teal);font-weight:600;">
-          ↳ Veja a lista de documentos abaixo que evita a procedência parcial ou a improcedência do seu pedido.
-        </div>
-      </div>
-
-      <div class="regras-jec-grid" data-motion data-reveal>
-        <div>
-          <span style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px;">
-            <Icon name="pin" size={14} /> Onde Ajuizar (Foro)
-          </span>
-          <span style="font-size:13px;color:var(--fg-mid);line-height:1.45;display:block;">{detalhe.regrasJec.foro}</span>
-        </div>
-        <div>
-          <span style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px;">
-            <Icon name="shield" size={14} /> Tentativa Prévia
-          </span>
-          <span style="font-size:13px;color:var(--fg-mid);line-height:1.45;display:block;">{detalhe.regrasJec.orgaoPrevio}</span>
-        </div>
-        <div>
-          <span style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px;">
-            <Icon name="user" size={14} /> Assistência Jurídica
-          </span>
-          <span style="font-size:13px;color:var(--fg-mid);line-height:1.45;display:block;">{detalhe.regrasJec.jusPostulandi}</span>
-        </div>
-      </div>
-    </div>
-  ) : (
-    <div class="big-stats" data-motion style="max-width:820px">
-      <div data-reveal style="--i:0"><b data-count-auto>{tema.procedenciaPct.toFixed(1).replace('.', ',')}%</b><span>tiveram pedidos acolhidos</span></div>
-      <div data-reveal style="--i:1"><b data-count-auto data-delay="350" style="color:#c53030">{(100 - tema.procedenciaPct).toFixed(1).replace('.', ',')}%</b><span>tiveram pedidos rejeitados</span></div>
-      <div data-reveal style="--i:2"><b data-count-auto data-delay="700">{fmt(tema.decisoes)}</b><span>decisões no TJSP (10 RAJs)</span></div>
-    </div>
-
-    <div class="ed-note" style="max-width:820px;margin:24px auto 36px">
-      <h3 style="font-size:17.5px;font-weight:600;color:var(--navy);margin:0 0 8px;">O que separa quem ganha de quem perde em {tema.nome.toLowerCase()}?</h3>
-      <p style="font-size:15px;line-height:1.65;color:var(--fg-mid);margin:0;">
-        A análise de <strong>{fmt(tema.decisoes)} decisões judiciais</strong> em todo o Estado de São Paulo mostra que a diferença entre os <strong>{tema.procedenciaPct.toFixed(1).replace('.', ',')}%</strong> vitoriosos e os <strong>{(100 - tema.procedenciaPct).toFixed(1).replace('.', ',')}%</strong> que perderam está na consistência das <strong style="color:var(--navy)">provas pré-constituídas</strong> (tentativa administrativa registrada via protocolo SAC/Consumidor.gov, extratos com data e hora e comprovação imediata da falha do serviço).
-      </p>
-    </div>
-  )}
+  <!-- Painel Jurimétrico Modular com Ficha Técnica -->
+  <JurimetricsPanel tema={tema} detalhe={detalhe} />
 
   <div class="inst-wrap">
     <div class="doc">
-      {detalhe && detalhe.provasIndispensaveis.length > 0 && (
-        <section class="provas-indispensaveis" style="margin-bottom:40px;">
-          <div class="ed-eyebrow">
-            <Icon name="shield" size={14} /> Curadoria Probatória DefendaMe
-          </div>
-          <h2 style="font-size:24px;font-weight:700;color:var(--navy);margin:0 0 10px;line-height:1.3;">
-            Documentos indispensáveis: o que não pode faltar na sua ação
-          </h2>
-          <p style="font-size:15px;line-height:1.65;color:var(--fg-mid);margin:0 0 20px;">
-            Com base em nossa pesquisa contínua e no acompanhamento de milhares de decisões do JEC paulista, identificamos que a maioria dos pedidos rejeitados decorre da falta de documentos básicos no momento da inicial. Reunimos aqui os elementos de prova que você deve organizar antes de procurar o Juizado ou um Advogado:
-          </p>
-
-          <div class="provas-list" data-motion>
-            {detalhe.provasIndispensaveis.map((p, idx) => (
-              <div class="prova-row" data-reveal style={`--i:${idx}`}>
-                <span style="display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:var(--r-btn);background:var(--teal-pale);color:var(--teal);flex-shrink:0;">
-                  <Icon name={p.icone} size={20} />
-                </span>
-                <div style="flex:1;min-width:0;">
-                  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:4px;">
-                    <strong style="font-size:15.5px;color:var(--navy);">{idx + 1}. {p.titulo}</strong>
-                    <span style="font-size:11.5px;font-weight:600;color:var(--teal);background:var(--teal-pale);padding:2px 8px;border-radius:var(--r-btn);border:1px solid var(--line-teal);">{p.tag}</span>
-                  </div>
-                  <p style="font-size:14px;line-height:1.55;color:var(--fg-mid);margin:0;">{p.descricao}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div class="ed-note ed-note-navy">
-            <strong>Importante no JEC (Regra da Petição Inicial):</strong> Diferente da Justiça Comum, no Juizado Especial Cível todas as provas documentais devem acompanhar a petição de atermação ou a peça inicial do Advogado. Se faltar a prova mínima da ocorrência ou do dano material, a empresa ré poderá alegar ausência de provas e o processo corre sério risco de improcedência.
-          </div>
-        </section>
+      <!-- Curadoria Probatória Modular -->
+      {detalhe?.provasIndispensaveis && (
+        <EvidenceChecklist provas={detalhe.provasIndispensaveis} tema={tema} />
       )}
 
       <ImageSlot
         variant="body"
         tag={tema.slug === 'transporte-aereo' ? "Infográfico Probatório · Res. 400 ANAC" : `Infográfico Probatório · ${tema.nome}`}
         titulo={tema.slug === 'transporte-aereo' ? "Anatomia da Prova: Elementos indispensáveis do registro fotográfico e documental no aeroporto" : `Dossiê Probatório: Documentos essenciais em ações de ${tema.nome.toLowerCase()}`}
-        legenda={tema.slug === 'transporte-aereo' ? "Exemplo esquemático dos 5 pontos de prova que o passageiro deve registrar imediatamente após atraso > 4h ou cancelamento de voo." : `Checklist visual dos documentos que comprovam a falha de serviço e evitam a improcedência no Juizado Especial Cível.`}
+        legenda={tema.slug === 'transporte-aereo' ? "Exemplo esquemático dos 5 pontos de prova que o passageiro deve registrar imediatamente após atraso superior a 4h ou cancelamento de voo." : `Checklist visual dos documentos que comprovam a falha de serviço e evitam a improcedência no Juizado Especial Cível.`}
         dimensao="760 × 380 px"
         icone={tema.icone}
         numero={1}
@@ -213,33 +96,22 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'CollectionPage', n
       ) : (
         <p>Os artigos aprofundados deste pilar estão em fase final de produção pela redação técnica. Enquanto isso, se você foi prejudicado por {tema.nome.toLowerCase()}, pode avaliar preliminarmente sua situação.</p>
       )}
-      <aside class="cta-in" data-motion data-reveal><div><b>Sofreu prejuízo com {tema.nome.toLowerCase()}?</b><span>Avalie preliminarmente sua situação e saiba quais documentos indispensáveis você deve reunir antes de procurar o Juizado ou um Advogado.</span></div><a class="btn btn-primary" href="/#verificar" data-open-case data-cat={tema.slug}>Avaliar minha situação <Icon name="arrow-right" size={16} stroke={2.2} /></a></aside>
 
-      <div class="legal-parity-card ed-note" data-motion data-reveal>
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
-          <span style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:var(--r-btn);background:var(--teal-pale);color:var(--teal);flex-shrink:0;"><Icon name="shield" size={20} stroke={2} /></span>
-          <div>
-            <span class="post-vinheta" style="margin-bottom:2px;font-size:11.5px;">Defesa Técnica e Paridade de Armas</span>
-            <h4 style="font-size:17.5px;font-weight:700;color:var(--navy);margin:0;line-height:1.3;">Procure um Advogado Especializado em Juizados Especiais Cíveis</h4>
-          </div>
+      <aside class="cta-in" data-motion data-reveal>
+        <div>
+          <b>Sofreu prejuízo com {tema.nome.toLowerCase()}?</b>
+          <span>Avalie preliminarmente sua situação e saiba quais documentos indispensáveis você deve reunir antes de procurar o Juizado ou um Advogado.</span>
         </div>
-        <p style="font-size:15px;line-height:1.65;color:var(--fg-mid);margin:0 0 14px;">
-          Em litígios no Juizado Especial Cível, as empresas rés — instituições bancárias, operadoras de telecomunicações, companhias aéreas e concessionárias — comparecem <strong>sempre assistidas por bancas jurídicas experientes e prepostos capacitados</strong> para audiências de conciliação e instrução.
-        </p>
-        <p style="font-size:15px;line-height:1.65;color:var(--fg-mid);margin:0 0 14px;">
-          Embora o artigo 9º da Lei nº 9.099 de 1995 autorize o cidadão a ajuizar ações de até vinte salários mínimos desacompanhado de patrono — instituto do jus postulandi —, a assistência de um <strong>Advogado especializado em Juizados Especiais Cíveis</strong> é determinante para restabelecer a <strong style="color:var(--navy)">paridade de armas</strong> e assegurar o rigor técnico indispensável:
-        </p>
-        <ul style="font-size:14.5px;line-height:1.65;color:var(--fg-mid);margin:0 0 18px;padding-left:20px;display:flex;flex-direction:column;gap:8px;">
-          <li><strong>Prevenção da preclusão probatória:</strong> No rito sumaríssimo do Juizado Especial Cível, todos os documentos essenciais devem acompanhar a petição inicial, sob risco de preclusão e improcedência por deficiência probatória.</li>
-          <li><strong>Formulação técnica de pedidos e tutelas de urgência:</strong> Adequada postulação de medidas liminares para baixa de negativações ou cessação imediata de cobranças indevidas, inversão do ônus da prova segundo o artigo 6º, inciso VIII do CDC, repetição do indébito em dobro prevista no artigo 42, parágrafo único do CDC, e fixação de astreintes, que são as multas diárias cominatórias.</li>
-          <li><strong>Atuação em audiência e fase recursal privativa:</strong> Enfrentamento das preliminares e defesas da empresa ré, além de representação privativa por advogado caso haja interposição de Recurso Inominado ao Colégio Recursal, conforme o artigo 41, parágrafo 2º da Lei nº 9.099 de 1995.</li>
-        </ul>
-        <div style="background:var(--bg-subtle, #f8fafc);border:1px solid var(--border);border-radius:var(--r-btn);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;">
-          <span style="font-size:13.5px;font-weight:600;color:var(--navy);">Para assegurar sua defesa técnica especializada, consulte sempre um Advogado regularmente inscrito na OAB.</span>
-          <a href="/#verificar" class="btn btn-outline" style="font-size:13px;padding:7px 16px;" data-open-case data-cat={tema.slug}>Organizar documentos prévios <Icon name="arrow-right" size={14} /></a>
-        </div>
-      </div>
+        <a class="btn btn-primary" href="/#verificar" data-open-case data-cat={tema.slug}>
+          Avaliar minha situação <Icon name="arrow-right" size={16} stroke={2.2} />
+        </a>
+      </aside>
+
+      <!-- Card de Paridade e Assistência Técnica -->
+      <LegalParityCard tema={tema} />
     </div>
+
+    <!-- Barra Lateral: Imagem, AdSlot e CTA Preservados -->
     <aside class="inst-toc" style="display:flex;flex-direction:column;gap:20px">
       <ImageSlot
         variant="side"
@@ -249,6 +121,7 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'CollectionPage', n
         dimensao="280 × 160 px"
         icone="doc"
       />
+      <!-- AdSlot Lateral Preservado -->
       <AdSlot variant="side" />
       <a class="side-cta" href="/#verificar" data-open-case data-cat={tema.slug} style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--teal);padding:14px 16px;border-radius:var(--r);text-decoration:none;display:block;box-shadow:var(--shadow);">
         <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--teal);display:block;margin-bottom:4px;">Diagnóstico Preliminar</span>
@@ -257,6 +130,7 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'CollectionPage', n
     </aside>
   </div>
 
+  <!-- AdSlot Amplo / Footer Preservado -->
   <div style="margin:44px auto 24px;max-width:1170px;padding:0 16px;">
     <AdSlot variant="wide" />
   </div>
@@ -321,7 +195,7 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'CollectionPage', n
           <span>Mais temas deste segmento:</span>
           {maisOutros.map((m) => (
             <a href={`/${m.slug}/`} style="color:var(--teal);font-weight:600;text-decoration:none;background:var(--teal-pale);padding:5px 12px;border-radius:var(--r-btn);font-size:13px;border:1px solid var(--line-teal);">
-              {m.nome} ({m.procedenciaPct.toFixed(1).replace('.', ',')}%)
+              {m.nome} [{m.procedenciaPct.toFixed(1).replace('.', ',')}%]
             </a>
           ))}
         </div>

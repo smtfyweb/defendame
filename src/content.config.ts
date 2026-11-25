@@ -15,7 +15,8 @@ const artigos = defineCollection({
     vinheta: z.string(),                      // chapéu acima do título
     // 'analise' = coluna assinada por André L. Silva, em 1ª pessoa (opinião + dados)
     // 'guia'    = texto de serviço da Redação DefendaMe, com revisão técnica de André L. Silva
-    formato: z.enum(['analise', 'guia']).default('analise'),
+    // 'estudo'  = estudo especial aprofundado conduzido pela Equipe de Pesquisa DefendaMe
+    formato: z.enum(['analise', 'guia', 'estudo']).default('analise'),
     tema: z.enum(TEMA_SLUGS as [string, ...string[]]),
     slug: z.string(),                         // URL final: /<tema>/<slug>
     publicado: z.coerce.date(),

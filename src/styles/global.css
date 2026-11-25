@@ -1471,6 +1471,7 @@ svg text { font-family: var(--ff); }
 .post-fmt { display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: var(--r-btn); font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
 .post-fmt.fmt-analise { background: var(--teal); color: #fff; }
 .post-fmt.fmt-guia { background: transparent; color: var(--teal); border: 1px solid var(--line-teal); }
+.post-fmt.fmt-estudo { background: var(--navy); color: #fff; }
 .post-meta-av.mark { border-radius: 8px; }
 .post-meta-rev { display: inline-flex; align-items: center; gap: 6px; }
 .post-meta-rev img { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; }

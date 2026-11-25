@@ -140,6 +140,15 @@ WHITELIST_PRECEDENTES_HOMOLOGADOS: Dict[str, Dict[str, str]] = {
         "tema_materia": "negativacao-indevida",
         "descricao": "Distinguishing da Súmula 385 quando a anotação preexistente está sub judice."
     },
+    "1981798": {
+        "tribunal": "STJ",
+        "tipo": "REsp",
+        "processo": "REsp 1.981.798/MG",
+        "relator": "Min. Moura Ribeiro",
+        "orgao": "Segunda Seção",
+        "tema_materia": "negativacao-indevida",
+        "descricao": "Segunda Seção do STJ: a simples existência de ação judicial não afasta automaticamente a Súmula 385; exige-se verossimilhança da ilegitimidade das inscrições preexistentes."
+    },
     "1284920": {
         "tribunal": "STJ",
         "tipo": "REsp",

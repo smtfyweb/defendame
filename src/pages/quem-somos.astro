@@ -4,11 +4,15 @@ import Icon from '../components/Icon.astro';
 import { SITE, AUTHOR, DATASET } from '../data/site';
 
 const toc: [string, string][] = [
-  ['proposito', 'Propósito e Função Social do JEC'],
-  ['transparencia-dados', 'Transparência e Dados Públicos'],
-  ['metodologia', 'Metodologia Forense em 5 Etapas'],
+  ['proposito', 'Nosso Propósito'],
+  ['o-que-fazemos', 'O que Fazemos'],
+  ['independencia', 'Independência e Transparência'],
+  ['dados-publicos', 'Dados Públicos e LGPD'],
+  ['metodologia', 'Como Desenvolvemos Nossas Pesquisas'],
+  ['producao-editorial', 'Nossa Produção Editorial'],
   ['responsavel', 'Responsabilidade Técnica'],
-  ['atendimento', 'Quando o Conteúdo Informativo Não Basta'],
+  ['limites', 'Informação não é Promessa de Resultado'],
+  ['atendimento', 'Quando Você Precisa de Orientação Individual'],
   ['contato', 'Governança e Contato']
 ];
 
@@ -19,7 +23,7 @@ const jsonLd = [
     '@type': 'AboutPage',
     url,
     name: 'Quem somos — DefendaMe',
-    description: 'Plataforma independente de jurimetria e inteligência jurídica aplicada às relações de consumo no Juizado Especial Cível paulista.',
+    description: 'Plataforma independente de pesquisa jurimétrica e informação jurídica sobre as relações de consumo no Juizado Especial Cível paulista.',
     publisher: {
       '@type': 'Organization',
       name: SITE.name,
@@ -39,22 +43,21 @@ const jsonLd = [
 
 <PageLayout
   title={`Quem somos | ${SITE.name}`}
-  description="Conheça o DefendaMe: inteligência jurídica e jurimetria aplicada às demandas do Juizado Especial Cível a partir de decisões públicas do TJSP."
+  description="Conheça o DefendaMe: inteligência jurídica independente e pesquisa jurimétrica aplicada às demandas do Juizado Especial Cível a partir de decisões públicas do TJSP."
   h1="Quem <em>somos</em>"
-  lead="Inteligência jurídica independente e análise empírica de decisões judiciais para esclarecer os direitos do consumidor perante o Juizado Especial Cível."
+  lead="Decisões reais. Dados analisados. Informação jurídica para o cidadão."
   toc={toc}
   jsonLd={jsonLd}
 >
 
-<h2 id="proposito">Propósito e Função Social do JEC</h2>
 <p>
-  O <strong>DefendaMe</strong> é uma plataforma independente de jurimetria e conteúdo analítico voltada às controvérsias de consumo tuteladas pelos <strong>Juizados Especiais Cíveis</strong> no Estado de São Paulo. Nosso compromisso é mitigar a assimetria informacional entre cidadãos e grandes fornecedores, oferecendo diagnósticos objetivos baseados no comportamento real da jurisprudência.
+  O <strong>DefendaMe</strong> é uma plataforma independente de pesquisa jurimétrica e informação jurídica dedicada às controvérsias de consumo nos Juizados Especiais Cíveis do Estado de São Paulo.
 </p>
 <p>
-  A concepção do projeto fundamenta-se no rigoroso apreço institucional pelo <strong>Tribunal de Justiça do Estado de São Paulo</strong> e na valorização da função social estabelecida pela <strong>Lei Federal nº 9.099 de 1995</strong>.
+  Investigamos decisões judiciais, examinamos fundamentos jurídicos e organizamos dados para ajudar o cidadão a compreender como os conflitos de consumo são analisados pelo Poder Judiciário.
 </p>
 <p>
-  Os Juizados Especiais foram concebidos sob a inspiração do artigo 98, inciso I, da Constituição Federal, inaugurando um microssistema processual orientado pelos princípios da <em>oralidade, simplicidade, informalidade, economia processual e celeridade</em>. Essa estrutura garante o acesso democrático ao Poder Judiciário, assegura a gratuidade de custas no primeiro grau e prioriza a solução consensual dos litígios.
+  Nosso trabalho aproxima três dimensões: a realidade dos conflitos entre consumidores e fornecedores, o Direito aplicável a cada situação e os padrões identificados no conjunto de decisões judiciais estudadas. Acreditamos que o acesso à informação de qualidade contribui para reduzir a assimetria informacional e permite que as pessoas compreendam melhor seus direitos, suas responsabilidades e os caminhos disponíveis para buscar uma solução.
 </p>
 
 <div class="big-stats" data-motion>
@@ -68,66 +71,112 @@ const jsonLd = [
   </div>
   <div data-reveal style="--i:2">
     <b data-count-auto data-delay="700">14 Silos</b>
-    <span>Temas críticos de consumo estruturados</span>
+    <span>Temas críticos de consumo estruturados no JEC</span>
   </div>
 </div>
 
-<h2 id="transparencia-dados">Transparência e Dados Públicos</h2>
+<h2 id="proposito">Nosso Propósito</h2>
 <p>
-  A confiabilidade das informações publicadas decorre do uso exclusivo de fontes oficiais e abertas do Poder Judiciário, em plena conformidade com as balizas legais e constitucionais de transparência:
+  O acesso à Justiça não depende apenas da existência de leis e tribunais. Também exige que o cidadão consiga compreender seus direitos, identificar as questões relevantes de seu problema e encontrar informações confiáveis sobre os caminhos disponíveis.
+</p>
+<p>
+  Os Juizados Especiais Cíveis, instituídos pela Lei Federal nº 9.099 de 1995, desempenham papel fundamental nesse contexto. Orientados pelos princípios da oralidade, simplicidade, informalidade, economia processual e celeridade, foram concebidos para ampliar o acesso ao Judiciário e favorecer a solução pacífica e rápida de conflitos de menor complexidade.
+</p>
+<p>
+  Entretanto, conhecer a legislação não significa necessariamente compreender como determinado conflito será examinado em um processo judicial. É nesse espaço que atua o DefendaMe: investigamos decisões, organizamos informações e traduzimos conhecimento jurídico em conteúdo acessível, sem substituir a avaliação individual de cada caso por conclusões genéricas.
 </p>
 
+<h2 id="o-que-fazemos">O que Fazemos</h2>
+<p>
+  Nossa atuação está concentrada na pesquisa e na análise de controvérsias de consumo submetidas aos Juizados Especiais Cíveis:
+</p>
+
+<div class="about-grid" data-motion style="grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; margin: 20px 0;">
+  <div class="about-card" data-reveal style="--i:0">
+    <span class="med-icon"><Icon name="search" size={22} stroke={2} /></span>
+    <h3>Pesquisa de Decisões Judiciais</h3>
+    <p>Organização e exame minucioso de documentos públicos e acórdãos relacionados aos temas estudados no portal.</p>
+  </div>
+  <div class="about-card" data-reveal style="--i:1">
+    <span class="med-icon"><Icon name="chart" size={22} stroke={2} /></span>
+    <h3>Jurimetria Empírica</h3>
+    <p>Utilização de métodos quantitativos para identificar padrões e indicadores no conjunto de decisões analisadas.</p>
+  </div>
+  <div class="about-card" data-reveal style="--i:2">
+    <span class="med-icon"><Icon name="shield" size={22} stroke={2} /></span>
+    <h3>Análise Jurídica Dogmática</h3>
+    <p>Estudo dos fundamentos legais, argumentos das partes e entendimentos consolidados pelas Turmas Recursais e Tribunais Superiores.</p>
+  </div>
+  <div class="about-card" data-reveal style="--i:3">
+    <span class="med-icon"><Icon name="doc" size={22} stroke={2} /></span>
+    <h3>Análise Probatória</h3>
+    <p>Investigação dos documentos e elementos de prova determinantes que separam pedidos acolhidos de pedidos rejeitados.</p>
+  </div>
+</div>
+
+<p>
+  Nosso objetivo não é apenas apresentar números, mas ajudar o leitor a compreender o que eles representam, quais perguntas permitem responder e quais conclusões não podem ser extraídas deles.
+</p>
+
+<h2 id="independencia">Independência e Transparência</h2>
+<p>
+  O DefendaMe mantém uma abordagem estritamente independente. Não partimos da premissa de que consumidores ou fornecedores estejam sempre certos ou errados.
+</p>
+<p>
+  Cada controvérsia deve ser examinada a partir de seus fatos concretos, das provas disponíveis, das normas aplicáveis e dos fundamentos apresentados nas decisões judiciais. A análise de um conjunto de julgados não representa uma avaliação pessoal dos magistrados nem uma classificação de sua atuação funcional: nosso objeto de estudo são os padrões decisórios observáveis nos documentos examinados.
+</p>
+<p>
+  As informações estatísticas são apresentadas como resultados de uma pesquisa delimitada. Por isso, sua interpretação deve considerar o período analisado, a abrangência da base, os critérios de classificação e as limitações metodológicas expressas em nossas fichas técnicas.
+</p>
+
+<h2 id="dados-publicos">Dados Públicos e Proteção de Informações Pessoais [LGPD]</h2>
+<p>
+  O trabalho de pesquisa utiliza documentos e informações provenientes de fontes públicas do Poder Judiciário, conforme a disponibilidade e as condições de acesso de cada fonte. A publicidade dos atos processuais, prevista no artigo 93, inciso IX, da Constituição Federal e na Lei de Acesso à Informação [Lei nº 12.527 de 2011], convive harmoniosamente com os direitos fundamentais à privacidade e à proteção de dados pessoais.
+</p>
 <div class="about-card" style="margin: 20px 0; border-left: 3px solid var(--teal);">
   <div style="display: flex; gap: 14px; align-items: flex-start;">
-    <span style="color: var(--teal); margin-top: 2px;"><Icon name="gavel" size={24} stroke={2} /></span>
+    <span style="color: var(--teal); margin-top: 2px;"><Icon name="shield" size={24} stroke={2} /></span>
     <div>
-      <h3 style="margin: 0 0 6px; font-size: 16.5px; color: var(--navy);">Conformidade Normativa e Governança da Informação</h3>
+      <h3 style="margin: 0 0 6px; font-size: 16.5px; color: var(--navy);">Governança e Anonimização Ética</h3>
       <p style="margin: 0; font-size: 14px; color: var(--fg-mid); line-height: 1.6;">
-        Nossa esteira analítica observa o princípio constitucional da publicidade dos atos processuais insculpido no artigo 93, inciso IX, da Constituição Federal, as determinações da Lei nº 12.527 de 2011 — Lei de Acesso à Informação — e a Resolução nº 331 de 2020 do Conselho Nacional de Justiça, que instituiu a base DataJud. A atividade tem caráter estritamente descritivo e estatístico, sem emitir juízo de valor sobre o mérito funcional de magistrados ou serventuários.
+        A publicação de informações pelo DefendaMe observa critérios de necessidade, finalidade e segurança, em estrita conformidade com a Lei Geral de Proteção de Dados Pessoais [Lei nº 13.709 de 2018 — LGPD]. Todas as decisões passam por higienização para suprimir nomes de pessoas físicas, documentos de identificação, domicílios e contas correntes, mantendo o foco analítico exclusivo na matéria fática e na aplicação do Direito.
       </p>
     </div>
   </div>
 </div>
 
+<h2 id="metodologia">Como Desenvolvemos Nossas Pesquisas</h2>
 <p>
-  Em paralelo, a governança de dados do portal cumpre integralmente os ditames da Lei Geral de Proteção de Dados Pessoais — Lei nº 13.709 de 2018. Todas as decisões passam por protocolos estritos de descaracterização para suprimir nomes de pessoas físicas, documentos de identificação, domicílios e contas correntes, preservando a intimidade das partes e mantendo o foco analítico exclusivo na matéria fática e na aplicação do direito.
+  As pesquisas do DefendaMe seguem procedimentos sistemáticos de coleta, organização, tratamento, classificação e análise documental e estatística:
 </p>
+<ul style="margin: 16px 0 20px; line-height: 1.7;">
+  <li><strong>Origem documental:</strong> repositórios públicos oficiais do Tribunal de Justiça de São Paulo e base DataJud do CNJ;</li>
+  <li><strong>Recorte temporal e geográfico:</strong> decisões proferidas no âmbito das 10 Regiões Administrativas Judiciárias do Estado de São Paulo;</li>
+  <li><strong>Unidade de análise:</strong> sentenças de primeiro grau e acórdãos colegiados das Turmas Recursais;</li>
+  <li><strong>Critérios de classificação:</strong> categorização uniforme entre procedência total, parcial, improcedência e acordos homologados;</li>
+  <li><strong>Transparência de limites:</strong> explicitação dos fatores que os dados não abrangem e das divergências de entendimento entre comarcas.</li>
+</ul>
 
-<h2 id="metodologia">Metodologia Forense em 5 Etapas</h2>
+<h2 id="producao-editorial">Nossa Produção Editorial</h2>
 <p>
-  Cada artigo, indicador e faixa indenizatória exposta no portal resulta de uma esteira metodológica de legal analytics dividida em cinco fases sucessivas:
+  O conteúdo do DefendaMe é estruturado em três modalidades distintas de publicação, cada uma com escopo e voz específicos:
 </p>
-
-<div class="about-grid" data-motion style="grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px;">
+<div class="about-grid" data-motion style="grid-template-columns: repeat(3, minmax(0,1fr)); gap: 16px; margin: 20px 0;">
   <div class="about-card" data-reveal style="--i:0">
-    <span class="med-icon"><Icon name="search" size={22} stroke={2} /></span>
-    <h3>1. Coleta Pública e Amostragem</h3>
-    <p>Extração automatizada e sistemática de decisões dos repositórios oficiais públicos do TJSP — portal e-SAJ — e da base DataJud do CNJ, abrangendo as 10 Regiões Administrativas Judiciárias paulistas, com recorte temporal e temático detalhado.</p>
+    <span class="med-icon"><Icon name="doc" size={22} stroke={2} /></span>
+    <h3>Guias Técnicos</h3>
+    <p>Materiais informativos elaborados pela <strong>Redação DefendaMe</strong> para explicar direitos, documentos, prazos e providências práticas ao consumidor.</p>
   </div>
-
   <div class="about-card" data-reveal style="--i:1">
-    <span class="med-icon"><Icon name="lock" size={22} stroke={2} /></span>
-    <h3>2. Anonimização Ética e LGPD</h3>
-    <p>Higienização automatizada de dados pessoais sensíveis das partes. O processo blinda a privacidade individual e isola unicamente as variáveis técnicas de julgamento.</p>
+    <span class="med-icon"><Icon name="edit" size={22} stroke={2} /></span>
+    <h3>Análises Autorais</h3>
+    <p>Artigos assinados por <strong>André L. Silva</strong>, com investigação documental, interpretação jurídica e leitura empírica dos precedentes em primeira pessoa moderada.</p>
   </div>
-
   <div class="about-card" data-reveal style="--i:2">
-    <span class="med-icon"><Icon name="shield" size={22} stroke={2} /></span>
-    <h3>3. Auditoria Precedencial Superior</h3>
-    <p>Confronto de cada conjunto amostral com as teses vinculantes e repetitivas dos Tribunais Superiores: Temas 210 e 1.240 do STF, REsp 1.584.465/MG do STJ, Súmulas 385, 479 e 548 do STJ, e Enunciados Cíveis do FONAJE e do FOJESP.</p>
-  </div>
-
-  <div class="about-card" data-reveal style="--i:3">
     <span class="med-icon"><Icon name="chart" size={22} stroke={2} /></span>
-    <h3>4. Modelagem Quantitativa e Jurimétrica</h3>
-    <p>Cálculo estatístico de frequências de êxito, desmembramento entre pedidos de dano moral e material, cálculo do tempo médio de tramitação até a sentença e aferição das faixas interquartis de condenação.</p>
+    <h3>Estudos Especiais</h3>
+    <p>Pesquisas aprofundadas conduzidas pela <strong>Equipe de Pesquisa DefendaMe</strong>, reunindo levantamentos estatísticos multirregionais e séries históricas.</p>
   </div>
-</div>
-
-<div class="about-card" style="margin-top: 16px;">
-  <span class="med-icon"><Icon name="doc" size={22} stroke={2} /></span>
-  <h3>5. Redação e Divulgação Cidadã</h3>
-  <p>Elaboração de artigos técnicos e guias de orientação em linguagem clara, expurgando o formalismo desnecessário sem perder o rigor dogmático, em estrita consonância com o Provimento CFOAB nº 205 de 2021.</p>
 </div>
 
 <h2 id="responsavel">Responsabilidade Técnica</h2>
@@ -135,23 +184,31 @@ const jsonLd = [
   <img src={AUTHOR.photo} alt={AUTHOR.name} width="84" height="84" />
   <div>
     <b>{AUTHOR.name}</b>
-    <span>{AUTHOR.jobTitle}</span>
+    <span>{AUTHOR.role}</span>
     <p style="margin: 6px 0 10px; font-size: 14px; color: var(--fg-mid); line-height: 1.5;">
-      Pesquisador forense com formação jurídica pela UNIP — Universidade Paulista e especialização técnica em Ciência de Dados pela PUC-PR — Pontifícia Universidade Católica do Paraná. Coordena a mineração de dados judiciais e a auditoria de precedentes do portal.
+      Pesquisador jurídico e responsável pela estruturação das pesquisas jurimétricas do DefendaMe. Graduado em Direito pela UNIP, em Marketing pela UMC e com formação complementar em Ciência de Dados, IA e Analytics Aplicado pela PUC-PR. Alia vivência executiva em ambientes corporativos à investigação documental de decisões dos Juizados Especiais Cíveis.
     </p>
-    <a href={AUTHOR.url} style="font-weight: 600; color: var(--navy); text-decoration: underline;">Conhecer trajetória, formação acadêmica e artigos assinados →</a>
+    <a href={AUTHOR.url} style="font-weight: 600; color: var(--navy); text-decoration: underline;">Conhecer trajetória, formação acadêmica e análises assinadas →</a>
   </div>
 </div>
 <p>
-  André L. Silva assina as análises em primeira pessoa e realiza a revisão técnica dos guias elaborados pela Redação DefendaMe, assegurando a fidelidade aos precedentes colegiados do TJSP.
+  André assina as análises autorais e participa da revisão técnica e metodológica dos guias publicados pela plataforma, assegurando rigor aos precedentes do TJSP.
 </p>
 
-<h2 id="atendimento">Quando o Conteúdo Informativo Não Basta</h2>
+<h2 id="limites">Informação não é Promessa de Resultado</h2>
 <p>
-  Se o leitor vivenciou situação análoga às retratadas nas análises, disponibilizamos a ferramenta <strong>Verificar meu caso</strong> para recepção e triagem das circunstâncias fáticas apresentadas.
+  A jurimetria permite identificar padrões e tendências em conjuntos de decisões judiciais. Ela <strong>não prevê com certeza o resultado de um processo individual</strong>.
 </p>
 <p>
-  O preenchimento do formulário tem finalidade diagnóstica e não estabelece contratação automática de serviços. Reiteramos que a atuação jurídica perante o Poder Judiciário, especialmente na fase recursal perante as Turmas Recursais, exige a assistência de profissional da advocacia regularmente inscrito na OAB ou membro da Defensoria Pública.
+  Cada caso depende de suas circunstâncias concretas, das provas apresentadas, das normas aplicáveis e do livre convencimento motivado do juízo. O conteúdo publicado pelo DefendaMe possui finalidade exclusivamente informativa e educativa. Não substitui a consulta individual a profissional habilitado, não constitui parecer jurídico e não representa promessa de êxito judicial, em estrito cumprimento ao Provimento CFOAB nº 205 de 2021.
+</p>
+
+<h2 id="atendimento">Quando Você Precisa de Orientação Individual</h2>
+<p>
+  Se você vivenciou uma situação semelhante às abordadas em nossas pesquisas, a ferramenta <strong>Verificar meu caso</strong> permite organizar previamente as informações e documentos sobre o ocorrido para uma triagem preliminar.
+</p>
+<p>
+  O preenchimento do formulário tem finalidade de organização probatória e diagnóstica. Não implica contratação automática de serviços, não estabelece relação advogado-cliente e não garante viabilidade de demanda. Quando necessária a atuação profissional ou a interposição de recursos, o cidadão deve buscar advogado regularmente inscrito na OAB ou a Defensoria Pública.
 </p>
 <p style="margin: 24px 0;">
   <a class="btn btn-primary" href="/#verificar" data-open-case>Verificar meu caso no Juizado <Icon name="arrow-right" size={16} stroke={2.2} /></a>
@@ -159,11 +216,11 @@ const jsonLd = [
 
 <h2 id="contato">Governança e Contato</h2>
 <p>
-  Para sugestões editoriais, esclarecimentos sobre bases de dados ou solicitações institucionais:
+  Para sugestões editoriais, dúvidas metodológicas sobre nossas pesquisas ou solicitações relativas à privacidade de dados:
 </p>
 <ul style="margin: 12px 0 20px; line-height: 1.7;">
   <li><strong>Contato institucional:</strong> <span class="fill">{SITE.email}</span></li>
-  <li><strong>Privacidade e encarregado pelo tratamento de dados pessoais:</strong> <span class="fill">{SITE.privacyEmail}</span></li>
+  <li><strong>Privacidade e proteção de dados:</strong> <span class="fill">{SITE.privacyEmail}</span></li>
 </ul>
 
 </PageLayout>

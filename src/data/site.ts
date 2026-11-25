@@ -1,11 +1,11 @@
 export const SITE = {
   name: 'DefendaMe',
   url: import.meta.env.PUBLIC_SITE_URL || 'https://defendame.pages.dev',
-  tagline: 'Seus direitos no Juizado Especial Cível, explicados com dados',
-  description: 'Artigos e guias sobre as demandas mais comuns do Juizado Especial Cível, construídos a partir de decisões reais do TJSP.',
+  tagline: 'Inteligência jurídica independente. Decisões reais. Informação para o cidadão.',
+  description: 'Plataforma de pesquisa jurimétrica e informação jurídica que investiga decisões judiciais, interpreta padrões decisórios e traduz conhecimento jurídico em informação acessível sobre as relações de consumo no Juizado Especial Cível paulista.',
   locale: 'pt_BR',
-  email: 'contato@defendame.online',          // confirmar
-  privacyEmail: 'privacidade@defendame.online', // confirmar
+  email: 'contato@defendame.online',
+  privacyEmail: 'privacidade@defendame.online',
   youtube: 'https://www.youtube.com/@defendame',
   instagram: 'https://www.instagram.com/defendame.online',
   whatsapp: 'https://wa.me/5511966016189',
@@ -20,15 +20,16 @@ export const SITE = {
 
 export const AUTHOR = {
   name: 'André L. Silva',
-  role: 'Especialista em Jurimetria e Análise de Dados',
-  jobTitle: 'Especialista em Jurimetria e Legal Analytics no JEC',
+  role: 'Pesquisador Jurídico | Jurimetria e Legal Analytics',
+  jobTitle: 'Pesquisador Jurídico e Coordenador de Jurimetria',
+  headline: 'Pesquisa jurídica orientada por evidências, análise empírica de decisões judiciais e investigação dos conflitos nas relações de consumo.',
+  bioShort: 'Pesquisador jurídico responsável pela estruturação das análises jurimétricas do DefendaMe. Graduado em Direito pela UNIP, em Marketing pela UMC e com formação complementar em Ciência de Dados, IA e Analytics Aplicado pela PUC-PR.',
   photo: '/images/andre-l-silva.jpg',
   url: '/autor/andre-l-silva/',
   alumniOf: [
-    'UNIP — Universidade Paulista',
-    'PUC-PR — Pontifícia Universidade Católica do Paraná',
-    'EPN — Escola Paulista de Negócios',
-    'UMC — Universidade de Mogi das Cruzes'
+    'Universidade Paulista (UNIP)',
+    'Universidade de Mogi das Cruzes (UMC)',
+    'Pontifícia Universidade Católica do Paraná (PUC-PR)'
   ],
 };
 
@@ -42,8 +43,9 @@ export const DATASET = {
 
 export const OAB_NOTE = 'Conteúdo informativo em conformidade com o Provimento CFOAB nº 205/2021. Sem promessa de resultado.';
 
-/** Rótulos dos formatos editoriais (ver docs/GUIA-DE-ESTILO.md §12). */
+/** Rótulos dos formatos editoriais oficiais do DefendaMe. */
 export const FORMATOS = {
-  analise: { rotulo: 'Análise', desc: 'Coluna assinada: leitura do especialista sobre os dados, em primeira pessoa.' },
-  guia: { rotulo: 'Guia', desc: 'Texto de serviço da Redação, com revisão técnica do especialista.' },
+  guia: { rotulo: 'Guia Técnico', desc: 'Material informativo da Redação DefendaMe, com revisão técnica do especialista.' },
+  analise: { rotulo: 'Análise Autoral', desc: 'Coluna assinada por André L. Silva: investigação de teses e jurisprudência em primeira pessoa.' },
+  estudo: { rotulo: 'Estudo Especial', desc: 'Pesquisa aprofundada: levantamento empírico e jurimetria multirregional pela equipe de pesquisa.' },
 } as const;

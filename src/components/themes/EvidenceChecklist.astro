@@ -1,0 +1,47 @@
+---
+import Icon from '../Icon.astro';
+import type { ProvaIndispensavel } from '../../data/temasDetalhamento';
+import type { Tema } from '../../data/temas';
+
+interface Props {
+  provas: ProvaIndispensavel[];
+  tema: Tema;
+}
+
+const { provas, tema } = Astro.props;
+---
+
+{provas && provas.length > 0 && (
+  <section class="provas-indispensaveis" style="margin-bottom:40px;">
+    <div class="ed-eyebrow">
+      <Icon name="shield" size={14} /> Curadoria Probatória DefendaMe
+    </div>
+    <h2 style="font-size:24px;font-weight:700;color:var(--navy);margin:0 0 10px;line-height:1.3;">
+      Documentos indispensáveis: o que não pode faltar na sua ação
+    </h2>
+    <p style="font-size:15px;line-height:1.65;color:var(--fg-mid);margin:0 0 20px;">
+      Com base na análise empírica de decisões dos Juizados Especiais Cíveis paulistas, identificamos que a fragilidade probatória na petição inicial é o principal fator associado à improcedência ou à procedência meramente parcial dos pedidos. A seguir, reunimos os documentos essenciais que devem ser organizados antes da distribuição da ação ou do atendimento com seu advogado:
+    </p>
+
+    <div class="provas-list" data-motion>
+      {provas.map((p, idx) => (
+        <div class="prova-row" data-reveal style={`--i:${idx}`}>
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:var(--r-btn);background:var(--teal-pale);color:var(--teal);flex-shrink:0;">
+            <Icon name={p.icone} size={20} />
+          </span>
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:4px;">
+              <strong style="font-size:15.5px;color:var(--navy);">{idx + 1}. {p.titulo}</strong>
+              <span style="font-size:11.5px;font-weight:600;color:var(--teal);background:var(--teal-pale);padding:2px 8px;border-radius:var(--r-btn);border:1px solid var(--line-teal);">{p.tag}</span>
+            </div>
+            <p style="font-size:14px;line-height:1.55;color:var(--fg-mid);margin:0;">{p.descricao}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="ed-note ed-note-navy" style="margin-top:20px;">
+      <strong>Orientação Probatória no Rito do JEC:</strong> No Juizado Especial Cível, orientado pelos princípios da celeridade e concentração dos atos processuais [Art. 2º da Lei Federal nº 9.099 de 1995], a apresentação precoce e completa de todos os documentos disponíveis desde a inicial confere substancial vantagem processual, possibilitando a análise imediata de medidas liminares e inviabilizando defesas genéricas da empresa ré.
+    </div>
+  </section>
+)}

@@ -1,0 +1,41 @@
+---
+import Icon from '../Icon.astro';
+import type { Tema } from '../../data/temas';
+
+interface Props {
+  tema: Tema;
+}
+
+const { tema } = Astro.props;
+---
+
+<div class="legal-parity-card ed-note" data-motion data-reveal>
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+    <span style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:var(--r-btn);background:var(--teal-pale);color:var(--teal);flex-shrink:0;">
+      <Icon name="shield" size={20} stroke={2} />
+    </span>
+    <div>
+      <span class="post-vinheta" style="margin-bottom:2px;font-size:11.5px;">Defesa Técnica e Paridade de Armas</span>
+      <h4 style="font-size:17.5px;font-weight:700;color:var(--navy);margin:0;line-height:1.3;">
+        A Importância da Assistência Jurídica no Juizado Especial Cível
+      </h4>
+    </div>
+  </div>
+  <p style="font-size:15px;line-height:1.65;color:var(--fg-mid);margin:0 0 14px;">
+    Em demandas nos Juizados Especiais Cíveis, as empresas rés — instituições bancárias, companhias aéreas, concessionárias e operadoras de telefonia — comparecem representadas por bancas de advocacia experientes e equipes jurídicas especializadas em audiências e teses defensivas.
+  </p>
+  <p style="font-size:15px;line-height:1.65;color:var(--fg-mid);margin:0 0 14px;">
+    Embora o artigo 9º da Lei Federal nº 9.099 de 1995 faculte ao cidadão ingressar em juízo sem advogado em causas de até vinte salários mínimos — faculdade do jus postulandi —, a assistência de um <strong>advogado regularmente inscrito na OAB ou membro da Defensoria Pública</strong> é determinante para restabelecer a <strong style="color:var(--navy)">paridade de armas</strong>:
+  </p>
+  <ul style="font-size:14.5px;line-height:1.65;color:var(--fg-mid);margin:0 0 18px;padding-left:20px;display:flex;flex-direction:column;gap:8px;">
+    <li><strong>Organização e higidez probatória:</strong> estruturação de petições com instrução documental adequada, afastando preliminares e pedidos genéricos de improcedência.</li>
+    <li><strong>Formulação técnica de pedidos e tutelas de urgência:</strong> postulação fundamentada de medidas liminares [para exclusão de cadastros ou cancelamento de cobranças], inversão judicial do ônus da prova [Art. 6º, VIII do CDC] e fixação de astreintes [multas cominatórias diárias].</li>
+    <li><strong>Representação privativa na fase recursal:</strong> atuação técnica em audiência de instrução e representação obrigatória e privativa por advogado em caso de interposição de Recurso Inominado perante o Colégio Recursal [Art. 41, § 2º da Lei nº 9.099 de 1995].</li>
+  </ul>
+  <div style="background:var(--bg-subtle, #f8fafc);border:1px solid var(--border);border-radius:var(--r-btn);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;">
+    <span style="font-size:13.5px;font-weight:600;color:var(--navy);">Para assegurar sua defesa técnica especializada, consulte sempre um advogado regularmente inscrito na OAB.</span>
+    <a href="/#verificar" class="btn btn-outline" style="font-size:13px;padding:7px 16px;" data-open-case data-cat={tema.slug}>
+      Organizar documentos prévios <Icon name="arrow-right" size={14} />
+    </a>
+  </div>
+</div>

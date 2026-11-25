@@ -12,9 +12,11 @@ const data = (dt: Date) => dt.toLocaleDateString('pt-BR', { timeZone: 'UTC', day
 const url = new URL(AUTHOR.url, SITE.url).href;
 
 const toc: [string, string][] = [
-  ['experiencia', 'Experiência Corporativa e Trajetória'],
+  ['posicionamento', 'Posicionamento e Princípio de Atuação'],
+  ['perspectivas', 'Quatro Perspectivas Integradas'],
   ['atuacao', 'Legal Analytics e Análise Probatória'],
   ['formacao', 'Formação Acadêmica e Multidisciplinar'],
+  ['modalidades', 'Modalidades Editoriais e Tom de Voz'],
   ['etica', 'Compromisso Ético e CFOAB nº 205/2021'],
   ...(analises.length ? [['analises', 'Análises Técnicas Assinadas'] as [string, string]] : []),
   ...(guias.length ? [['guias', 'Guias Técnicos Revisados'] as [string, string]] : []),
@@ -59,9 +61,9 @@ const jsonLd = [
 
 <PageLayout
   title={`${AUTHOR.name} — ${AUTHOR.role} | ${SITE.name}`}
-  description={`${AUTHOR.name}, ${AUTHOR.jobTitle}. Experiência executiva em grandes corporações, formação jurídica e legal analytics aplicado a decisões judiciais do TJSP no Juizado Especial Cível.`}
+  description={`${AUTHOR.name}, ${AUTHOR.jobTitle}. Pesquisa jurídica orientada por evidências, análise empírica de decisões judiciais e investigação dos conflitos nas relações de consumo no JEC.`}
   h1="André L. <em>Silva</em>"
-  lead={`${AUTHOR.jobTitle}. Alia experiência executiva em grandes corporações, sólida formação jurídica e ciência de dados para decodificar os padrões decisórios do Juizado Especial Cível paulista.`}
+  lead="Pesquisador jurídico | Jurimetria e Legal Analytics. Investigação empírica de decisões judiciais, análise probatória e comportamento decisório no Juizado Especial Cível paulista."
   toc={toc}
   jsonLd={jsonLd}
 >
@@ -72,11 +74,11 @@ const jsonLd = [
     <b>{AUTHOR.name}</b>
     <span class="ah-r">{AUTHOR.role}</span>
     <p style="margin: 6px 0 16px; font-size: 14.5px; color: var(--fg-mid); line-height: 1.55;">
-      Pesquisador forense e especialista em jurimetria aplicada ao contencioso de consumo. Reúne sólida vivência comercial em grandes grupos corporativos, formação jurídica e inteligência em ciência de dados para estruturar a jurisprudência das Turmas Recursais e Varas do Juizado Especial Cível do Tribunal de Justiça de São Paulo.
+      Responsável pela estruturação das pesquisas e análises jurimétricas do DefendaMe. Reúne formação jurídica, conhecimentos em ciência de dados e vivência em ambientes corporativos para investigar o comportamento decisório do Tribunal de Justiça de São Paulo nas controvérsias de consumo.
     </p>
     <div class="aut-links">
-      <a class="aut-sub" href="#experiencia"><Icon name="bank" size={15} stroke={2} />Experiência Corporativa</a>
-      <a class="aut-sub" href="#atuacao"><Icon name="chart" size={15} stroke={2} />Análise Probatória</a>
+      <a class="aut-sub" href="#perspectivas"><Icon name="shield" size={15} stroke={2} />4 Perspectivas Integradas</a>
+      <a class="aut-sub" href="#atuacao"><Icon name="chart" size={15} stroke={2} />Legal Analytics</a>
       <a class="aut-sub" href="#formacao"><Icon name="doc" size={15} stroke={2} />Formação Acadêmica</a>
     </div>
   </div>
@@ -89,87 +91,123 @@ const jsonLd = [
   </div>
   <div data-reveal style="--i:1">
     <b data-count-auto data-delay="350">10 RAJs</b>
-    <span>Cobertura empírica: Capital, Grande SP, Litoral e Interior</span>
+    <span>Regiões Administrativas Judiciárias analisadas</span>
   </div>
   <div data-reveal style="--i:2">
     <b data-count-auto data-delay="700">14 Silos</b>
-    <span>Demandas de consumo estruturadas no Juizado Especial Cível</span>
+    <span>Demandas críticas estruturadas no JEC</span>
   </div>
 </div>
 
-<h2 id="experiencia">Experiência Corporativa e Trajetória</h2>
+<h2 id="posicionamento">Posicionamento e Princípio de Atuação</h2>
 <p>
-  Antes de estruturar a pesquisa jurimétrica do DefendaMe, André L. Silva construiu uma sólida trajetória de atuação executiva e comercial em grandes grupos corporativos. Essa vivência nas engrenagens empresariais confere à sua análise uma compreensão profunda sobre a dinâmica interna dos grandes fornecedores:
+  O trabalho de André L. Silva é orientado pela <strong>pesquisa jurídica empírica fundamentada em evidências</strong>. Em vez de deduzir soluções apenas de teorias abstratas ou de opiniões isoladas, dedica-se a investigar como os magistrados dos Juizados Especiais Cíveis decidem na prática os conflitos entre consumidores e fornecedores.
 </p>
-<ul style="margin: 16px 0 20px; line-height: 1.7;">
-  <li><strong>Arquitetura operacional das grandes corporações:</strong> compreensão prática dos fluxos de atendimento ao cliente, canais de SAC e ouvidoria, sistemas automatizados de cobrança e rotinas de esteira bancária e aérea;</li>
-  <li><strong>Origem fática dos litígios de massa:</strong> identificação dos pontos de fricção e diretrizes de mercado que dão causa a cobranças indevidas, fraudes eletrônicas, atrasos operacionais e desassistência material ao consumidor;</li>
-  <li><strong>Visão pragmática e realista:</strong> interpretação que transcende a teoria dogmática abstrata, conectando as práticas corporativas de mercado às exigências probatórias formuladas pelos magistrados no momento da sentença.</li>
-</ul>
+<div class="about-card" style="margin: 20px 0; border-left: 3px solid var(--teal);">
+  <div style="display: flex; gap: 14px; align-items: flex-start;">
+    <span style="color: var(--teal); margin-top: 2px;"><Icon name="gavel" size={24} stroke={2} /></span>
+    <div>
+      <h3 style="margin: 0 0 6px; font-size: 16.5px; color: var(--navy);">Princípio de Atuação Forense</h3>
+      <p style="margin: 0; font-size: 14.5px; color: var(--fg-mid); line-height: 1.6;">
+        <em>"Investigar antes de concluir, apresentar evidências antes de afirmar e reconhecer os limites dos dados antes de interpretar seus resultados."</em>
+      </p>
+    </div>
+  </div>
+</div>
+
+<h2 id="perspectivas">Quatro Perspectivas Integradas</h2>
 <p>
-  Essa experiência executiva permite que a jurimetria do DefendaMe não seja apenas um agrupamento de números, mas uma leitura estratégica dos conflitos entre cidadãos e grandes empresas, compreendendo os dois lados da relação de consumo.
+  A compreensão consistente dos litígios de consumo exige uma abordagem multidisciplinar. A investigação de André integra quatro perspectivas complementares:
 </p>
+
+<div class="about-grid" data-motion style="grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; margin: 20px 0;">
+  <div class="about-card" data-reveal style="--i:0">
+    <span class="med-icon"><Icon name="bank" size={22} stroke={2} /></span>
+    <h3>1. Perspectiva Corporativa</h3>
+    <p>A experiência executiva e comercial permite compreender a estrutura real das grandes empresas: fluxos de atendimento ao cliente, canais de SAC e ouvidoria, rotinas automatizadas de cobrança e os pontos de atrito que geram os litígios de massa.</p>
+  </div>
+
+  <div class="about-card" data-reveal style="--i:1">
+    <span class="med-icon"><Icon name="shield" size={22} stroke={2} /></span>
+    <h3>2. Perspectiva Jurídica</h3>
+    <p>A formação em Direito fundamenta o exame dos critérios de responsabilidade civil objetiva, a teoria do risco da atividade, os deveres de informação e segurança do CDC e a dinâmica processual dos Juizados Especiais Cíveis [Lei nº 9.099/1995].</p>
+  </div>
+
+  <div class="about-card" data-reveal style="--i:2">
+    <span class="med-icon"><Icon name="search" size={22} stroke={2} /></span>
+    <h3>3. Perspectiva Investigativa</h3>
+    <p>A pesquisa documental minuciosa em acórdãos e sentenças permite isolar os fundamentos determinantes, comparar teses das partes, confrontar divergências entre juizados e identificar o que realmente convence o magistrado.</p>
+  </div>
+
+  <div class="about-card" data-reveal style="--i:3">
+    <span class="med-icon"><Icon name="chart" size={22} stroke={2} /></span>
+    <h3>4. Perspectiva Analítica</h3>
+    <p>A jurimetria e o Legal Analytics transformam grandes volumes de decisões em indicadores objetivos de desfecho, dosimetria e tempo médio, com estrito respeito aos limites estatísticos e metodológicos da amostra.</p>
+  </div>
+</div>
 
 <h2 id="atuacao">Legal Analytics e Análise Probatória</h2>
 <p>
-  A pesquisa jurimétrica do DefendaMe atua diretamente na redução da assimetria informacional, fornecendo parâmetros objetivos para a atuação perante os Juizados Especiais Cíveis paulistas.
-</p>
-<p>
-  A partir da mineração e auditoria estatística de decisões colegiadas e sentenças públicas, o trabalho extrai indicadores concretos para o esclarecimento das demandas:
+  No DefendaMe, André dedica-se à mineração e organização de dados judiciais para responder às dúvidas reais do cidadão: o que aconteceu em processos semelhantes e quais provas foram determinantes para o resultado.
 </p>
 <ul style="margin: 16px 0 20px; line-height: 1.7;">
-  <li><strong>Percentuais históricos de desfecho:</strong> mensuração da taxa real de procedência, procedência parcial e improcedência por espécie de falha na prestação do serviço;</li>
-  <li><strong>Composição do conjunto probatório:</strong> identificamos nos acórdãos do Tribunal quais documentos integraram com maior frequência o conjunto probatório das demandas acolhidas e, em contrapartida, em quais hipóteses a documentação apresentada se mostrou insuficiente, frágil ou desprovida de lastro fático para demonstrar a falha de serviço ou o prejuízo alegado;</li>
-  <li><strong>Dosimetria indenizatória:</strong> quantificação de valores medianos e faixas interquartis arbitrados pelas Turmas Recursais a título de danos materiais e morais;</li>
-  <li><strong>Tempo médio processual:</strong> intervalo médio verificado entre a distribuição da petição inicial até a prolação da sentença em primeiro grau.</li>
+  <li><strong>Padrões de fundamentação:</strong> mapeamento dos argumentos acolhidos e rejeitados pelos magistrados paulistas em cada espécie de falha de serviço;</li>
+  <li><strong>Dossiê probatório essencial:</strong> identificação dos documentos que integraram as demandas exitosas e das falhas documentais que motivaram a improcedência do pedido;</li>
+  <li><strong>Faixas reais de indenização:</strong> quantificação estatística de valores arbitrados a título de danos morais e materiais, afastando expectativas irreais;</li>
+  <li><strong>Duração média dos processos:</strong> monitoramento do intervalo médio entre a distribuição da petição inicial e a prolação da sentença no primeiro grau do JEC.</li>
 </ul>
 
 <h2 id="formacao">Formação Acadêmica e Multidisciplinar</h2>
 <p>
-  A sólida fundamentação analítica resulta de uma trajetória acadêmica multidisciplinar que integra Direito Processual Civil, Ciência de Dados, Marketing Estratégico e Governança Corporativa:
+  A atuação profissional é sustentada por uma trajetória acadêmica contínua que une o Direito, as Ciências Exatas e as Dinâmicas Mercadológicas:
 </p>
 
 <div class="bio-timeline">
   <div class="bio-entry">
     <h3 class="bio-title">Bacharelado em Direito</h3>
-    <div class="bio-inst">UNIP — Universidade Paulista</div>
+    <div class="bio-inst">Universidade Paulista [UNIP]</div>
     <p class="bio-desc">
-      Formação jurídica alicerçada na dogmática do Direito Privado, na Teoria Geral da Responsabilidade Civil e no Direito Processual Civil. Dedicação aos institutos fundamentais do microssistema do Código de Defesa do Consumidor, com ênfase no fato e no vício do serviço, na inversão do ônus da prova e na teoria do desvio produtivo. Pesquisa direcionada à dinâmica forense da Lei Federal nº 9.099 de 1995, examinando critérios de admissibilidade probatória, dosimetria de danos materiais e extrapatrimoniais, e a jurisprudência das Turmas Recursais do Tribunal de Justiça de São Paulo.
+      Formação jurídica orientada ao Direito Privado, Teoria Geral da Responsabilidade Civil, microssistema do Código de Defesa do Consumidor e Direito Processual Civil. Pesquisa direcionada à dinâmica dos Juizados Especiais Cíveis [Lei nº 9.099/1995], critérios de admissibilidade probatória e jurisprudência das Turmas Recursais do TJSP.
     </p>
   </div>
 
   <div class="bio-entry">
     <h3 class="bio-title">Graduação em Marketing</h3>
-    <div class="bio-inst">UMC — Universidade de Mogi das Cruzes</div>
+    <div class="bio-inst">Universidade de Mogi das Cruzes [UMC]</div>
     <p class="bio-desc">
-      Formação voltada à compreensão analítica das relações mercadológicas, canais de distribuição, comportamento do consumidor e práticas concorrenciais. Estudo das dinâmicas comerciais e contratuais que regem as relações entre fornecedores de grande porte e o consumidor final, conectando a análise de mercado às vulnerabilidades contratuais contemporâneas.
+      Compreensão das dinâmicas comerciais, canais de relacionamento corporativo, comportamento do consumidor e práticas mercadológicas que regem as relações entre fornecedores de grande porte e o consumidor final.
     </p>
   </div>
 
   <div class="bio-entry">
-    <h3 class="bio-title">MBA em Gestão Estratégica Mercadológica</h3>
-    <div class="bio-inst">EPN — Escola Paulista de Negócios</div>
+    <h3 class="bio-title">Formação Complementar em Ciência de Dados, IA e Analytics Aplicado</h3>
+    <div class="bio-inst">Pontifícia Universidade Católica do Paraná [PUC-PR]</div>
     <p class="bio-desc">
-      Especialização executiva focada em planejamento estratégico, governança corporativa, gestão de operações em larga escala e integridade da informação. Desenvolvimento de visão sistêmica sobre estruturação de processos corporativos e mitigação de riscos em ambientes de alta concorrência.
+      Formação analítica aplicada ao processamento de dados judiciais: mineração de dados textuais, processamento de linguagem natural [NLP] aplicado a sentenças e acórdãos, modelagem de indicadores e análise estatística de decisões.
     </p>
   </div>
 
   <div class="bio-entry">
-    <h3 class="bio-title">MBA Executivo em Direito do Consumidor, Mercados Digitais e Defesa Concorrencial</h3>
-    <div class="bio-inst">EPN — Escola Paulista de Negócios</div>
+    <h3 class="bio-title">Pós-Graduações Executivas [Em Andamento]</h3>
+    <div class="bio-inst">Escola Paulista de Negócios [EPN]</div>
     <p class="bio-desc">
-      Aprofundamento na tutela do consumidor no comércio eletrônico, economia das plataformas digitais, regulação concorrencial e práticas comerciais abusivas em ambientes virtuais. Estudo dos reflexos da Lei Geral de Proteção de Dados Pessoais nas relações de consumo e das novas assimetrias decorrentes da contratação digital massificada.
-    </p>
-  </div>
-
-  <div class="bio-entry">
-    <h3 class="bio-title">Data Science, Inteligência Artificial e Analytics Aplicado</h3>
-    <div class="bio-inst">PUC-PR — Pontifícia Universidade Católica do Paraná</div>
-    <p class="bio-desc">
-      Formação quantitativa avançada voltada à jurimetria e inteligência analítica judiciária. Mineração de dados textuais em repositórios jurisprudenciais públicos, processamento de linguagem natural aplicado a sentenças e acórdãos, modelagem probabilística de desfechos processuais e análise estatística da dispersão de indenizações nos tribunais estaduais.
+      Dois programas de MBA atualmente em curso: Gestão Estratégica Mercadológica e MBA Executivo em Direito do Consumidor, Mercados Digitais e Defesa Concorrencial, focados na governança corporativa e no impacto das plataformas digitais sobre as relações de consumo.
     </p>
   </div>
 </div>
+
+<h2 id="modalidades">Modalidades Editoriais e Tom de Voz</h2>
+<p>
+  A comunicação do autor no DefendaMe adota tom <strong>investigativo, analítico, didático, crítico e prudente</strong>. A escrita prioriza o problema fático concreto, confronta decisões divergentes e explicita fontes e limitações metodológicas.
+</p>
+<p>
+  O conteúdo do portal distingue claramente a autoria individual do pesquisador e a comunicação institucional:
+</p>
+<ul style="margin: 16px 0 20px; line-height: 1.7;">
+  <li><strong>Análises Autorais:</strong> artigos assinados por André L. Silva, apresentando investigação empírica de decisões e leitura crítica de precedentes em primeira pessoa moderada;</li>
+  <li><strong>Guias Técnicos:</strong> textos elaborados pela Redação DefendaMe, com revisão técnica e metodológica de André L. Silva para garantir a precisão jurisprudencial;</li>
+  <li><strong>Estudos Especiais:</strong> pesquisas aprofundadas conduzidas em colaboração com a equipe técnica da plataforma.</li>
+</ul>
 
 <h2 id="etica">Compromisso Ético e CFOAB nº 205/2021</h2>
 <div class="alert-box-info" style="margin: 20px 0;">
@@ -178,13 +216,13 @@ const jsonLd = [
     <strong>Alinhamento Ético e Normativo</strong>
   </div>
   <p style="margin-bottom: 10px;">
-    Todas as análises e guias técnicos assinados ou revisados por André L. Silva no DefendaMe têm caráter estritamente informativo e educativo, em estrita obediência ao Provimento CFOAB nº 205 de 2021 e ao Código de Ética e Disciplina da OAB.
+    Todas as análises e conteúdos assinados ou revisados por André L. Silva possuem finalidade exclusivamente pedagógica, analítica e informativa, em integral obediência ao Provimento CFOAB nº 205 de 2021 e ao Código de Ética e Disciplina da OAB.
   </p>
   <p style="margin-bottom: 10px;">
-    <strong>Sem promessa de resultado:</strong> A jurimetria aponta tendências estatísticas de decisões passadas do Tribunal de Justiça de São Paulo; ela não garante o desfecho de nenhuma ação individual, cuja procedência dependerá exclusivamente da análise do magistrado e das provas carreadas aos autos no caso concreto.
+    <strong>Sem promessa de resultado:</strong> A jurimetria identifica tendências estatísticas em decisões passadas do Tribunal de Justiça de São Paulo; não assegura o resultado de processos individuais, cuja análise cabe com exclusividade ao juiz natural da causa com base no conjunto probatório.
   </p>
   <p style="margin: 0;">
-    <strong>Representação técnica:</strong> Embora a Lei nº 9.099 de 1995 autorize o ingresso desacompanhado até vinte salários mínimos, o patrocínio técnico de profissional da advocacia ou da Defensoria Pública é indispensável para causas de maior complexidade e para a atuação perante as Turmas Recursais.
+    <strong>Assistência jurídica:</strong> Embora a Lei nº 9.099 de 1995 autorize ajuizamento sem advogado em causas de até 20 salários mínimos, o patrocínio técnico por profissional regularmente inscrito na OAB ou membro da Defensoria Pública é determinante para restabelecer a paridade de armas contra grandes bancas corporativas e privativo na fase recursal perante o Colégio Recursal.
   </p>
 </div>
 

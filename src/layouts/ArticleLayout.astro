@@ -48,10 +48,12 @@ if (d.faq.length) jsonLd.push({ '@context': 'https://schema.org', '@type': 'FAQP
     <h1 class="post-titulo" set:html={d.tituloHtml || d.titulo} />
     <p class="post-sub" set:html={md(d.linhaFina)} />
     <div class="post-meta">
-      {analise ? (
+      {d.formato === 'analise' ? (
+        <><img class="post-meta-av" src={AUTHOR.photo} alt={AUTHOR.name} width="26" height="26" style="border-radius:50%;" />
+        <span>Por <a href={AUTHOR.url} style="font-weight:600;color:var(--navy);">{AUTHOR.name}</a></span></>
+      ) : d.formato === 'estudo' ? (
         <><img class="post-meta-av mark" src="/favicon.svg" alt="" width="26" height="26" />
-        <span>Redação {SITE.name}</span><span class="dot">·</span>
-        <span class="post-meta-rev"><img src={AUTHOR.photo} alt="" width="22" height="22" />Análise técnica: <a href={AUTHOR.url}>{AUTHOR.name}</a></span></>
+        <span>Equipe de Pesquisa {SITE.name} & <a href={AUTHOR.url} style="font-weight:600;color:var(--navy);">{AUTHOR.name}</a></span></>
       ) : (
         <><img class="post-meta-av mark" src="/favicon.svg" alt="" width="26" height="26" />
         <span>Redação {SITE.name}</span><span class="dot">·</span>

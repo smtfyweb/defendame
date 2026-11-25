@@ -1,0 +1,154 @@
+---
+import Icon from '../Icon.astro';
+import { fmt, type Tema } from '../../data/temas';
+import type { TemaDetalhamento } from '../../data/temasDetalhamento';
+
+interface Props {
+  tema: Tema;
+  detalhe: TemaDetalhamento | null;
+}
+
+const { tema, detalhe } = Astro.props;
+const jurimetria = detalhe?.jurimetria;
+const totalDecisoes = jurimetria?.total || tema.decisoes;
+
+// Percentuais de mérito (devem somar 100%)
+const procTotal = jurimetria ? jurimetria.procedenteTotalPct : tema.procedenciaPct;
+const parcial = jurimetria ? jurimetria.parcialPct : 0;
+const improc = jurimetria ? jurimetria.improcedentePct : (100 - tema.procedenciaPct);
+const acordos = jurimetria ? jurimetria.acordosPct : null;
+const faixa = jurimetria?.faixaDanoMoral || 'R$ 3.000 a R$ 8.000';
+const faixaDescricao = jurimetria?.faixaDescricao || `Valores médios arbitrados pelas Turmas Recursais do TJSP para casos de ${tema.nome.toLowerCase()}`;
+const ficha = jurimetria?.fichaTecnica;
+---
+
+<div class="jurimetria-dash">
+  <div class="jd-panel">
+    <div class="jd-head">
+      <span style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--fg-muted);">
+        Distribuição de Decisões de Mérito no TJSP [10 RAJs]
+      </span>
+      <span style="font-size:12.5px;color:var(--fg-muted);font-weight:600;">
+        {fmt(totalDecisoes)} decisões analisadas
+      </span>
+    </div>
+
+    <div class="stats-jurimetria-grid" data-motion>
+      <div class="jd-stat" data-reveal style="--i:0;--c:var(--teal)">
+        <b class="jd-n" data-count-auto data-delay="0">{procTotal.toFixed(1).replace('.', ',')}%</b>
+        <span class="jd-l">Procedente Total</span>
+        <span class="jd-s">Acolhimento integral do pedido</span>
+      </div>
+      {parcial > 0 ? (
+        <div class="jd-stat" data-reveal style="--i:1;--c:#d97706">
+          <b class="jd-n" data-count-auto data-delay="350">{parcial.toFixed(1).replace('.', ',')}%</b>
+          <span class="jd-l">Parcialmente Proc.</span>
+          <span class="jd-s">Dano moral reduzido ou afastado</span>
+        </div>
+      ) : (
+        <div class="jd-stat" data-reveal style="--i:1;--c:#2563eb">
+          <b class="jd-n" data-count-auto data-delay="350">10 RAJs</b>
+          <span class="jd-l">Abrangência Estadual</span>
+          <span class="jd-s">Capital, Litoral e Interior</span>
+        </div>
+      )}
+      <div class="jd-stat" data-reveal style="--i:2;--c:#dc2626">
+        <b class="jd-n" data-count-auto data-delay="700">{improc.toFixed(1).replace('.', ',')}%</b>
+        <span class="jd-l">Improcedente</span>
+        <span class="jd-s">Falta de provas ou tese rejeitada</span>
+      </div>
+    </div>
+
+    <!-- Barra de distribuição estrita em 100% -->
+    <div class="dist-bar" data-motion aria-hidden="true">
+      <span data-bar style={`--w:${procTotal}%;--i:0;background:var(--teal)`}></span>
+      {parcial > 0 && <span data-bar style={`--w:${parcial}%;--i:4;background:#d97706`}></span>}
+      <span data-bar style={`--w:${improc}%;--i:8;background:#dc2626`}></span>
+    </div>
+
+    {acordos && (
+      <div class="jd-conciliacao-card" style="margin-top:14px;background:var(--bg-subtle, #f8fafc);border:1px solid var(--border);border-radius:var(--r-btn);padding:10px 14px;display:flex;align-items:center;gap:10px;">
+        <span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:var(--r-btn);background:#dbeafe;color:#2563eb;flex-shrink:0;">
+          <Icon name="chat" size={14} />
+        </span>
+        <span style="font-size:13px;color:var(--fg-mid);line-height:1.45;">
+          <strong>Resolução consensual prévia:</strong> Em <strong style="color:var(--navy);">{acordos.toFixed(1).replace('.', ',')}%</strong> dos processos cadastrados houve homologação de acordo entre as partes antes da prolação da sentença terminativa de mérito.
+        </span>
+      </div>
+    )}
+
+    <div class="jd-faixa" data-motion data-reveal>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:var(--r-btn);background:var(--teal-pale);color:var(--teal);"><Icon name="gavel" size={16} /></span>
+        <span style="font-size:13px;color:var(--fg-mid);"><strong>Faixa típica de arbitramento no TJSP:</strong> <span style="color:var(--navy);font-weight:700;">{faixa}</span></span>
+      </div>
+      <span style="font-size:12px;color:var(--fg-muted);">{faixaDescricao}</span>
+    </div>
+
+    {ficha && (
+      <details class="jd-ficha-tecnica" style="margin-top:16px;border-top:1px solid var(--border);padding-top:12px;font-size:12.5px;color:var(--fg-muted);">
+        <summary style="cursor:pointer;font-weight:600;color:var(--navy);display:flex;align-items:center;gap:6px;user-select:none;">
+          <Icon name="shield" size={14} /> Ficha Técnica Metodológica da Amostra [Auditoria Forense]
+        </summary>
+        <div style="margin-top:10px;display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:10px;background:var(--bg-subtle, #f8fafc);padding:12px;border-radius:var(--r-btn);border:1px solid var(--border);">
+          <div>
+            <strong style="color:var(--navy);display:block;margin-bottom:2px;">Tribunal de Origem:</strong>
+            <span>{ficha.tribunal}</span>
+          </div>
+          <div>
+            <strong style="color:var(--navy);display:block;margin-bottom:2px;">Abrangência Territorial:</strong>
+            <span>{ficha.abrangencia}</span>
+          </div>
+          <div>
+            <strong style="color:var(--navy);display:block;margin-bottom:2px;">Unidade Amostral:</strong>
+            <span>{ficha.unidadeAnalise}</span>
+          </div>
+          <div>
+            <strong style="color:var(--navy);display:block;margin-bottom:2px;">Período Analisado:</strong>
+            <span>{ficha.periodo}</span>
+          </div>
+          <div style="grid-column:1 / -1;">
+            <strong style="color:var(--navy);display:block;margin-bottom:2px;">Critério de Classificação dos Desfechos:</strong>
+            <span>{ficha.criterioExito}</span>
+          </div>
+        </div>
+      </details>
+    )}
+  </div>
+
+  <div class="ed-note" data-motion data-reveal>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+      <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:var(--r-btn);background:var(--teal-pale);color:var(--teal);"><Icon name="chart" size={16} /></span>
+      <h3 style="font-size:17.5px;font-weight:700;color:var(--navy);margin:0;">O que os números revelam sobre as decisões de {tema.nome.toLowerCase()}?</h3>
+    </div>
+    <p style="font-size:14.5px;line-height:1.65;color:var(--fg-mid);margin:0 0 10px;">
+      {jurimetria?.comentario || `A análise empírica de ${fmt(totalDecisoes)} decisões judiciais do TJSP demonstra que a taxa de acolhimento dos pedidos decorre diretamente da robustez do conjunto probatório inicial apresentado perante o Juizado Especial Cível.`}
+    </p>
+    <div style="font-size:13px;color:var(--teal);font-weight:600;">
+      ↳ Confira o dossiê probatório indispensável abaixo para assegurar a consistência do seu pedido no JEC.
+    </div>
+  </div>
+
+  {detalhe?.regrasJec && (
+    <div class="regras-jec-grid" data-motion data-reveal>
+      <div>
+        <span style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px;">
+          <Icon name="pin" size={14} /> Onde Ajuizar [Foro]
+        </span>
+        <span style="font-size:13px;color:var(--fg-mid);line-height:1.45;display:block;">{detalhe.regrasJec.foro}</span>
+      </div>
+      <div>
+        <span style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px;">
+          <Icon name="shield" size={14} /> Tentativa Administrativa
+        </span>
+        <span style="font-size:13px;color:var(--fg-mid);line-height:1.45;display:block;">{detalhe.regrasJec.orgaoPrevio}</span>
+      </div>
+      <div>
+        <span style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px;">
+          <Icon name="user" size={14} /> Assistência Jurídica
+        </span>
+        <span style="font-size:13px;color:var(--fg-mid);line-height:1.45;display:block;">{detalhe.regrasJec.jusPostulandi}</span>
+      </div>
+    </div>
+  )}
+</div>

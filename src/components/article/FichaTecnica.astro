@@ -1,0 +1,54 @@
+---
+import Icon from '../Icon.astro';
+
+interface Props {
+  tribunal?: string;
+  abrangencia?: string;
+  amostra?: string;
+  periodo?: string;
+  criterio?: string;
+}
+
+const {
+  tribunal = 'Tribunal de Justiça do Estado de São Paulo [TJSP]',
+  abrangencia = '10 Regiões Administrativas Judiciárias [10 RAJs]',
+  amostra = 'Decisões públicas colegiadas e sentenças do JEC',
+  periodo = '2023 a 2026',
+  criterio = 'Classificação de desfecho terminativo com exame de pedidos de dano moral e material'
+} = Astro.props;
+---
+
+<div class="ficha-tecnica-box ed-note" style="margin: 28px 0; border-left: 3px solid var(--teal); background: var(--bg-subtle, #f8fafc);">
+  <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+    <span style="display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: var(--r-btn); background: var(--teal-pale); color: var(--teal); flex-shrink: 0;">
+      <Icon name="shield" size={16} stroke={2} />
+    </span>
+    <div>
+      <span class="post-vinheta" style="font-size: 11px; margin-bottom: 2px;">Metodologia Forense e Jurimetria</span>
+      <h3 style="font-size: 16px; font-weight: 700; color: var(--navy); margin: 0; line-height: 1.25;">Ficha Técnica da Pesquisa Empírica</h3>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; font-size: 13px; color: var(--fg-mid);">
+    <div>
+      <strong style="color: var(--navy); display: block; font-size: 11.5px; text-transform: uppercase; letter-spacing: .03em;">Tribunal Auditado</strong>
+      <span>{tribunal}</span>
+    </div>
+    <div>
+      <strong style="color: var(--navy); display: block; font-size: 11.5px; text-transform: uppercase; letter-spacing: .03em;">Abrangência Geográfica</strong>
+      <span>{abrangencia}</span>
+    </div>
+    <div>
+      <strong style="color: var(--navy); display: block; font-size: 11.5px; text-transform: uppercase; letter-spacing: .03em;">Base Amostral</strong>
+      <span>{amostra}</span>
+    </div>
+    <div>
+      <strong style="color: var(--navy); display: block; font-size: 11.5px; text-transform: uppercase; letter-spacing: .03em;">Recorte Temporal</strong>
+      <span>{periodo}</span>
+    </div>
+  </div>
+
+  <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border); font-size: 12.5px; color: var(--fg-muted);">
+    <strong>Critério Analítico:</strong> {criterio}. Dados coletados de repositórios públicos oficiais em conformidade com o Art. 93, IX da CF/88 e a Lei nº 13.709/2018 [LGPD].
+  </div>
+</div>
